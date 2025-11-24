@@ -43,28 +43,23 @@ class Main:
                 lines.append(line.strip())
             
         return lines
-
-    def execute(self):
+    
+    def get_file(self):
         args = sys.argv
         argc = len(args)
         
-        if argc != 2:
-            print(f"Usage: {args[0]} file.pot")
-        
-            return False
+        if argc != 2:   raise ValueError(f"Sorry, that is not the correct usage, this would be: {args[0]} filename.pot")
         
         filename = args[1]
         
-        if filename[-4:] != '.pot':
-            print("Please use a `.pot` file!")
-            
-            return False
+        if filename[-4:] != '.pot': raise TypeError("Sorry, that is not a `.pot` file!")
+        if not os.path.exists(filename):    raise FileNotFoundError("Sorry, that file is not found!")
         
-        if not os.path.exists(filename):
-            print("That file does not exist!")
-            
-            return False
+        return filename
         
+
+    def execute(self):
+        filename = self.get_file()
         file_lines = self.read_file(filename)
         
         print(f"Processing the file: {file_lines}")
