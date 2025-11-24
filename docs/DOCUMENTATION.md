@@ -6,4 +6,7 @@
 
     19:23
         File structure created, comments added and ideas outlined.
+
+    20:06
+        Able to get a file from command line and process into lines.
         
