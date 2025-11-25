@@ -12,99 +12,130 @@
                         Copyright (C) 2025 BrotatoBoi 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published
-        by: The Free Software Foundation, either the version 3 of the
+        by: The Free Software Foundation, either version 3 of the
         License, or any later version.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
+
 class Token:
-  def __init__(self, tokenType, value):
-    self.tokenType = tokenType
-    self.value = value
+    def __init__(self, token_type, value):
+        """
+            Initialize a token with its attributes.
+            
+            Arguments:
+                token_type (str) : The type that the token should be.
+                value (str) : The value of the token.
+                
+            Attributes:
+                token_type (str) : Extends from argument `token_type`.
+                value (str) : Extends from argument `value`.
+        """
+        
+        self.token_type = token_type
+        self.value = value
     
-  def __repr__(self):
-    return f"Token({self.tokenType}, {self.value})"
-    
+    def __repr__(self):
+        """
+            Display the token.
+        """
+        
+        return f"Token({self.token_type}, {self.value})"
+
+
 def tokenize(source):
-  tokens = []
-  i = 0
-  
-  while i < len(source):
-    char = source[i]
-    
-    if char.isspace():
-      i += 1
-      continue
-    
-    if char.isdigit():
-      num = char
-      i += 1
-      
-      while i < len(source) and source[i].isdigit():
-        num += source[i]
-        i += 1
-      
-      tokens.append(Token("NUMBER", int(num)))
-      continue
-    
-    if char.isalpha():
-      ident = char
-      i += 1
-      
-      while i < len(source) and source[i].isalnum():
-        ident += source[i]
-        i += 1
+    """
+        Tokenize the source code into Tokens.
         
-      if ident == "set":
-        tokens.append(Token("KEYWORD_SET", ident))
-        
-      elif ident == "say":
-        tokens.append(Token("KEYWORD_SAY", ident))
-        
-      elif ident == "get":
-        tokens.append(Token("KEYWORD_GET", ident))
-        
-      else:
-        tokens.append(Token("IDENTIFIER", ident))
-
-      continue
+        Arguments:
+            source (str) : The source code that needs to be interpreted.
+          
+        Returns:
+            tokens (array) : All of the Tokens that were processed.
+    """
     
-    if char == "#":
-      i += 1
-      comment = ""
-      
-      while i < len(source) and source[i] != "#":
-        comment += source[i]
-        i += 1        
+    tokens = []
+    i = 0
+    
+    while i < len(source):
+        char = source[i]
         
-      #tokens.append(Token("COMMENT", comment))
-      i += 1
-      continue
-    
-    if char == "=":
-      tokens.append(Token("EQUALS", "="))
-      i += 1
-      
-      continue
-    
-    if char == '"':
-      i += 1
-      string_data = ""
-      
-      while i < len(source) and source[i] != '"':
-        string_data += source[i]
-        i += 1
+        # ~ Skip whitespace. ~ #
+        if char.isspace():
+            i += 1
+            continue
         
-      if i >= len(source):
-        raise Exception("Unterminated string!")
-
-      i += 1
-      tokens.append(Token("STRING", string_data))
-      
-      continue
+        # ~ Process a number. ~ #
+        if char.isdigit():
+            num = char
+            i += 1
+            
+            while i < len(source) and source[i].isdigit():
+                num += source[i]
+                i += 1
+            
+            tokens.append(Token("NUMBER", int(num)))
+            continue
+        
+        # ~ Process identifiers and keywords. ~ #
+        if char.isalpha():
+            ident = char
+            i += 1
+            
+            while i < len(source) and source[i].isalnum():
+                ident += source[i]
+                i += 1
+            
+            if ident == "set":
+                tokens.append(Token("KEYWORD_SET", ident))
+            
+            elif ident == "say":
+                tokens.append(Token("KEYWORD_SAY", ident))
+            
+            elif ident == "get":
+                tokens.append(Token("KEYWORD_GET", ident))
+            
+            else:
+                tokens.append(Token("IDENTIFIER", ident))
+            
+            continue
+        
+        # ~ Process comment blocks. ~ #
+        if char == "#":
+            i += 1
+            
+            while i < len(source) and source[i] != "#":
+                i += 1
+            
+            i += 1
+            continue
+        
+        # ~ Process equals symbol. ~ #
+        if char == "=":
+            tokens.append(Token("EQUALS", "="))
+            i += 1
+            continue
+        
+        # ~ Process string literals. ~ #
+        if char == '"':
+            i += 1
+            string_data = ""
+            
+            while i < len(source) and source[i] != '"':
+                string_data += source[i]
+                i += 1
+                
+            if i >= len(source):
+                raise Exception("Unterminated string literal.")
+            
+            i += 1
+            tokens.append(Token("STRING", string_data))
+            continue
+        
+        # ~ Handle unknown characters. ~ #
+        raise Exception(f"Unknown character in source: {char}")
     
-    raise Exception(f"Unknown character: {char}")
+    tokens.append(Token("EOF", None))
     
-  tokens.append(Token("EOF", None))
-  return tokens
+    return tokens

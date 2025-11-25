@@ -20,8 +20,13 @@
     02:00
         Added comments, need to find a way to make it better though.
         (`#` for single lines and `#~` for multiline)
+    
+    03:47
+        Cleaned u all of the code in each of the source files.
+        
 
 # Future Plans
 * Fix current keywords; `get`, `set`, `say`
+* Need to have "row and column" metadata for the tokens
 
         
