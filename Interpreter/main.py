@@ -28,21 +28,28 @@
 import os
 import sys
 
+import tokenizer as t
+import parser as p
+import executor as e
+
 class Main:
     def __init__(self):
         self._isRunning = True
-        # self.tokenizer = Tokenizer()
+        self.executor = e.Executor()
         # self.parser = Parser()
         # self.analyzer = Analyzer()
         
+    # maybe make get/read file functions a separate thing.
     def read_file(self, filename):
-        lines = []
+        source = ""
         
         with open(filename, 'r') as file:
             for line in file.readlines():
-                lines.append(line.strip())
-            
-        return lines
+                for char in line:
+                    source += char
+                # source += "[EOL]"
+                    
+        return source
     
     def get_file(self):
         args = sys.argv
@@ -60,9 +67,15 @@ class Main:
 
     def execute(self):
         filename = self.get_file()
-        file_lines = self.read_file(filename)
+        source = self.read_file(filename)
+        tokens = t.tokenize(source)
+        # print(f"Processing the file: {tokens}")
+        parser = p.Parser(tokens)
+        ast = parser.parse()
         
-        print(f"Processing the file: {file_lines}")
+        self.executor.run(ast)
+        
+        
 
 
 if __name__ == '__main__':

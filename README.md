@@ -6,9 +6,9 @@ Spud will eventually support importing its own source files as well as code writ
 
 ## Plan
 The first milestone is a fully functional interpreted version of Spud supporting:
-- Input
-- Output
-- Variables
+- Input (In Progress)
+- Output (In Progress)
+- Variables (In Progress)
 - Expressions
 - Loops
 - Conditionals
