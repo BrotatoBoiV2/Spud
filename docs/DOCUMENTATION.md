@@ -22,8 +22,8 @@
         (`#` for single lines and `#~` for multiline)
     
     03:47
-        Cleaned u all of the code in each of the source files.
-        
+        Cleaned up all of the code in each of the source files.
+
 
 # Future Plans
 * Fix current keywords; `get`, `set`, `say`
