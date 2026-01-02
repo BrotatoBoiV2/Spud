@@ -27,9 +27,17 @@
 """
 
 
+from sys import argv
+
+
 class Main:
     def __init__(self):
+        self.file = argv[1] if len(argv) > 1 else self.display_usage()
         self._is_running = True
+
+    def display_usage(self):
+        print(f"Usage: python3 {argv[0]} <file.pot>")
+        exit()
 
     def execute(self):
         while self._is_running:
