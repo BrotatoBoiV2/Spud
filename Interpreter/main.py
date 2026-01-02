@@ -26,3 +26,17 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
+
+class Main:
+    def __init__(self):
+        self._is_running = True
+
+    def execute(self):
+        while self._is_running:
+            pass
+
+
+if __name__ == '__main__':
+    main = Main()
+    main.execute()
+
