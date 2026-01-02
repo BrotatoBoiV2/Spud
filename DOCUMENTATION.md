@@ -16,6 +16,14 @@
 
         When that is done I can move on to the next version of the interpreter.
 
+    Path:
+        Start off with comments
+        Then move onto the `say` keyword and allowing strings
+        Then allow for setting variables
+        Introduce variable expansions
+        Have string concationation and allow for int to string conversion
+        Allow for error handling
+
     What is next?
         Loops
 
