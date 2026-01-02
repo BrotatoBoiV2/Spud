@@ -1,14 +1,14 @@
 # Spud Language
 
 ## Summary
-Spud is a low-level programming language with a high-level, developer-friendly syntax. The long-term goal is for Spud to become a fully self-hosted systems language capable of building everything from operating systems and VGA-level graphical software to AI tools and quantum-focused computation.  
+Spud is going to be a low-level programming language with a high-level, developer-friendly syntax. The long-term goal is for Spud to become a fully self-hosted systems language capable of building everything from operating systems and VGA-level graphical software to AI tools and quantum-focused computation.  
 Spud will eventually support importing its own source files as well as code written in other languages.
 
 ## Plan
 The first milestone is a fully functional interpreted version of Spud supporting:
-- Input (In Progress)
-- Output (In Progress)
-- Variables (In Progress)
+- Input
+- Output
+- Variables
 - Expressions
 - Loops
 - Conditionals
