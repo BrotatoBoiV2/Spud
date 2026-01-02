@@ -23,5 +23,14 @@
 
 ## Developers Log
 2026-01-02:
-    21:18
+    19:18
         Initially creating the programs structure.
+
+    19:43
+        Created the initial structure and the skeleton for the `main.py` file.
+
+    19:48
+        The skeleton for the `tokenizer.py` file is complete.
+
+    19:50
+        Both files `executor.py` and `parser.py` have base skeletons.
