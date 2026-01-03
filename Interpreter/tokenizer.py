@@ -27,56 +27,90 @@
 """
 
 
+# from dataclasses import dataclass
+
+
+# @dataclass
+class Token:
+    def __init__(self, token_type, token_value, token_line, token_column):
+        self.type = token_type
+        self.value = token_value
+        self.line = token_line
+        self.column = token_column
+
+    def __str__(self):
+        return f"Token({self.type} | {self.value} | {self.line} | {self.column})"
+
+
 class Tokenizer:
     def __init__(self):
-        pass
+        self.code = None
+        self.index = 0
+
+    def peek(self):
+        if self.index + 1 < len(self.code):   return self.code[self.index+1]
+        return ""
+
 
     def tokenize(self, code):
-        index = 0
+        self.code = code
+
+        column = 0
+        row = 0
         ident = ""
         tokens = []
         in_comment = False
         in_string = False
 
-        while index < len(code):
-            token = code[index]
+        while self.index < len(code):
+            column += 1
+
+            if code[self.index] == "\n":
+                row += 1
+                column = 0
+
+            token = code[self.index]
 
             if token.isalpha():
                 if in_comment or in_string:
                     while True:
-                        if not (token == " " and (code[index+1] == '"' or code[index+1] == "~")):
+                        if not (token == " " and (self.peek() == '"' or self.peek() == "~")):
                             ident += token
-                        index += 1
-                        token = code[index]
+                        self.index += 1
+                        token = code[self.index]
 
-                        if token == '"' or token == "~" and code[index+1] == ")":
+                        if token == '"' or token == "~" and self.peek() == ")":
                             break
                 else:
                     ident += token
 
-            if token == "(" and code[index+1] == "~":
-                index += 1
+            if token == "(" and self.peek() == "~":
+                self.index += 1
                 in_comment = True
 
-            elif token == "~" and code[index+1] == ")":
+            elif token == "~" and self.peek() == ")":
                 in_comment = False
-                tokens.append(f"COMMENT({ident})")
+                tokens.append(Token("COMMENT", ident, row, column))
                 ident = ""
-                index += 1
+                self.index += 1
 
             elif token == '"':
                 if not in_string:
                     in_string = True
                 else:
-                    tokens.append(f"STRING({ident})")
+                    tokens.append(Token("STRING", ident, row, column))
                     ident = ""
                     in_string = False
 
-            elif ident == "say":
-                tokens.append(f"SAY")
+            elif self.peek() == " " and ident:
+                if ident in ["say"]:
+                    tokens.append(Token("KEYWORD", ident, row, column))
+                else:
+                    raise Exception(f"Unknown keyword: {ident}")
+
                 ident = ""
 
-            index += 1
+            self.index += 1
 
         return tokens
 
