@@ -51,12 +51,16 @@ class Main:
 
     def read_file(self):
         with open(self.file, "r") as f:
-            return f.read().replace("\n", "")
+            return f.read()
 
     def execute(self):
         while self._is_running:
             file_string = self.read_file()
             tokens = self.tokenizer.tokenize(file_string)
+            # parse = self.parser.parse(tokens)
+            for token in tokens:
+                print(token)
+
 
             exit()
 
