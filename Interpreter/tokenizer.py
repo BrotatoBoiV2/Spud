@@ -31,6 +31,52 @@ class Tokenizer:
     def __init__(self):
         pass
 
-    def tokenize(self):
-        pass
+    def tokenize(self, code):
+        index = 0
+        ident = ""
+        tokens = []
+        in_comment = False
+        in_string = False
+
+        while index < len(code):
+            token = code[index]
+
+            if token.isalpha():
+                if in_comment or in_string:
+                    while True:
+                        if not (token == " " and (code[index+1] == '"' or code[index+1] == "~")):
+                            ident += token
+                        index += 1
+                        token = code[index]
+
+                        if token == '"' or token == "~" and code[index+1] == ")":
+                            break
+                else:
+                    ident += token
+
+            if token == "(" and code[index+1] == "~":
+                index += 1
+                in_comment = True
+
+            elif token == "~" and code[index+1] == ")":
+                in_comment = False
+                tokens.append(f"COMMENT({ident})")
+                ident = ""
+                index += 1
+
+            elif token == '"':
+                if not in_string:
+                    in_string = True
+                else:
+                    tokens.append(f"STRING({ident})")
+                    ident = ""
+                    in_string = False
+
+            elif ident == "say":
+                tokens.append(f"SAY")
+                ident = ""
+
+            index += 1
+
+        return tokens
 
