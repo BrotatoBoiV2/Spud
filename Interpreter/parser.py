@@ -31,5 +31,12 @@ class Parser:
     def __init__(self):
         pass
 
-    def parse(self):
-        pass
+    def parse(self, tokens):
+        parsed = []
+
+        for token in tokens:
+            if token.type == "COMMENT":
+                continue
+
+            parsed.append(token)
+            
