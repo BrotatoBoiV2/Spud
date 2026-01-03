@@ -8,7 +8,7 @@
 
         test.pot:
         ```
-        # This is a comment.
+        (~ This is a comment. ~)
         count = 10
         say "The result of 'count' is: " count + 1
         say "throw an error here
@@ -42,3 +42,10 @@
 
     19:50
         Both files `executor.py` and `parser.py` have base skeletons.
+
+2026-01-03:
+    04:46
+        Test files have been written for the tokenizer.
+
+    05:32
+        The tokenizer is capable of tokenizing a comment, the `say` keyword and strings.
