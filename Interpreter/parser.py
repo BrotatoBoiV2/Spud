@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 0.0-2026.01.02
+                        Version: 0.5-2026.01.03
 
 ===============================================================================
 
@@ -27,16 +27,40 @@
 """
 
 
+from nodes import *
+
+
 class Parser:
     def __init__(self):
-        pass
+        self.index = 0
+        self.tokens = None
+
+    def peek(self):
+        if self.index < len(self.tokens):
+            return self.tokens[self.index+1]
+        return None
+
+    def eat(self, token):
+        if token.type == "KEYWORD":
+            if token.value == "say":
+                if self.peek().type == "STRING":
+                    output = self.peek().value
+                    self.eat(self.peek())
+
+                    return SayNode(output)
 
     def parse(self, tokens):
+        self.tokens = tokens
+
         parsed = []
 
-        for token in tokens:
-            if token.type == "COMMENT":
-                continue
+        while self.index < len(tokens):
+            eaten = self.eat(tokens[self.index])
+            if eaten:
+                parsed.append(eaten)
 
-            parsed.append(token)
+            self.index += 1
+
+
+        return parsed
             

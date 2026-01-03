@@ -3,13 +3,13 @@
                 Programmer: Aaron "A.J." Cassell. (@BrotatoBoi)
                         Program Name: Spud Language.
                      Description: My custom language.
-                              File: main.py
+                             File: nodes.py
                             Date: 2026/01/02
                         Version: 0.5-2026.01.03
 
 ===============================================================================
 
-                        Copyright (C) 2025 BrotatoBoi
+                        Copyright (C) 2025 BrotatoBoi 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU Affero General Public License as published
         by the Free Software Foundation, either version 3 of the License, or
@@ -27,47 +27,9 @@
 """
 
 
-# ~ Import System Modules. ~ #
-from sys import argv
+class SayNode:
+  def __init__(self, output):
+    self.output = output
 
-# ~ Import Local Modules. ~ #
-from tokenizer import Tokenizer
-from parser import Parser
-
-
-class Main:
-    def __init__(self):
-        self.tokenizer = Tokenizer()
-        self.parser = Parser()
-        self.file = argv[1] if len(argv) > 1 else self.display_usage()
-
-        if not self.file.endswith(".pot"):
-            print("File is not a `.pot` file!")
-            self.display_usage()
-
-        self._is_running = True
-
-    def display_usage(self):
-        print(f"Usage: python3 {argv[0]} <file.pot>")
-        exit()
-
-    def read_file(self):
-        with open(self.file, "r") as f:
-            return f.read()
-
-    def execute(self):
-        while self._is_running:
-            file_string = self.read_file()
-            tokens = self.tokenizer.tokenize(file_string)
-            ast = self.parser.parse(tokens)
-            
-            for node in ast:
-                node.execute()
-
-            exit()
-
-
-if __name__ == '__main__':
-    main = Main()
-    main.execute()
-
+  def execute(self):
+    print(self.output)
