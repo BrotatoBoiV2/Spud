@@ -27,21 +27,38 @@
 """
 
 
+# ~ Import System Modules. ~ #
 from sys import argv
+
+# ~ Import Local Modules. ~ #
+from tokenizer import Tokenizer
 
 
 class Main:
     def __init__(self):
+        self.tokenizer = Tokenizer()
         self.file = argv[1] if len(argv) > 1 else self.display_usage()
+
+        if not self.file.endswith(".pot"):
+            print("File is not a `.pot` file!")
+            self.display_usage()
+
         self._is_running = True
 
     def display_usage(self):
         print(f"Usage: python3 {argv[0]} <file.pot>")
         exit()
 
+    def read_file(self):
+        with open(self.file, "r") as f:
+            return f.read().replace("\n", "")
+
     def execute(self):
         while self._is_running:
-            pass
+            file_string = self.read_file()
+            tokens = self.tokenizer.tokenize(file_string)
+
+            exit()
 
 
 if __name__ == '__main__':
