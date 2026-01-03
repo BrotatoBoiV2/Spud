@@ -49,3 +49,6 @@
 
     05:32
         The tokenizer is capable of tokenizing a comment, the `say` keyword and strings.
+
+    19:06
+        Fixed aome identifier errors like double spaces and root words. (i.e.: say -> saying)
