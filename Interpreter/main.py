@@ -57,10 +57,7 @@ class Main:
         while self._is_running:
             file_string = self.read_file()
             tokens = self.tokenizer.tokenize(file_string)
-            # parse = self.parser.parse(tokens)
-            for token in tokens:
-                print(token)
-
+            ast = self.parser.parse(tokens)
 
             exit()
 

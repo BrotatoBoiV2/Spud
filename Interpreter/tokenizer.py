@@ -47,10 +47,12 @@ class Tokenizer:
         self.code = None
         self.index = 0
 
-    def peek(self):
-        if self.index + 1 < len(self.code):   return self.code[self.index+1]
+    def peek(self, amount=1):
+        if self.index + amount < len(self.code):   return self.code[self.index+amount]
         return ""
 
+    def current(self):
+        return self.code[self.index]
 
     def tokenize(self, code):
         self.code = code
@@ -66,35 +68,40 @@ class Tokenizer:
             column += 1
 
             if code[self.index] == "\n":
+                tokens.append(Token("NEWLINE", "\\n", row, column))
                 row += 1
                 column = 0
 
-            token = code[self.index]
+            if self.current() == " ":
+                self.index += 1
+                continue
 
-            if token.isalpha():
+            if self.current().isalpha():
                 if in_comment or in_string:
                     while True:
-                        if not (token == " " and (self.peek() == '"' or self.peek() == "~")):
-                            ident += token
+                        ident += self.current()
                         self.index += 1
-                        token = code[self.index]
 
-                        if token == '"' or token == "~" and self.peek() == ")":
+                        if self.current() == '"':
                             break
+                                
+                        if self.current() == "~" and self.peek() == ")":
+                            break
+                        
                 else:
-                    ident += token
+                    ident += self.current()
 
-            if token == "(" and self.peek() == "~":
+            if self.current() == "(" and self.peek() == "~":
                 self.index += 1
                 in_comment = True
 
-            elif token == "~" and self.peek() == ")":
+            if self.current() == "~" and self.peek() == ")":
                 in_comment = False
                 tokens.append(Token("COMMENT", ident, row, column))
                 ident = ""
                 self.index += 1
 
-            elif token == '"':
+            if self.current() == '"':
                 if not in_string:
                     in_string = True
                 else:
@@ -102,11 +109,8 @@ class Tokenizer:
                     ident = ""
                     in_string = False
 
-            elif self.peek() == " " and ident:
-                if ident in ["say"]:
-                    tokens.append(Token("KEYWORD", ident, row, column))
-                else:
-                    raise Exception(f"Unknown keyword: {ident}")
+            if not self.peek().isalnum() and ident:
+                tokens.append(Token("IDENTIFIER", ident, row, column))
 
                 ident = ""
 
