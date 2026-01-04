@@ -59,12 +59,15 @@ class Main:
         while self._is_running:
             file_string = self.read_file()
             tokens = self.tokenizer.tokenize(file_string)
+            # for token in tokens:
+            #     print(token)
             ast = self.parser.parse(tokens)
             
-            for node in ast:
-                node.execute()
+            # for node in ast:
+            #     if node:
+            #         node.execute()
 
-            exit()
+            self._is_running = False
 
 
 if __name__ == '__main__':

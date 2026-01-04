@@ -68,7 +68,7 @@ class Tokenizer:
             column += 1
 
             if code[self.index] == "\n":
-                tokens.append(Token("NEWLINE", "\\n", row, column))
+                tokens.append(Token("EOL", "EOL", row, column))
                 row += 1
                 column = 0
 
@@ -76,10 +76,16 @@ class Tokenizer:
                 self.index += 1
                 continue
 
-            if self.current().isalpha():
+            if self.current().isalpha() or self.current() == "\\":
                 if in_comment or in_string:
                     while True:
-                        ident += self.current()
+                        if self.current() == "\\" and self.peek() == "n":
+                            ident += "\n"
+                            self.index += 1
+                        else:
+
+                            ident += self.current()
+
                         self.index += 1
 
                         if self.current() == '"':
@@ -91,6 +97,15 @@ class Tokenizer:
                 else:
                     ident += self.current()
 
+            if self.current().isdigit():
+                while self.current().isdigit():
+                    ident += str(self.current())
+                    self.index += 1
+
+                tokens.append(Token("INTEGER", ident, row, column))
+
+                ident = ""
+
             if self.current() == "(" and self.peek() == "~":
                 self.index += 1
                 in_comment = True
@@ -99,11 +114,13 @@ class Tokenizer:
                 in_comment = False
                 tokens.append(Token("COMMENT", ident, row, column))
                 ident = ""
-                self.index += 1
+                # self.index += 1
 
             if self.current() == '"':
                 if not in_string:
                     in_string = True
+                    self.index += 1
+                    continue
                 else:
                     tokens.append(Token("STRING", ident, row, column))
                     ident = ""
@@ -118,6 +135,9 @@ class Tokenizer:
                 ident = ""
 
             self.index += 1
+
+        tokens.append(Token("NEWLINE", "\\n", row, column))
+        tokens.append(Token("EOF", "EOF", row, column))
 
         return tokens
 

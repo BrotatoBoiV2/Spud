@@ -28,39 +28,82 @@
 
 
 from nodes import *
+from tokenizer import Token
 
 
 class Parser:
     def __init__(self):
         self.index = 0
         self.tokens = None
+        self.token = None
 
     def peek(self):
-        if self.index < len(self.tokens):
-            return self.tokens[self.index+1]
+        if self.index != len(self.tokens):
+            return self.tokens[self.index]
+
+    def advance(self):
+        self.index += 1
+        self.token = self.peek()
+
+        if not self.token:
+            self.token = Token("EOF", "EOF", None, None)
+
+        # print(f"TEST: {self.token}")
+
+    def consume(self):
+        if self.token:
+            if self.token.type == "KEYWORD":
+                return self.token.value
+
+            if self.token.type == "IDENTIFIER":
+                return self.token.value
+
+            if self.token.type == "STRING":
+                return self.token.value
+
+            else:
+                pass
+
         return None
 
-    def eat(self, token):
-        if token.type == "KEYWORD":
-            if token.value == "say":
-                if self.peek().type == "STRING":
-                    output = self.peek().value
-                    self.eat(self.peek())
-
-                    return SayNode(output)
+    def begin_parser(self, tokens):
+        self.tokens = tokens 
+        self.token = self.peek()
 
     def parse(self, tokens):
-        self.tokens = tokens
+        self.begin_parser(tokens)
+
+        # for token in tokens:
+        #     print(token)
+
 
         parsed = []
 
-        while self.index < len(tokens):
-            eaten = self.eat(tokens[self.index])
-            if eaten:
-                parsed.append(eaten)
+        # if not self.token:
+        #     return False
 
-            self.index += 1
-
-
-        return parsed
+        while self.token.type != "EOF":
+            token_value = self.consume()
             
+            if token_value == "say":
+                output = ""
+
+                while True:
+                    if self.token.type == "EOL" or self.token.type == "EOF":
+                        break
+                    
+                    if self.token.type == "STRING":
+                        output += self.token.value
+
+                    if self.token.type == "INTEGER":
+                        # ~ Make an update to handle math equations. ~ #
+                        output += self.token.value
+
+                    self.advance()
+
+                print(output, end="")
+
+            
+            self.advance()
+
+        print("")
