@@ -55,10 +55,10 @@
 
 2026-01-04:
     19:45
-        Updated the say function so that it is now able to handle string concationation and integers.
+        Updated the say function so that it is now able to handle string concatenation and integers.
 
 
 # TO-DO:
     * Handle user input
     * Handle variables
-    
+    * Make the parser return Nodes to process.
