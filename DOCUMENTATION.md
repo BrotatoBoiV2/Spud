@@ -52,3 +52,13 @@
 
     19:06
         Fixed aome identifier errors like double spaces and root words. (i.e.: say -> saying)
+
+2026-01-04:
+    19:45
+        Updated the say function so that it is now able to handle string concationation and integers.
+
+
+# TO-DO:
+    * Handle user input
+    * Handle variables
+    
