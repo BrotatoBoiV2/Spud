@@ -21,10 +21,10 @@
     Path:
         Start off with comments (DONE)
         Then move onto the `say` keyword and allowing strings (DONE)
-        Then allow for setting variables
-        Introduce variable expansions
+        Then allow for setting and manipulating variables (IN-PROGESS)
+        Introduce variable expansions (DONE)
         Have string concationation and allow for int to string conversion (DONE)
-        Allow for error handling (IN WORKS)
+        Allow for error handling (IN-PROGRESS)
 
     What is next?
         Loops
