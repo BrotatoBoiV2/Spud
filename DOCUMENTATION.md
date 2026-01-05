@@ -23,7 +23,7 @@
         Then move onto the `say` keyword and allowing strings (DONE)
         Then allow for setting and manipulating variables (IN-PROGESS)
         Introduce variable expansions (DONE)
-        Have string concationation and allow for int to string conversion (DONE)
+        Have string concationation and allow for int to string conversion (IN-PROGRESS)
         Allow for error handling (IN-PROGRESS)
 
     What is next?
@@ -80,4 +80,5 @@
 
 # TO-DO:
     *** Make errors fully understandable.
+    *** Have say keyword rewritten to force string concatenation: `"string" + variable` instead of `"string" variable`
     * Handle variables: set them and manipulate them. (In-Progress)
