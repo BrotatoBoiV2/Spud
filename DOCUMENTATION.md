@@ -73,9 +73,11 @@
         Basic variables can be created: `var_name = value`.
         Need to make it more robust though.
 
+    18:20
+        Created a part iterator helpr method in `nodes.py` to help with variable expansion.
+
 ---
 
 # TO-DO:
     *** Make errors fully understandable.
     * Handle variables: set them and manipulate them. (In-Progress)
-    * Need to make a part iterator a helper function.
