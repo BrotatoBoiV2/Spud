@@ -45,6 +45,22 @@ def join_parts(parts):
   return ret
 
 
+class IntegerNode:
+  def __init__(self, value):
+    self.value = int(value)
+
+  def execute(self):
+    return self.value
+
+
+class StringNode:
+  def __init__(self, value):
+    self.value = value
+
+  def execute(self):
+    return self.value
+
+
 class VariableNode:
   def __init__(self, name, value_parts=None):
     self.name = name
@@ -69,7 +85,7 @@ class SayNode:
     prompt = join_parts(self.output_parts)
 
     print(prompt, end="")
-    
+
 
 class GetNode:
   def __init__(self, var_name, prompt):
