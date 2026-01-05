@@ -123,8 +123,6 @@ class Parser:
     def parse_set_variable(self):
         value_parts = []
         var_name = self.token.value
-        for token in self.tokens:
-            print(token)
 
         while True:
             if self.peek(1).type == "EOL" or self.peek(1).type == "EOF":
@@ -137,8 +135,6 @@ class Parser:
                 value_parts.append(self.peek(1).value)
             
             self.advance()
-
-        print(value_parts)
 
         return VariableNode(var_name, value_parts)
 
