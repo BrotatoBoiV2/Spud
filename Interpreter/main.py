@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 0.5-2026.01.04
+                        Version: 0.6-2026.01.05
 
 ===============================================================================
 
@@ -63,9 +63,11 @@ class Main:
             #     print(token)
             ast = self.parser.parse(tokens)
             
-            # for node in ast:
-            #     if node:
-            #         node.execute()
+            for node in ast:
+                if node:
+                    node.execute()
+
+            print("")
 
             self._is_running = False
 

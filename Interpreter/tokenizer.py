@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 0.5-2026.01.04
+                        Version: 0.6-2026.01.05
 
 ===============================================================================
 
@@ -127,7 +127,7 @@ class Tokenizer:
                     in_string = False
 
             if not self.peek().isalnum() and ident:
-                if ident == "say":
+                if ident in ["say", "get"]:
                     tokens.append(Token("KEYWORD", ident, row, column))
                 else:
                     tokens.append(Token("IDENTIFIER", ident, row, column))

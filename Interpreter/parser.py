@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 0.5-2026.01.04
+                        Version: 0.6-2026.01.05
 
 ===============================================================================
 
@@ -37,12 +37,12 @@ class Parser:
         self.tokens = None
         self.token = None
 
-    def peek(self):
-        if self.index != len(self.tokens):
-            return self.tokens[self.index]
+    def peek(self, amount=0):
+        if self.index+amount != len(self.tokens):
+            return self.tokens[self.index+amount]
 
-    def advance(self):
-        self.index += 1
+    def advance(self, amount=1):
+        self.index += amount
         self.token = self.peek()
 
         if not self.token:
@@ -70,6 +70,53 @@ class Parser:
         self.tokens = tokens 
         self.token = self.peek()
 
+    def parse_say(self):
+        output_parts = []
+
+        while True:
+            if self.token.type == "EOL" or self.token.type == "EOF":
+                break
+            
+            if self.token.type == "STRING":
+                output_parts.append(self.token.value)
+
+            if self.token.type == "INTEGER":
+                # ~ Make an update to handle math equations. ~ #
+                output_parts.append(self.token.value)
+
+            if self.token.type == "IDENTIFIER":
+                output_parts.append(VariableNode(self.token.value))
+
+            self.advance()
+
+        return SayNode(output_parts)
+
+    def parse_get(self):
+        self.advance()
+
+        var_name = ""
+        prompt = ""
+
+        if self.token.type == "IDENTIFIER":
+            var_name = self.token.value
+            self.advance()
+        else:
+            raise SyntaxError("Expected an identifier after `get` keyword.")
+
+        while True:
+            if self.token.type == "EOL" or self.token.type == "EOF":
+                break
+
+            if self.token.type == "IDENTIFIER":
+                var_name += self.token.value
+
+            if self.token.type == "STRING":
+                prompt += self.token.value
+
+            self.advance()
+
+        return GetNode(var_name, prompt)
+
     def parse(self, tokens):
         self.begin_parser(tokens)
 
@@ -86,24 +133,11 @@ class Parser:
             token_value = self.consume()
             
             if token_value == "say":
-                output = ""
-
-                while True:
-                    if self.token.type == "EOL" or self.token.type == "EOF":
-                        break
-                    
-                    if self.token.type == "STRING":
-                        output += self.token.value
-
-                    if self.token.type == "INTEGER":
-                        # ~ Make an update to handle math equations. ~ #
-                        output += self.token.value
-
-                    self.advance()
-
-                print(output, end="")
-
+                parsed.append(self.parse_say())
+            
+            elif token_value == "get":
+                parsed.append(self.parse_get())
             
             self.advance()
 
-        print("")
+        return parsed

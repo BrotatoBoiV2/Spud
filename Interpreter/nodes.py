@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 0.5-2026.01.04
+                        Version: 0.6-2026.01.05
 
 ===============================================================================
 
@@ -27,9 +27,46 @@
 """
 
 
+VARIABLES = {}
+
+
+class VariableNode:
+  def __init__(self, name):
+    self.name = name
+
+  def evaluate(self):
+    if self.name in VARIABLES:
+      # print(VARIABLES[self.name])
+      return VARIABLES[self.name]
+
+    return None
+
+
 class SayNode:
-  def __init__(self, output):
-    self.output = output
+  def __init__(self, output_parts):
+    self.output_parts = output_parts
 
   def execute(self):
-    print(self.output)
+    prompt = ""
+
+    for output in self.output_parts:
+      if isinstance(output, VariableNode):
+        if output.evaluate():
+          prompt += output.evaluate()
+        else:
+          raise ValueError(f"Variable {output.name} is not defined.")
+      else:
+        prompt += output
+
+    print(prompt, end="")
+    
+
+class GetNode:
+  def __init__(self, var_name, prompt):
+    self.var_name = var_name
+    self.prompt = prompt
+
+  def execute(self):
+    value = input(self.prompt)
+    VARIABLES[self.var_name] = value
+    # print(VARIABLES)
