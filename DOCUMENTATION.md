@@ -1,5 +1,7 @@
 *Note:* All time is in **UTC**.
 
+---
+
 ## Weekly Plan
     *Week Date:* 2026-01-05/2026-01-09
 
@@ -29,6 +31,8 @@
 
         While loops are the first thing to start with.
 
+---
+
 ## Developers Log
 2026-01-02:
     19:18
@@ -57,8 +61,12 @@
     19:45
         Updated the say function so that it is now able to handle string concatenation and integers.
 
+2026-01-05:
+    05:52
+        Created the GetNode so now input can be received from the user.
+        I suspect the VARIABLE handling may be fragile, but I will cross that bridge when I come to it.
+
+---
 
 # TO-DO:
-    * Handle user input
-    * Handle variables
-    * Make the parser return Nodes to process.
+    * Handle variables: set them and manipulate them.
