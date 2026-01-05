@@ -30,6 +30,21 @@
 VARIABLES = {}
 
 
+def join_parts(parts):
+  ret = ""
+
+  for part in parts:
+      if isinstance(part, VariableNode):
+        if part.evaluate():
+          ret += part.evaluate()
+        else:
+          raise ValueError(f"Variable {part.name} is not defined.")
+      else:
+        ret += part
+
+  return ret
+
+
 class VariableNode:
   def __init__(self, name, value_parts=None):
     self.name = name
@@ -37,25 +52,12 @@ class VariableNode:
 
   def evaluate(self):
     if self.name in VARIABLES:
-      # print(VARIABLES[self.name])
       return VARIABLES[self.name]
 
     raise ValueError(f"Variable {self.name} is not defined.")
 
-  # ~ Add an execute function that creates a variable
-  # A simple `VARIABLES[self.name] = self.value` is possibly all that is needed
   def execute(self):
-    value = ""
-
-    for part in self.value_parts:
-      if isinstance(part, VariableNode):
-        if part.evaluate():
-          value += part.evaluate()
-        else:
-          raise ValueError(f"Variable {part.name} is not defined.")
-      else:
-        value += part
-
+    value = join_parts(self.value_parts)
     VARIABLES[self.name] = value
 
 
@@ -64,16 +66,7 @@ class SayNode:
     self.output_parts = output_parts
 
   def execute(self):
-    prompt = ""
-
-    for output in self.output_parts:
-      if isinstance(output, VariableNode):
-        if output.evaluate():
-          prompt += output.evaluate()
-        else:
-          raise ValueError(f"Variable {output.name} is not defined.")
-      else:
-        prompt += output
+    prompt = join_parts(self.output_parts)
 
     print(prompt, end="")
     
