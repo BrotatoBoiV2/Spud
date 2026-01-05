@@ -81,4 +81,5 @@
 # TO-DO:
     *** Make errors fully understandable.
     *** Have say keyword rewritten to force string concatenation: `"string" + variable` instead of `"string" variable`
+    *** Make string and integer nodes.
     * Handle variables: set them and manipulate them. (In-Progress)
