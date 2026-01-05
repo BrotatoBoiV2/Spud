@@ -55,7 +55,10 @@ class Parser:
             if self.token.type == "KEYWORD":
                 return self.token.value
 
-            if self.token.type == "IDENTIFIER":
+            if self.peek().type == "IDENTIFIER":
+                if self.peek(1).type == "EQUAL":
+                    return "SET_VARIABLE"
+
                 return self.token.value
 
             if self.token.type == "STRING":
@@ -117,6 +120,28 @@ class Parser:
 
         return GetNode(var_name, prompt)
 
+    def parse_set_variable(self):
+        value_parts = []
+        var_name = self.token.value
+        for token in self.tokens:
+            print(token)
+
+        while True:
+            if self.peek(1).type == "EOL" or self.peek(1).type == "EOF":
+                break
+
+            elif self.peek(1).type == "STRING":
+                value_parts.append(self.peek(1).value)
+
+            elif self.peek(1).type == "INTEGER":
+                value_parts.append(self.peek(1).value)
+            
+            self.advance()
+
+        print(value_parts)
+
+        return VariableNode(var_name, value_parts)
+
     def parse(self, tokens):
         self.begin_parser(tokens)
 
@@ -137,6 +162,9 @@ class Parser:
             
             elif token_value == "get":
                 parsed.append(self.parse_get())
+
+            elif token_value == "SET_VARIABLE":
+                parsed.append(self.parse_set_variable())
             
             self.advance()
 

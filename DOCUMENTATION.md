@@ -66,7 +66,16 @@
         Created the GetNode so now input can be received from the user.
         I suspect the VARIABLE handling may be fragile, but I will cross that bridge when I come to it.
 
+    15:14
+        Started to plan out how the VARIABLES are going to be set.
+
+    17:27
+        Basic variables can be created: `var_name = value`.
+        Need to make it more robust though.
+
 ---
 
 # TO-DO:
-    * Handle variables: set them and manipulate them.
+    *** Make errors fully understandable.
+    * Handle variables: set them and manipulate them. (In-Progress)
+    * Need to make a part iterator a helper function.

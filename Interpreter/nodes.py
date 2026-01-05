@@ -31,15 +31,32 @@ VARIABLES = {}
 
 
 class VariableNode:
-  def __init__(self, name):
+  def __init__(self, name, value_parts=None):
     self.name = name
+    self.value_parts = value_parts
 
   def evaluate(self):
     if self.name in VARIABLES:
       # print(VARIABLES[self.name])
       return VARIABLES[self.name]
 
-    return None
+    raise ValueError(f"Variable {self.name} is not defined.")
+
+  # ~ Add an execute function that creates a variable
+  # A simple `VARIABLES[self.name] = self.value` is possibly all that is needed
+  def execute(self):
+    value = ""
+
+    for part in self.value_parts:
+      if isinstance(part, VariableNode):
+        if part.evaluate():
+          value += part.evaluate()
+        else:
+          raise ValueError(f"Variable {part.name} is not defined.")
+      else:
+        value += part
+
+    VARIABLES[self.name] = value
 
 
 class SayNode:
