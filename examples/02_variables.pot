@@ -1,0 +1,2 @@
+name = "Spud"
+say name

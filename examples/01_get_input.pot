@@ -1,0 +1,2 @@
+get input "What you type will be returned: "
+say input
