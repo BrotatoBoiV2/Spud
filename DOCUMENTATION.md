@@ -84,6 +84,6 @@
 
 # TO-DO:
     *** Make errors fully understandable.
-    *** Have say keyword rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
+    *** Have parts helper method in `nodes.py` rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
     *** Make string and integer nodes.
     * Handle variables: set them and manipulate them. (In-Progress)
