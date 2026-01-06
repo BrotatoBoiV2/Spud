@@ -89,11 +89,16 @@ class Tokenizer:
                     elif self.current() == "\\" and self.peek() == "n":
                         string_text += "\n"
                         self.index += 2
+                        continue
                     else:
                         if self.current():
                             string_text += self.current()
 
                         self.index += 1
+
+                        continue
+
+                    self.index += 1
 
                 tokens.append(Token("STRING", string_text, row, column))
 
@@ -128,6 +133,9 @@ class Tokenizer:
 
             if self.current() == "=":
                 tokens.append(Token("EQUAL", "=", row, column))
+
+            if self.current() == "+":
+                tokens.append(Token("ADDITION", "+", row, column))
 
             if self.current() == "(" and self.peek() == "~":
                 self.index += 1

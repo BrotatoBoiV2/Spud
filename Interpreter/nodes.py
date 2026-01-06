@@ -29,18 +29,39 @@
 
 VARIABLES = {}
 
+def peek(parts, amount=1):
+  if len(parts) > amount:
+    return parts[amount]
 
 def join_parts(parts):
+  index = 0
   ret = ""
+  
+  if parts:
+    while index < len(parts):
+      part = parts[index]
+      # print(parts)
+      if isinstance(peek(parts), OperatorNode):
+        ret += peek(parts).execute(part.execute(), peek(parts, 2).execute())
+        index += 3
 
-  for part in parts:
-      if isinstance(part, VariableNode):
-        if part.evaluate():
-          ret += part.evaluate()
-        else:
-          raise ValueError(f"Variable {part.name} is not defined.")
+        continue
+
+      elif not peek(parts):
+        pass
+
       else:
-        ret += part
+        raise ValueError("Invalid syntax.")
+      
+      if isinstance(part, VariableNode):
+        # print(part.evaluate())
+        ret += part.execute() if part.execute() else None
+        index += 1
+    
+      else:
+        ret += part.execute()
+        index += 1
+
 
   return ret
 
@@ -60,6 +81,16 @@ class StringNode:
   def execute(self):
     return self.value
 
+  
+class OperatorNode:
+  def __init__(self, op):
+    self.op = op
+
+  def execute(self, left, right):
+    if self.op == "+":
+      return left + right
+
+    raise ValueError(f"Invalid operator: {self.op}")
 
 class VariableNode:
   def __init__(self, name, value_parts=None):
@@ -67,6 +98,7 @@ class VariableNode:
     self.value_parts = value_parts
 
   def evaluate(self):
+    print(VARIABLES)
     if self.name in VARIABLES:
       return VARIABLES[self.name]
 

@@ -79,21 +79,26 @@ class Parser:
         self.token = self.peek()
 
     def parse_say(self):
+        self.advance()
+        # print(self.token)
         output_parts = []
         
         while True:
             if self.token.type == "EOL" or self.token.type == "EOF":
                 break
             
-            if self.token.type == "STRING":
-                output_parts.append(self.token.value)
+            elif self.token.type == "STRING":
+                output_parts.append(StringNode(self.token.value))
 
-            if self.token.type == "INTEGER":
+            elif self.token.type == "INTEGER":
                 # ~ Make an update to handle math equations. ~ #
-                output_parts.append(self.token.value)
+                output_parts.append(IntegerNode(self.token.value))
 
-            if self.token.type == "IDENTIFIER":
+            elif self.token.type == "IDENTIFIER":
                 output_parts.append(VariableNode(self.token.value))
+
+            elif self.token.type == "ADDITION":
+                output_parts.append(OperatorNode(self.token.value))
 
             self.advance()
 

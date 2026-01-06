@@ -76,10 +76,13 @@
     18:20
         Created a part iterator helpr method in `nodes.py` to help with variable expansion.
 
+2026-01-06:
+    14:57
+        Started to work on enforcing string concatenation so I can add functionality to keywords later. I need to test if this works for other keywords and such.
 ---
 
 # TO-DO:
     *** Make errors fully understandable.
-    *** Have say keyword rewritten to force string concatenation: `"string" + variable` instead of `"string" variable`
+    *** Have say keyword rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
     *** Make string and integer nodes.
     * Handle variables: set them and manipulate them. (In-Progress)
