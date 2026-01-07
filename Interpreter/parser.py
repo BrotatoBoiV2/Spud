@@ -128,18 +128,26 @@ class Parser:
         return GetNode(var_name, prompt)
 
     def parse_set_variable(self):
+        # print(self.token)
         value_parts = []
         var_name = self.token.value
+        self.advance()
 
         while True:
-            if self.peek(1).type == "EOL" or self.peek(1).type == "EOF":
+            if self.peek().type == "EOL" or self.peek().type == "EOF":
                 break
 
-            elif self.peek(1).type == "STRING":
-                value_parts.append(StringNode(self.peek(1).value))
+            elif self.peek().type == "STRING":
+                value_parts.append(StringNode(self.peek().value))
 
-            elif self.peek(1).type == "INTEGER":
-                value_parts.append(IntegerNode(self.peek(1).value))
+            elif self.peek().type == "INTEGER":
+                value_parts.append(IntegerNode(self.peek().value))
+
+            elif self.peek().type == "ADDITION":
+                value_parts.append(OperatorNode(self.peek().value))
+
+            elif self.peek().type == "IDENTIFIER":
+                value_parts.append(VariableNode(self.peek().value))
             
             self.advance()
             

@@ -35,36 +35,34 @@ def peek(parts, amount=1):
 
 def join_parts(parts):
   index = 0
-  ret = ""
-  
-  if parts:
-    while index < len(parts):
-      part = parts[index]
-      if isinstance(peek(parts), OperatorNode):
-        ret += peek(parts).execute(part.execute(), peek(parts, 2).execute())
-        index += 3
 
-        continue
+  while index < len(parts):
+    part = parts[index]
+    
+    if len(parts) > 1:
+      if isinstance(parts[index+1], OperatorNode):
+        if isinstance(part, IntegerNode) and isinstance(parts[index+2], IntegerMode):
+          return parts[index+1].execute(part.execute(), parts[index+2].execute())
 
-      elif not peek(parts):
+        elif isinstance(part, StringNode) and isinstance(parts[index+2], StringNode):
+          return parts[index+1].execute(part.execute(), parts[index+2].execute())
+
+        elif isinstance(part, VariableNode) and isinstance(parts[index+2], VariableNode):
+          return parts[index+1].execute(part.evaluate(), parts[index+2].evaluate())
+
+        index += 1
+
+      else:
+        #error
         pass
 
-      else:
-        raise ValueError("Invalid syntax.")
-      
-      if isinstance(part, VariableNode):
-        if part.evaluate():
-          ret += part.evaluate()
-          
-        index += 1
-      
-      else:
-        ret += part.execute()
-        index += 1
-    
-      index += 1
+    else:
+      if isinstance(part, IntegerNode) or isinstance(part, StringNode):
+        return part.execute()
+      elif isinstance(part, VariableNode):
+        return part.evaluate()
 
-  return ret
+    index += 1 
 
 
 class IntegerNode:
@@ -88,6 +86,15 @@ class OperatorNode:
     self.op = op
 
   def execute(self, left, right):
+    # if left is None:
+    #   return right
+
+    # if right is None:
+    #   return left
+
+    # if left is None and right is None:
+    #   return None
+
     if self.op == "+":
       return left + right
 

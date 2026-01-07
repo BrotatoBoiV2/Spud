@@ -85,10 +85,21 @@
         Noticed there was an error with the update running the examples, but patched them.
         The `parse_set_variable` method was not sending Nodes, and that broke functionality.
         Now it is handled a bit better and can pass the existing examples.
-        
+
+    16:47
+        Created a new example file to display math with variables.
+        It currently has issues with type conversion but that should be an easy fix!
+
+    19:22
+        Fixed the `join_parts` method to allow mathematical equations - Addition.
+        Need to add more operators in the future.
+        The math example now functions as intended!
+        I need to have the math expanded `5 + 2 + 3` etc.
 ---
 
 # TO-DO:
+    ***** FIRST ERROR SHOULD BE UNCLOSED QUOTE.
     *** Make errors fully understandable.
     *** Have parts helper method in `nodes.py` rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
-    * Handle variables: set them and manipulate them. (In-Progress)
+    ** Make larger mathematical expressions work: `5 + 2 + 3` etc.
+    * Handle variables: set them and manipulate them. (IN-PROGRESS)
