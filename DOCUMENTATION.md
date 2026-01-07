@@ -99,6 +99,9 @@
     20:32
         Made the mathematical expressions a bit more robust for situations like the test file:
             `say "2 + 2 = " + 2+2`
+
+    20:40
+        Updated to version 0.8-2026.01.07 in the Changelogs and filestamps.
 ---
 
 # TO-DO:
