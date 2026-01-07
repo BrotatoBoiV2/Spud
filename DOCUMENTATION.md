@@ -95,11 +95,14 @@
         Need to add more operators in the future.
         The math example now functions as intended!
         I need to have the math expanded `5 + 2 + 3` etc.
+
+    20:32
+        Made the mathematical expressions a bit more robust for situations like the test file:
+            `say "2 + 2 = " + 2+2`
 ---
 
 # TO-DO:
     ***** FIRST ERROR SHOULD BE UNCLOSED QUOTE.
     *** Make errors fully understandable.
     *** Have parts helper method in `nodes.py` rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
-    ** Make larger mathematical expressions work: `5 + 2 + 3` etc.
-    * Handle variables: set them and manipulate them. (IN-PROGRESS)
+    ** Make operator handling a recursive method.

@@ -155,6 +155,8 @@ class Parser:
 
     def parse(self, tokens):
         self.begin_parser(tokens)
+        # for token in self.tokens:
+        #     print(token)
 
         while self.token.type != "EOF":
             token_value = self.consume()

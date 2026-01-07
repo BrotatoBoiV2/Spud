@@ -122,14 +122,16 @@ class Tokenizer:
 
             if self.current().isdigit():
                 while True:
-                    if not self.peek().isdigit():
+                    self.index += 1
+                    if self.current() == None or not self.current().isdigit():
                         break
 
                     ident += self.current()
-                    self.index += 1
 
                 tokens.append(Token("INTEGER", ident, row, column))
                 ident = ""
+
+                continue
 
             if self.current() == "=":
                 tokens.append(Token("EQUAL", "=", row, column))

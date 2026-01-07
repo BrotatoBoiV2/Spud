@@ -35,25 +35,53 @@ def peek(parts, amount=1):
 
 def join_parts(parts):
   index = 0
+  # print(parts)
 
   while index < len(parts):
     part = parts[index]
-    
-    if len(parts) > 1:
+
+    if index+1 < len(parts):
+      # ~ Operator checker needs a recursive function. ~ #
       if isinstance(parts[index+1], OperatorNode):
-        if isinstance(part, IntegerNode) and isinstance(parts[index+2], IntegerMode):
-          return parts[index+1].execute(part.execute(), parts[index+2].execute())
+        left = None
+        right = None
+        
+        if isinstance(part, IntegerNode) and isinstance(parts[index+2], IntegerNode):
+          left = part.execute()
+          right = parts[index+2].execute()
 
         elif isinstance(part, StringNode) and isinstance(parts[index+2], StringNode):
-          return parts[index+1].execute(part.execute(), parts[index+2].execute())
+          left = part.execute()
+          right = parts[index+2].execute()
 
         elif isinstance(part, VariableNode) and isinstance(parts[index+2], VariableNode):
-          return parts[index+1].execute(part.evaluate(), parts[index+2].evaluate())
+          left = part.evaluate()
+          right = parts[index+2].evaluate()
 
-        index += 1
+        elif isinstance(part, StringNode) and isinstance(parts[index+2], VariableNode):
+          left = part.execute()
+          right = parts[index+2].evaluate()
+
+          if type(right) == int:
+            # ~ Recursion is a friend! ~ #
+            if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
+              right += parts[index+4].execute()
+
+        elif isinstance(part, StringNode) and isinstance(parts[index+2], IntegerNode):
+          left = part.execute()
+          right = parts[index+2].execute()
+
+           # ~ Recursion is a friend! ~ #
+          if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
+            right += parts[index+4].execute()
+              
+        if type(left) == str:
+          return parts[index+1].execute(left, str(right))
+        else:
+          return parts[index+1].execute(left, right)
 
       else:
-        #error
+        # ~ error ~ #
         pass
 
     else:
@@ -61,7 +89,7 @@ def join_parts(parts):
         return part.execute()
       elif isinstance(part, VariableNode):
         return part.evaluate()
-
+        
     index += 1 
 
 
@@ -86,15 +114,6 @@ class OperatorNode:
     self.op = op
 
   def execute(self, left, right):
-    # if left is None:
-    #   return right
-
-    # if right is None:
-    #   return left
-
-    # if left is None and right is None:
-    #   return None
-
     if self.op == "+":
       return left + right
 
