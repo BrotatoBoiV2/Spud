@@ -79,6 +79,12 @@
 2026-01-06:
     14:57
         Started to work on enforcing string concatenation so I can add functionality to keywords later. I need to test if this works for other keywords and such.
+
+2026-01-07:
+    16:25
+        Noticed there was an error with the update running the examples, but patched them.
+        The `parse_set_variable` method was not sending Nodes, and that broke functionality.
+        Now it is handled a bit better and can pass the existing examples.
         
 ---
 

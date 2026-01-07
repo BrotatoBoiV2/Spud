@@ -40,7 +40,6 @@ def join_parts(parts):
   if parts:
     while index < len(parts):
       part = parts[index]
-      # print(parts)
       if isinstance(peek(parts), OperatorNode):
         ret += peek(parts).execute(part.execute(), peek(parts, 2).execute())
         index += 3
@@ -54,16 +53,16 @@ def join_parts(parts):
         raise ValueError("Invalid syntax.")
       
       if isinstance(part, VariableNode):
-        # print(part.evaluate())
         if part.evaluate():
           ret += part.evaluate()
           
         index += 1
-    
+      
       else:
-        ret += part
+        ret += part.execute()
         index += 1
-
+    
+      index += 1
 
   return ret
 

@@ -49,8 +49,6 @@ class Parser:
         if not self.token:
             self.token = Token("EOF", "EOF", None, None)
 
-        # print(f"TEST: {self.token}")
-
     def consume(self):
         if self.token:
             if self.token.type == "KEYWORD":
@@ -80,7 +78,7 @@ class Parser:
 
     def parse_say(self):
         self.advance()
-        # print(self.token)
+        
         output_parts = []
         
         while True:
@@ -91,7 +89,6 @@ class Parser:
                 output_parts.append(StringNode(self.token.value))
 
             elif self.token.type == "INTEGER":
-                # ~ Make an update to handle math equations. ~ #
                 output_parts.append(IntegerNode(self.token.value))
 
             elif self.token.type == "IDENTIFIER":
@@ -139,24 +136,17 @@ class Parser:
                 break
 
             elif self.peek(1).type == "STRING":
-                value_parts.append(self.peek(1).value)
+                value_parts.append(StringNode(self.peek(1).value))
 
             elif self.peek(1).type == "INTEGER":
-                value_parts.append(self.peek(1).value)
+                value_parts.append(IntegerNode(self.peek(1).value))
             
             self.advance()
-
+            
         return VariableNode(var_name, value_parts)
 
     def parse(self, tokens):
         self.begin_parser(tokens)
-
-        # for token in tokens:
-        #     print(token)
-
-
-        # if not self.token:
-        #     return False
 
         while self.token.type != "EOF":
             token_value = self.consume()
