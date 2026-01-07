@@ -55,11 +55,13 @@ def join_parts(parts):
       
       if isinstance(part, VariableNode):
         # print(part.evaluate())
-        ret += part.execute() if part.execute() else None
+        if part.evaluate():
+          ret += part.evaluate()
+          
         index += 1
     
       else:
-        ret += part.execute()
+        ret += part
         index += 1
 
 
@@ -98,7 +100,7 @@ class VariableNode:
     self.value_parts = value_parts
 
   def evaluate(self):
-    print(VARIABLES)
+    # print(VARIABLES)
     if self.name in VARIABLES:
       return VARIABLES[self.name]
 
