@@ -74,7 +74,12 @@ class Main:
 
 if __name__ == '__main__':
     main = Main()
-    try:
+
+    if "--debug" in argv:
         main.execute()
-    except Exception as e:
-        print(f"Error: {e}")
+
+    else:
+        try:
+            main.execute()
+        except Exception as e:
+            print(f"Error: {e}")
