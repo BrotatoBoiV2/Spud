@@ -122,7 +122,7 @@
         Comments are now enforced to be closed. Also, pretty sure I got a majority of the possible errors, but I need to test more.
 
     21:13
-        Existing keywords are nor not allowed to be assigned to.
+        Existing keywords are not not allowed to be assigned to.
 
 ---
 
