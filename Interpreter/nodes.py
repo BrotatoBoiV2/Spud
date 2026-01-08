@@ -84,12 +84,12 @@ class BinOperNode:
     if self.oper == "+":
       if isinstance(self.left, VariableNode):
         left = self.left.evaluate()
-      elif isinstance(self.left, StringNode):
+      else:
         left = self.left.execute()
 
       if isinstance(self.right, VariableNode):
         right = self.right.evaluate()
-      elif isinstance(self.right, StringNode):
+      else:
         right = self.right.execute()
 
       if type(left) == str or type(right) == str:

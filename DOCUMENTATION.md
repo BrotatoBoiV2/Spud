@@ -116,6 +116,9 @@
 
     20:20
         `OperatorNode` was replaced by a more robust `BinOperNode` which also simplified the 'join_parts' method.
+        I need to allow for chaining of operators like `5 + 2 + 3 + 4 + 1`
+
+
 ---
 
 # TO-DO:
