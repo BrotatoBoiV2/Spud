@@ -35,7 +35,6 @@ def peek(parts, amount=1):
 
 def join_parts(parts):
   index = 0
-  # print(parts)
 
   while index < len(parts):
     part = parts[index]
@@ -81,8 +80,8 @@ def join_parts(parts):
           return parts[index+1].execute(left, right)
 
       else:
-        # ~ error ~ #
-        pass
+        error_msg = f"To concatenate two parts you need an operator at line {part.line} column {part.column}"
+        raise SyntaxError(error_msg)
 
     else:
       if isinstance(part, IntegerNode) or isinstance(part, StringNode):
@@ -94,24 +93,31 @@ def join_parts(parts):
 
 
 class IntegerNode:
-  def __init__(self, value):
+  def __init__(self, value, line, column):
     self.value = int(value)
+    self.line = line
+    self.column = column
+
 
   def execute(self):
     return self.value
 
 
 class StringNode:
-  def __init__(self, value):
+  def __init__(self, value, line, column):
     self.value = value
+    self.line = line
+    self.column = column
 
   def execute(self):
     return self.value
 
   
 class OperatorNode:
-  def __init__(self, op):
+  def __init__(self, op, line, column):
     self.op = op
+    self.line = line
+    self.column = column
 
   def execute(self, left, right):
     if self.op == "+":
@@ -119,9 +125,12 @@ class OperatorNode:
 
     raise ValueError(f"Invalid operator: {self.op}")
 
+
 class VariableNode:
-  def __init__(self, name, value_parts=None):
+  def __init__(self, name, line, column, value_parts=None):
     self.name = name
+    self.line = line
+    self.column = column
     self.value_parts = value_parts
 
   def evaluate(self):
@@ -137,8 +146,10 @@ class VariableNode:
 
 
 class SayNode:
-  def __init__(self, output_parts):
+  def __init__(self, output_parts, line, column):
     self.output_parts = output_parts
+    self.line = line
+    self.column = column
 
   def execute(self):
     prompt = join_parts(self.output_parts)
@@ -147,9 +158,11 @@ class SayNode:
 
 
 class GetNode:
-  def __init__(self, var_name, prompt):
+  def __init__(self, var_name, prompt, line, column):
     self.var_name = var_name
     self.prompt = prompt
+    self.line = line
+    self.column = column
 
   def execute(self):
     value = input(self.prompt)

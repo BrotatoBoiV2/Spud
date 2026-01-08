@@ -74,5 +74,7 @@ class Main:
 
 if __name__ == '__main__':
     main = Main()
-    main.execute()
-
+    try:
+        main.execute()
+    except Exception as e:
+        print(f"Error: {e}")

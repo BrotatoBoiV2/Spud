@@ -12,7 +12,7 @@
         ```
         (~ This is a comment. ~)
         count = 10
-        say "The result of 'count' is: " count + 1
+        say "The result of 'count' is: " + count + 1
         say "throw an error here
         ```
 
@@ -21,9 +21,9 @@
     Path:
         Start off with comments (DONE)
         Then move onto the `say` keyword and allowing strings (DONE)
-        Then allow for setting and manipulating variables (IN-PROGESS)
+        Then allow for setting and manipulating variables (DONE)
         Introduce variable expansions (DONE)
-        Have string concationation and allow for int to string conversion (IN-PROGRESS)
+        Have string concationation and allow for int to string conversion (DONE)
         Allow for error handling (IN-PROGRESS)
 
     What is next?
@@ -106,6 +106,9 @@
 2026-01-08:
     04:08
         Introduced the first error of an unterminated string.
+
+    04:50
+        Updated errors and how their output is returned to the screen.
 ---
 
 # TO-DO:

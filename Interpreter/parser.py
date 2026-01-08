@@ -61,12 +61,12 @@ class Parser:
                 return self.token.value
 
             elif self.token.type == "STRING":
-                self.parsed.append(StringNode(self.token.value))
+                self.parsed.append(StringNode(self.token.value, self.token.line, self.token.column))
 
                 return None
 
             elif self.token.type == "INTEGER":
-                self.parsed.append(IntegerNode(self.token.value))
+                self.parsed.append(IntegerNode(self.token.value, self.token.line, self.token.column))
 
                 return None
 
@@ -86,20 +86,20 @@ class Parser:
                 break
             
             elif self.token.type == "STRING":
-                output_parts.append(StringNode(self.token.value))
+                output_parts.append(StringNode(self.token.value, self.token.line, self.token.column))
 
             elif self.token.type == "INTEGER":
-                output_parts.append(IntegerNode(self.token.value))
+                output_parts.append(IntegerNode(self.token.value, self.token.line, self.token.column))
 
             elif self.token.type == "IDENTIFIER":
-                output_parts.append(VariableNode(self.token.value))
+                output_parts.append(VariableNode(self.token.value, self.token.line, self.token.column))
 
             elif self.token.type == "ADDITION":
-                output_parts.append(OperatorNode(self.token.value))
+                output_parts.append(OperatorNode(self.token.value, self.token.line, self.token.column))
 
             self.advance()
 
-        return SayNode(output_parts)
+        return SayNode(output_parts, self.token.line, self.token.column)
 
     def parse_get(self):
         self.advance()
@@ -125,7 +125,7 @@ class Parser:
 
             self.advance()
 
-        return GetNode(var_name, prompt)
+        return GetNode(var_name, prompt, self.token.line, self.token.column)
 
     def parse_set_variable(self):
         # print(self.token)
@@ -138,20 +138,20 @@ class Parser:
                 break
 
             elif self.peek().type == "STRING":
-                value_parts.append(StringNode(self.peek().value))
+                value_parts.append(StringNode(self.peek().value, self.peek().line, self.peek().column))
 
             elif self.peek().type == "INTEGER":
-                value_parts.append(IntegerNode(self.peek().value))
+                value_parts.append(IntegerNode(self.peek().value, self.peek().line, self.peek().column))
 
             elif self.peek().type == "ADDITION":
-                value_parts.append(OperatorNode(self.peek().value))
+                value_parts.append(OperatorNode(self.peek().value, self.peek().line, self.peek().column))
 
-            elif self.peek().type == "IDENTIFIER":
-                value_parts.append(VariableNode(self.peek().value))
+            elif self.peek().type == "IDENTIFIER": # ~ Might need value_parts. ~ #
+                value_parts.append(VariableNode(self.peek().value, self.peek().line, self.peek().column))
             
             self.advance()
             
-        return VariableNode(var_name, value_parts)
+        return VariableNode(var_name, self.token.line, self.token.column, value_parts=value_parts)
 
     def parse(self, tokens):
         self.begin_parser(tokens)

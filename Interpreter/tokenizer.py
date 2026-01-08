@@ -57,12 +57,10 @@ class Tokenizer:
     def tokenize(self, code):
         self.code = code
 
-        column = 0
-        row = 0
+        column = 1
+        row = 1
         ident = ""
         tokens = []
-        in_comment = False
-        in_string = False
 
         while self.index < len(code):
             column += 1
@@ -70,7 +68,7 @@ class Tokenizer:
             if self.current() == "\n":
                 tokens.append(Token("EOL", "EOL", row, column))
                 row += 1
-                column = 0
+                column = 1
 
             if self.current() == " ":
                 self.index += 1
