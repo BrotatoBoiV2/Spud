@@ -140,7 +140,7 @@ class Tokenizer:
                 tokens.append(Token("EQUAL", "=", row, column))
 
             if self.current() == "+":
-                tokens.append(Token("ADDITION", "+", row, column))
+                tokens.append(Token("OPERATOR", self.current(), row, column))
 
             if self.current() == "(" and self.peek() == "~":
                 self.index += 1
