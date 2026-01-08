@@ -117,4 +117,7 @@
 
 # TO-DO:
     *** Make errors fully understandable. (IN-PROGRESS)
-    ** Make operator handling a recursive method.
+    ** Add a Binary Operator Node for operating on two inputs.
+    * Have VARIABLES an Environment Class to handle in-scope variables.
+    * Do not allow keywords to be used as variables.
+    * Type handling needs to be moved into the operator node.
