@@ -109,8 +109,12 @@
 
     04:50
         Updated errors and how their output is returned to the screen.
+
+    17:50
+        Included a '--debug' flag to allow for more verbose output.
+        Some errors were introduced like Unknown Identifiers and such.
 ---
 
 # TO-DO:
-    *** Make errors fully understandable.
+    *** Make errors fully understandable. (IN-PROGRESS)
     ** Make operator handling a recursive method.
