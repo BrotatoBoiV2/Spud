@@ -105,11 +105,22 @@ class Tokenizer:
 
                 tokens.append(Token("STRING", string_text, row, column))
 
+            if self.current() == "~" and self.peek() == ")":
+                error_msg = f"There hasn't been a Left Potato Ear '(~' found for the matching pair on line {row} at column {column}."
+
+                raise SyntaxError(error_msg)
+
+
             if self.current() == "(" and self.peek() == "~":
                 comment_text = ""
                 self.index += 2
 
                 while True:
+                    if self.index == len(self.code):
+                        error_msg = f"The comment on line {row} at column {column} is missing a Right Potato Ear '~)'."
+
+                        raise SyntaxError(error_msg)
+
                     if self.current() == "~" and self.peek() == ")":
                         self.index += 1
                         break
