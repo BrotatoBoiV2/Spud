@@ -72,8 +72,9 @@ def join_parts(parts):
           right = parts[index+2].execute()
 
            # ~ Recursion is a friend! ~ #
-          if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
-            right += parts[index+4].execute()
+          if index+3 < len(parts):
+            if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
+              right += parts[index+4].execute()
               
         if type(left) == str:
           return parts[index+1].execute(left, str(right))
