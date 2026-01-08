@@ -63,8 +63,9 @@ def join_parts(parts):
 
           if type(right) == int:
             # ~ Recursion is a friend! ~ #
-            if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
-              right += parts[index+4].execute()
+            if index+3 < len(parts):
+              if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
+                right += parts[index+4].execute()
 
         elif isinstance(part, StringNode) and isinstance(parts[index+2], IntegerNode):
           left = part.execute()

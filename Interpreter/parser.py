@@ -169,6 +169,10 @@ class Parser:
 
             elif token_value == "SET_VARIABLE":
                 self.parsed.append(self.parse_set_variable())
+
+            elif self.token.type == "IDENTIFIER":
+                error_msg = f"Invalid token: '{self.token.value}' at line {self.token.line} column {self.token.column}"
+                raise SyntaxError(error_msg)
             
             self.advance()
 
