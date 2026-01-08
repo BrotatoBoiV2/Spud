@@ -113,11 +113,12 @@
     17:50
         Included a '--debug' flag to allow for more verbose output.
         Some errors were introduced like Unknown Identifiers and such.
+
+    20:20
+        `OperatorNode` was replaced by a more robust `BinOperNode` which also simplified the 'join_parts' method.
 ---
 
 # TO-DO:
     *** Make errors fully understandable. (IN-PROGRESS)
-    ** Add a Binary Operator Node for operating on two inputs.
     * Have VARIABLES an Environment Class to handle in-scope variables.
     * Do not allow keywords to be used as variables.
-    * Type handling needs to be moved into the operator node.

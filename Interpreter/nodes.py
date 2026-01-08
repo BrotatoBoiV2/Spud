@@ -36,62 +36,16 @@ def peek(parts, amount=1):
 def join_parts(parts):
   index = 0
 
-  while index < len(parts):
-    part = parts[index]
-
-    if index+1 < len(parts):
-      # ~ Operator checker needs a recursive function. ~ #
-      if isinstance(parts[index+1], OperatorNode):
-        left = None
-        right = None
-        
-        if isinstance(part, IntegerNode) and isinstance(parts[index+2], IntegerNode):
-          left = part.execute()
-          right = parts[index+2].execute()
-
-        elif isinstance(part, StringNode) and isinstance(parts[index+2], StringNode):
-          left = part.execute()
-          right = parts[index+2].execute()
-
-        elif isinstance(part, VariableNode) and isinstance(parts[index+2], VariableNode):
-          left = part.evaluate()
-          right = parts[index+2].evaluate()
-
-        elif isinstance(part, StringNode) and isinstance(parts[index+2], VariableNode):
-          left = part.execute()
-          right = parts[index+2].evaluate()
-
-          if type(right) == int:
-            # ~ Recursion is a friend! ~ #
-            if index+3 < len(parts):
-              if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
-                right += parts[index+4].execute()
-
-        elif isinstance(part, StringNode) and isinstance(parts[index+2], IntegerNode):
-          left = part.execute()
-          right = parts[index+2].execute()
-
-           # ~ Recursion is a friend! ~ #
-          if index+3 < len(parts):
-            if isinstance(parts[index+3], OperatorNode) and isinstance(parts[index+4], IntegerNode):
-              right += parts[index+4].execute()
-              
-        if type(left) == str:
-          return parts[index+1].execute(left, str(right))
-        else:
-          return parts[index+1].execute(left, right)
-
-      else:
-        error_msg = f"To concatenate two parts you need an operator at line {part.line} column {part.column}"
-        raise SyntaxError(error_msg)
-
-    else:
-      if isinstance(part, IntegerNode) or isinstance(part, StringNode):
-        return part.execute()
-      elif isinstance(part, VariableNode):
+  if parts:
+    while index < len(parts):
+      part = parts[index]
+      
+      if isinstance(part, VariableNode):
         return part.evaluate()
-        
-    index += 1 
+
+      return part.execute()
+
+      index += 1 
 
 
 class IntegerNode:
@@ -115,17 +69,37 @@ class StringNode:
     return self.value
 
   
-class OperatorNode:
-  def __init__(self, op, line, column):
-    self.op = op
+class BinOperNode:
+  def __init__(self, left, oper, right, line, column):
+    self.oper = oper
+    self.left = left
+    self.right = right
     self.line = line
     self.column = column
 
-  def execute(self, left, right):
-    if self.op == "+":
+  def execute(self):
+    left = None
+    right = None
+
+    if self.oper == "+":
+      if isinstance(self.left, VariableNode):
+        left = self.left.evaluate()
+      elif isinstance(self.left, StringNode):
+        left = self.left.execute()
+
+      if isinstance(self.right, VariableNode):
+        right = self.right.evaluate()
+      elif isinstance(self.right, StringNode):
+        right = self.right.execute()
+
+      if type(left) == str or type(right) == str:
+        return str(left) + str(right)
+
       return left + right
 
-    raise ValueError(f"Invalid operator: {self.op}")
+
+
+    raise ValueError(f"Invalid operator: {self.oper}")
 
 
 class VariableNode:

@@ -84,6 +84,26 @@ class Parser:
         while True:
             if self.token.type == "EOL" or self.token.type == "EOF":
                 break
+
+            if self.peek(1).type == "OPERATOR":
+                left = None
+                right = None
+
+                if self.token.type == "IDENTIFIER":
+                    left = VariableNode(self.token.value, self.token.line, self.token.column)
+                elif self.token.type == "INTEGER":
+                    left = IntegerNode(self.token.value, self.token.line, self.token.column)
+                elif self.token.type == "STRING":
+                    left = StringNode(self.token.value, self.token.line, self.token.column)
+
+                if self.peek(2).type == "IDENTIFIER":
+                    right = VariableNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+                elif self.peek(2).type == "INTEGER":
+                    right = IntegerNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+                elif self.peek(2).type == "STRING":
+                    right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+
+                output_parts.append(BinOperNode(left, self.peek(1).value, right, self.token.line, self.token.column))
             
             elif self.token.type == "STRING":
                 output_parts.append(StringNode(self.token.value, self.token.line, self.token.column))
@@ -93,9 +113,6 @@ class Parser:
 
             elif self.token.type == "IDENTIFIER":
                 output_parts.append(VariableNode(self.token.value, self.token.line, self.token.column))
-
-            elif self.token.type == "ADDITION":
-                output_parts.append(OperatorNode(self.token.value, self.token.line, self.token.column))
 
             self.advance()
 
@@ -137,14 +154,35 @@ class Parser:
             if self.peek().type == "EOL" or self.peek().type == "EOF":
                 break
 
-            elif self.peek().type == "STRING":
+            if self.peek(1).type == "OPERATOR":
+                left = None
+                right = None
+
+                if self.token.type == "IDENTIFIER":
+                    left = VariableNode(self.token.value, self.token.line, self.token.column)
+                elif self.token.type == "INTEGER":
+                    left = IntegerNode(self.token.value, self.token.line, self.token.column)
+                elif self.token.type == "STRING":
+                    left = StringNode(self.token.value, self.token.line, self.token.column)
+
+                if self.peek(2).type == "IDENTIFIER":
+                    right = VariableNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+                elif self.peek(2).type == "INTEGER":
+                    right = IntegerNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+                elif self.peek(2).type == "STRING":
+                    right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+
+
+                value_parts.append(BinOperNode(left, self.peek(1).value, right, self.peek().line, self.peek().column))
+
+                self.advance(3)
+                continue
+                
+            if self.peek().type == "STRING":
                 value_parts.append(StringNode(self.peek().value, self.peek().line, self.peek().column))
 
             elif self.peek().type == "INTEGER":
                 value_parts.append(IntegerNode(self.peek().value, self.peek().line, self.peek().column))
-
-            elif self.peek().type == "ADDITION":
-                value_parts.append(OperatorNode(self.peek().value, self.peek().line, self.peek().column))
 
             elif self.peek().type == "IDENTIFIER": # ~ Might need value_parts. ~ #
                 value_parts.append(VariableNode(self.peek().value, self.peek().line, self.peek().column))
