@@ -102,10 +102,12 @@
 
     20:40
         Updated to version 0.8-2026.01.07 in the Changelogs and filestamps.
+
+2026-01-08:
+    04:08
+        Introduced the first error of an unterminated string.
 ---
 
 # TO-DO:
-    ***** FIRST ERROR SHOULD BE UNCLOSED QUOTE.
     *** Make errors fully understandable.
-    *** Have parts helper method in `nodes.py` rewritten to force string concatenation: `"string" + variable` instead of `"string" variable` (IN-PROGRESS)
     ** Make operator handling a recursive method.

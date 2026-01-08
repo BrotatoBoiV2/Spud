@@ -83,6 +83,11 @@ class Tokenizer:
                 self.index += 1
 
                 while True:
+                    if self.index == len(self.code):
+                        error_msg = f"The string on line {row} at column {column} is missing a closing quote."
+
+                        raise SyntaxError(error_msg)
+
                     if self.current() == '"' or self.current() == None:
                         break
 
