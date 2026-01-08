@@ -24,7 +24,7 @@
         Then allow for setting and manipulating variables (DONE)
         Introduce variable expansions (DONE)
         Have string concationation and allow for int to string conversion (DONE)
-        Allow for error handling (IN-PROGRESS)
+        Allow for error handling (DONE)
 
     What is next?
         Loops
@@ -119,11 +119,10 @@
         I need to allow for chaining of operators like `5 + 2 + 3 + 4 + 1`
 
     21:02
-        Comments are now enforced to be closed.
+        Comments are now enforced to be closed. Also, pretty sure I got a majority of the possible errors, but I need to test more.
 
 ---
 
 # TO-DO:
-    *** Make errors fully understandable. (IN-PROGRESS)
     * Have VARIABLES an Environment Class to handle in-scope variables.
     * Do not allow keywords to be used as variables.
