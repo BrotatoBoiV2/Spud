@@ -121,8 +121,10 @@
     21:02
         Comments are now enforced to be closed. Also, pretty sure I got a majority of the possible errors, but I need to test more.
 
+    21:13
+        Existing keywords are nor not allowed to be assigned to.
+
 ---
 
 # TO-DO:
     * Have VARIABLES an Environment Class to handle in-scope variables.
-    * Do not allow keywords to be used as variables.

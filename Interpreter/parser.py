@@ -52,6 +52,11 @@ class Parser:
     def consume(self):
         if self.token:
             if self.token.type == "KEYWORD":
+                if self.peek(1).type == "EQUAL":
+                    error_msg = f"You tried to assign a value to a keyword on line {self.token.line} at column {self.token.column}."
+                    
+                    raise SyntaxError(error_msg)
+                
                 return self.token.value
 
             elif self.peek().type == "IDENTIFIER":
