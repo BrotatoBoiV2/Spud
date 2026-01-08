@@ -1,0 +1,6 @@
+# ~ Python Files. ~ #
+Interpreter/__pycache__/
+
+# ~ Testing files. ~ #
+test.pot
+node-test.py
