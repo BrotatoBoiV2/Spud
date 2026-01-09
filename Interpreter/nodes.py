@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 0.8-2026.01.07
+                        Version: 1.0-2026.01.09
 
 ===============================================================================
 
@@ -27,120 +27,106 @@
 """
 
 
-VARIABLES = {}
-
 def peek(parts, amount=1):
   if len(parts) > amount:
     return parts[amount]
 
-def join_parts(parts):
-  index = 0
+def join_parts(parts, memory):
+  if not parts: return None
 
-  if parts:
-    while index < len(parts):
-      part = parts[index]
-      
-      if isinstance(part, VariableNode):
-        return part.evaluate()
+  return parts[0].execute(memory)
 
-      return part.execute()
-
-      index += 1 
-
-
-class IntegerNode:
-  def __init__(self, value, line, column):
-    self.value = int(value)
-    self.line = line
-    self.column = column
-
-
-  def execute(self):
-    return self.value
-
-
-class StringNode:
+class Node:
   def __init__(self, value, line, column):
     self.value = value
     self.line = line
     self.column = column
 
-  def execute(self):
-    return self.value
+
+  def execute(self, memory):
+    pass
+
+
+class IntegerNode(Node):
+  def __init__(self, value, line, column):
+    super().__init__(value, line, column)
+
+  def execute(self, memory):
+    return int(self.value)
+
+
+class StringNode(Node):
+  def __init__(self, value, line, column):
+    super().__init__(value, line, column)
+
+  def execute(self, memory):
+    return str(self.value)
 
   
-class BinOperNode:
-  def __init__(self, left, oper, right, line, column):
-    self.oper = oper
+class BinOperNode(Node):
+  def __init__(self, value, left, right, line, column):
+    super().__init__(value, line, column)
+
     self.left = left
     self.right = right
-    self.line = line
-    self.column = column
 
-  def execute(self):
-    left = None
-    right = None
+  def execute(self, memory):
+    left = self.left.execute(memory)
+    right = self.right.execute(memory)
 
-    if self.oper == "+":
-      if isinstance(self.left, VariableNode):
-        left = self.left.evaluate()
-      else:
-        left = self.left.execute()
-
-      if isinstance(self.right, VariableNode):
-        right = self.right.evaluate()
-      else:
-        right = self.right.execute()
-
+    if self.value == "+":
       if type(left) == str or type(right) == str:
         return str(left) + str(right)
 
       return left + right
 
+    raise ValueError(f"Invalid operator: {self.value}")
 
 
-    raise ValueError(f"Invalid operator: {self.oper}")
+class VariableNode(Node):
+  def __init__(self, value, line, column, value_parts=None):
+    super().__init__(value, line, column)
 
-
-class VariableNode:
-  def __init__(self, name, line, column, value_parts=None):
-    self.name = name
-    self.line = line
-    self.column = column
     self.value_parts = value_parts
 
-  def evaluate(self):
-    # print(VARIABLES)
-    if self.name in VARIABLES:
-      return VARIABLES[self.name]
+  def execute(self, memory):
+    if not self.value_parts:
+      value = memory.get(self.value)
 
-    raise ValueError(f"Variable {self.name} is not defined.")
+      if value is not None:
+        return value
 
-  def execute(self):
-    value = join_parts(self.value_parts)
-    VARIABLES[self.name] = value
+      if memory.get(self.value):
+        return memory.get(self.value)
+
+      raise ValueError(f"Variable {self.value} is not defined.")
+
+    else:
+      value = join_parts(self.value_parts, memory)
+      
+      memory.set(self.value, value)
 
 
-class SayNode:
-  def __init__(self, output_parts, line, column):
-    self.output_parts = output_parts
-    self.line = line
-    self.column = column
+class SayNode(Node):
+  def __init__(self, value, line, column):
+    super().__init__(value, line, column)
 
-  def execute(self):
-    prompt = join_parts(self.output_parts)
+
+  def execute(self, memory):
+    prompt = join_parts(self.value, memory)
 
     print(prompt, end="")
 
 
-class GetNode:
-  def __init__(self, var_name, prompt, line, column):
-    self.var_name = var_name
-    self.prompt = prompt
-    self.line = line
-    self.column = column
+class GetNode(Node):
+  def __init__(self, value, prompt, line, column):
+    super().__init__(value, line, column)
 
-  def execute(self):
+    self.value = value
+
+    self.prompt = prompt
+
+  def execute(self, memory):
     value = input(self.prompt)
-    VARIABLES[self.var_name] = value
+    memory.set(self.value, value)
     # print(VARIABLES)

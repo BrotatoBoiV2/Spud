@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 0.8-2026.01.07
+                        Version: 1.0-2026.01.09
 
 ===============================================================================
 
@@ -108,7 +108,7 @@ class Parser:
                 elif self.peek(2).type == "STRING":
                     right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
 
-                output_parts.append(BinOperNode(left, self.peek(1).value, right, self.token.line, self.token.column))
+                output_parts.append(BinOperNode(self.peek(1).value, left,  right, self.token.line, self.token.column))
             
             elif self.token.type == "STRING":
                 output_parts.append(StringNode(self.token.value, self.token.line, self.token.column))
@@ -178,7 +178,7 @@ class Parser:
                     right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
 
 
-                value_parts.append(BinOperNode(left, self.peek(1).value, right, self.peek().line, self.peek().column))
+                value_parts.append(BinOperNode(self.peek(1).value, left, right, self.peek().line, self.peek().column))
 
                 self.advance(3)
                 continue
@@ -190,7 +190,7 @@ class Parser:
                 value_parts.append(IntegerNode(self.peek().value, self.peek().line, self.peek().column))
 
             elif self.peek().type == "IDENTIFIER": # ~ Might need value_parts. ~ #
-                value_parts.append(VariableNode(self.peek().value, self.peek().line, self.peek().column))
+                value_parts.append(VariableNode(self.peek().value, self.peek().line, peek=self.peek().column))
             
             self.advance()
             
