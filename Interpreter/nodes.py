@@ -33,8 +33,8 @@ def peek(parts, amount=1):
 
 def join_parts(parts, memory):
   if not parts: return None
-
-  return parts[0].execute(memory)
+  
+  return parts.execute(memory)
 
 class Node:
   def __init__(self, value, line, column):
@@ -75,10 +75,10 @@ class BinOperNode(Node):
     right = self.right.execute(memory)
 
     if self.value == "+":
-      if type(left) == str or type(right) == str:
-        return str(left) + str(right)
+      if isinstance(left, int) and isinstance(right, int):
+        return int(left) + int(right)
 
-      return left + right
+      return str(left) + str(right)
 
     raise ValueError(f"Invalid operator: {self.value}")
 
@@ -122,11 +122,9 @@ class GetNode(Node):
   def __init__(self, value, prompt, line, column):
     super().__init__(value, line, column)
 
-    self.value = value
-
     self.prompt = prompt
 
   def execute(self, memory):
-    value = input(self.prompt)
+    value = input(self.prompt.value)
     memory.set(self.value, value)
     # print(VARIABLES)

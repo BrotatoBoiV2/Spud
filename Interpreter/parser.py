@@ -32,191 +32,118 @@ from tokenizer import Token
 
 
 class Parser:
-    def __init__(self):
-        self.index = 0
-        self.tokens = None
-        self.token = None
-        self.parsed = []
+  def __init__(self):
+    self.index = 0
+    self.tokens = None
+    self.token = None
+    self.parsed = []
 
-    def peek(self, amount=0):
-        if self.index+amount != len(self.tokens):
-            return self.tokens[self.index+amount]
+  def peek(self, amount=0):
+    if self.index+amount != len(self.tokens):
+      return self.tokens[self.index+amount]
 
-    def advance(self, amount=1):
-        self.index += amount
-        self.token = self.peek()
+  def advance(self, amount=1):
+    self.index += amount
+    self.token = self.peek()
 
-        if not self.token:
-            self.token = Token("EOF", "EOF", None, None)
+    if not self.token:
+      self.token = Token("EOF", "EOF", None, None)
 
-    def consume(self):
-        if self.token:
-            if self.token.type == "KEYWORD":
-                if self.peek(1).type == "EQUAL":
-                    error_msg = f"You tried to assign a value to a keyword on line {self.token.line} at column {self.token.column}."
-                    
-                    raise SyntaxError(error_msg)
-                
-                return self.token.value
+  def parse_say(self):
+    self.advance()
 
-            elif self.peek().type == "IDENTIFIER":
-                if self.peek(1).type == "EQUAL":
-                    return "SET_VARIABLE"
+    return SayNode(self.parse_expression(), self.token.line, self.token.column)
 
-                return self.token.value
+  def parse_expression(self):
+    left = self.parse_primary()
+    # self.advance()
 
-            elif self.token.type == "STRING":
-                self.parsed.append(StringNode(self.token.value, self.token.line, self.token.column))
+    while self.token.type == "OPERATOR":
+      oper = self.token.value
+      self.advance()
+      
+      right = self.parse_primary()
+      
+      if self.token.type == "IDENTIFIER":
+        print("CRINGE")
+        right = BinOperNode(oper, right, self.peek(1), self.token.line, self.token.column)
 
-                return None
+      left = BinOperNode(oper, left, right, self.token.line, self.token.column)
+    
+    return left
 
-            elif self.token.type == "INTEGER":
-                self.parsed.append(IntegerNode(self.token.value, self.token.line, self.token.column))
+  def parse_primary(self):
+    token = self.token
 
-                return None
+    if token.type == "INTEGER":
+      self.advance()
+      return IntegerNode(token.value, token.line, token.column)
 
-        return None
+    elif token.type == "STRING":
+      self.advance()
+      return StringNode(token.value, token.line, token.column)
 
-    def begin_parser(self, tokens):
-        self.tokens = tokens 
-        self.token = self.peek()
+    elif token.type == "IDENTIFIER":
+      self.advance()
+      return VariableNode(token.value, token.line, token.column)
 
-    def parse_say(self):
-        self.advance()
+    elif token.type == "LPARAM":
+      self.advance()
+      node = self.parse_expression()
+
+      if self.token.type != "RPARAM":
+        raise SyntaxError("Expected ')' after expression.")
+
+      self.advance()
+      return node
+
+
+  def parse_get(self):
+    self.advance()
+
+    var_name = ""
+    prompt = ""
+
+    if self.token.type == "IDENTIFIER":
+      var_name = self.token.value
+      self.advance()
+    else:
+      raise SyntaxError("Expected identifier after 'get'.")
+
+    return GetNode(var_name, self.parse_expression(), self.token.line, self.token.column)
+
+  def parse_set_variable(self):
+    var_name = self.token.value
+    self.advance()
+
+    if self.token.type != "EQUAL":
+      raise SyntaxError("Expected '=' after variable name.")
+
+    self.advance()
+
+    expression_tree = self.parse_expression()
+
+    return VariableNode(var_name, self.token.line, self.token.column, value_parts=expression_tree)
+
+
+  def parse(self, tokens):
+    self.tokens = tokens
+    self.token = self.peek()
+
+    while self.token.type != "EOF":
+      token = self.token
+
+      if token.type == "KEYWORD":
+        if token.value == "say":
+          self.parsed.append(self.parse_say())
         
-        output_parts = []
-        
-        while True:
-            if self.token.type == "EOL" or self.token.type == "EOF":
-                break
+        elif token.value == "get":
+          self.parsed.append(self.parse_get())
 
-            if self.peek(1).type == "OPERATOR":
-                left = None
-                right = None
+      elif token.type == "IDENTIFIER":
+        self.parsed.append(self.parse_set_variable())
 
-                if self.token.type == "IDENTIFIER":
-                    left = VariableNode(self.token.value, self.token.line, self.token.column)
-                elif self.token.type == "INTEGER":
-                    left = IntegerNode(self.token.value, self.token.line, self.token.column)
-                elif self.token.type == "STRING":
-                    left = StringNode(self.token.value, self.token.line, self.token.column)
+      self.advance()
 
-                if self.peek(2).type == "IDENTIFIER":
-                    right = VariableNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
-                elif self.peek(2).type == "INTEGER":
-                    right = IntegerNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
-                elif self.peek(2).type == "STRING":
-                    right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
+    return self.parsed
 
-                output_parts.append(BinOperNode(self.peek(1).value, left,  right, self.token.line, self.token.column))
-            
-            elif self.token.type == "STRING":
-                output_parts.append(StringNode(self.token.value, self.token.line, self.token.column))
-
-            elif self.token.type == "INTEGER":
-                output_parts.append(IntegerNode(self.token.value, self.token.line, self.token.column))
-
-            elif self.token.type == "IDENTIFIER":
-                output_parts.append(VariableNode(self.token.value, self.token.line, self.token.column))
-
-            self.advance()
-
-        return SayNode(output_parts, self.token.line, self.token.column)
-
-    def parse_get(self):
-        self.advance()
-
-        var_name = ""
-        prompt = ""
-
-        if self.token.type == "IDENTIFIER":
-            var_name = self.token.value
-            self.advance()
-        else:
-            raise SyntaxError("Expected an identifier after `get` keyword.")
-
-        while True:
-            if self.token.type == "EOL" or self.token.type == "EOF":
-                break
-
-            if self.token.type == "IDENTIFIER":
-                var_name += self.token.value
-
-            if self.token.type == "STRING":
-                prompt += self.token.value
-
-            self.advance()
-
-        return GetNode(var_name, prompt, self.token.line, self.token.column)
-
-    def parse_set_variable(self):
-        # print(self.token)
-        value_parts = []
-        var_name = self.token.value
-        self.advance()
-
-        while True:
-            if self.peek().type == "EOL" or self.peek().type == "EOF":
-                break
-
-            if self.peek(1).type == "OPERATOR":
-                left = None
-                right = None
-
-                if self.token.type == "IDENTIFIER":
-                    left = VariableNode(self.token.value, self.token.line, self.token.column)
-                elif self.token.type == "INTEGER":
-                    left = IntegerNode(self.token.value, self.token.line, self.token.column)
-                elif self.token.type == "STRING":
-                    left = StringNode(self.token.value, self.token.line, self.token.column)
-
-                if self.peek(2).type == "IDENTIFIER":
-                    right = VariableNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
-                elif self.peek(2).type == "INTEGER":
-                    right = IntegerNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
-                elif self.peek(2).type == "STRING":
-                    right = StringNode(self.peek(2).value, self.peek(2).line, self.peek(2).column)
-
-
-                value_parts.append(BinOperNode(self.peek(1).value, left, right, self.peek().line, self.peek().column))
-
-                self.advance(3)
-                continue
-                
-            if self.peek().type == "STRING":
-                value_parts.append(StringNode(self.peek().value, self.peek().line, self.peek().column))
-
-            elif self.peek().type == "INTEGER":
-                value_parts.append(IntegerNode(self.peek().value, self.peek().line, self.peek().column))
-
-            elif self.peek().type == "IDENTIFIER": # ~ Might need value_parts. ~ #
-                value_parts.append(VariableNode(self.peek().value, self.peek().line, peek=self.peek().column))
-            
-            self.advance()
-            
-        return VariableNode(var_name, self.token.line, self.token.column, value_parts=value_parts)
-
-    def parse(self, tokens):
-        self.begin_parser(tokens)
-        # for token in self.tokens:
-        #     print(token)
-
-        while self.token.type != "EOF":
-            token_value = self.consume()
-            
-            if token_value == "say":
-                self.parsed.append(self.parse_say())
-            
-            elif token_value == "get":
-                self.parsed.append(self.parse_get())
-
-            elif token_value == "SET_VARIABLE":
-                self.parsed.append(self.parse_set_variable())
-
-            elif self.token.type == "IDENTIFIER":
-                error_msg = f"Invalid token: '{self.token.value}' at line {self.token.line} column {self.token.column}"
-                raise SyntaxError(error_msg)
-            
-            self.advance()
-
-        return self.parsed

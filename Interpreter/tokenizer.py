@@ -153,6 +153,12 @@ class Tokenizer:
             if self.current() == "+":
                 tokens.append(Token("OPERATOR", self.current(), row, column))
 
+            if self.current() == "(":
+                tokens.append(Token("LPARAM", "(", row, column))
+
+            if self.current() == ")":
+                tokens.append(Token("RPARAM", ")", row, column))
+
             if self.current() == "(" and self.peek() == "~":
                 self.index += 1
                 in_comment = True

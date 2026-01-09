@@ -12,7 +12,7 @@
         ```
         (~ This is a comment. ~)
         count = 10
-        say "The result of 'count' is: " + count + 1
+        say "The result of 'count' is: " + (count + 1)
         say "throw an error here
         ```
 
@@ -27,7 +27,7 @@
         Allow for error handling (DONE)
 
     What is next?
-        A codebase rewrite before implementing any new features
+        A codebase rewrite before implementing any new features and ensure errors.
 
 ---
 
@@ -132,8 +132,18 @@
     04:50
         Updated to version 1.0-2026.01.09 in the Changelogs and filestamps.
 
+    18:58
+        Updated the parser to allow for cleaner code and chained mathematical operations.
+
+    19:44
+        Included parentheses to allow for more complex mathematical operations.
+
 
 ---
 
 # TO-DO:
-
+    *** Codebase rewrite for less spaghetti code. ***
+    *** Profesionalize the errors:
+        Error: {error}
+        Line {line}: {line text} ***
+    
