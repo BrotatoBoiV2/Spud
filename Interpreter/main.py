@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 0.8-2026.01.07
+                        Version: 1.0-2026.01.09
 
 ===============================================================================
 
@@ -33,6 +33,7 @@ from sys import argv
 # ~ Import Local Modules. ~ #
 from tokenizer import Tokenizer
 from parser import Parser
+from memory import Environment
 
 
 class Main:
@@ -56,6 +57,8 @@ class Main:
             return f.read()
 
     def execute(self):
+        global_memory = Environment()
+
         while self._is_running:
             file_string = self.read_file()
             tokens = self.tokenizer.tokenize(file_string)
@@ -65,7 +68,7 @@ class Main:
             
             for node in ast:
                 if node:
-                    node.execute()
+                    node.execute(global_memory)
 
             print("")
 

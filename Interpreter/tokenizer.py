@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 0.8-2026.01.07
+                        Version: 1.0-2026.01.09
 
 ===============================================================================
 

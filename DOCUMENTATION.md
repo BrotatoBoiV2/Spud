@@ -124,7 +124,18 @@
     21:13
         Existing keywords are not not allowed to be assigned to.
 
+    21:20
+        Created the `memory.py` file to handle variable memory.
+
+2026-01-09:
+    04:46
+        Created a memory environment to handle variable memory.
+
+    04:50
+        Updated to version 1.0-2026.01.09 in the Changelogs and filestamps.
+
+
 ---
 
 # TO-DO:
-    * Have VARIABLES an Environment Class to handle in-scope variables.
+
