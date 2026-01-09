@@ -27,9 +27,7 @@
         Allow for error handling (DONE)
 
     What is next?
-        Loops
-
-        While loops are the first thing to start with.
+        A codebase rewrite before implementing any new features
 
 ---
 
