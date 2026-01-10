@@ -172,6 +172,8 @@ class Tokenizer:
 
                 token_type = "KEYWORD" if ident in ["say", "get"] else "IDENTIFIER"
                 tokens.append(Token(token_type, ident, row, column))
+
+                ident = ""
                 continue
             
             else:
