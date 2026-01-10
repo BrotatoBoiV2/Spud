@@ -127,7 +127,7 @@
 
 2026-01-09:
     04:46
-        Created a memory environment to handle variable memory.
+        Created a memory environment to handle variable memory, so it is no longer fragile.
 
     04:50
         Updated to version 1.0-2026.01.09 in the Changelogs and filestamps.
