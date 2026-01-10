@@ -142,7 +142,6 @@
 ---
 
 # TO-DO:
-    *** Codebase rewrite for less spaghetti code. ***
     *** Profesionalize the errors:
         Error: {error}
         Line {line}: {line text} ***

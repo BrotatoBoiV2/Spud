@@ -36,7 +36,7 @@ class Environment:
         if name in self.variables:
             return self.variables[name]
 
-        elif self.parent:
+        if self.parent:
             return self.parent.get(name)
 
         raise NameError(f"Variable '{name}' not found.")

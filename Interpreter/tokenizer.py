@@ -27,10 +27,6 @@
 """
 
 
-# from dataclasses import dataclass
-
-
-# @dataclass
 class Token:
     def __init__(self, token_type, token_value, token_line, token_column):
         self.type = token_type
@@ -64,19 +60,18 @@ class Tokenizer:
 
         while self.index < len(code):
             column += 1
-            
-            if self.current() == "\n":
-                tokens.append(Token("EOL", "EOL", row, column))
-                row += 1
-                column = 1
+            char = self.current()
 
-            if self.current() == " ":
-                self.index += 1
-
-            if self.current().isalnum():
-                ident += self.current()
+            if char.isspace():
+                if char == "\n":
+                    tokens.append(Token("EOL", "EOL", row, column))
+                    row += 1
+                    column = 1
                 
-            if self.current() == '"':
+                self.index += 1
+                continue
+
+            elif char == '"':
                 string_text = ""
                 self.index += 1
 
@@ -87,6 +82,7 @@ class Tokenizer:
                         raise SyntaxError(error_msg)
 
                     if self.current() == '"' or self.current() == None:
+                        self.index += 1
                         break
 
                     elif self.current() == "\\" and self.peek() == "n":
@@ -105,13 +101,13 @@ class Tokenizer:
 
                 tokens.append(Token("STRING", string_text, row, column))
 
-            if self.current() == "~" and self.peek() == ")":
+            elif char == "~" and self.peek() == ")":
                 error_msg = f"There hasn't been a Left Potato Ear '(~' found for the matching pair on line {row} at column {column}."
 
                 raise SyntaxError(error_msg)
 
 
-            if self.current() == "(" and self.peek() == "~":
+            elif char == "(" and self.peek() == "~":
                 comment_text = ""
                 self.index += 2
 
@@ -134,49 +130,52 @@ class Tokenizer:
                 tokens.append(Token("COMMENT", comment_text, row, column))
                 continue
 
-            if self.current().isdigit():
+            elif char.isdigit():
                 while True:
+                    ident += self.current()
                     self.index += 1
+
                     if self.current() == None or not self.current().isdigit():
                         break
-
-                    ident += self.current()
 
                 tokens.append(Token("INTEGER", ident, row, column))
                 ident = ""
 
                 continue
 
-            if self.current() == "=":
+            elif char == "=":
                 tokens.append(Token("EQUAL", "=", row, column))
-
-            if self.current() == "+":
-                tokens.append(Token("OPERATOR", self.current(), row, column))
-
-            if self.current() == "(":
-                tokens.append(Token("LPARAM", "(", row, column))
-
-            if self.current() == ")":
-                tokens.append(Token("RPARAM", ")", row, column))
-
-            if self.current() == "(" and self.peek() == "~":
                 self.index += 1
-                in_comment = True
+                continue
 
-            if self.current() == "~" and self.peek() == ")":
-                in_comment = False
-                tokens.append(Token("COMMENT", ident, row, column))
+            elif self.current() == "+":
+                tokens.append(Token("OPERATOR", self.current(), row, column))
+                self.index += 1
+                continue 
+
+            elif self.current() == "(":
+                tokens.append(Token("LPARAM", "(", row, column))
+                self.index += 1
+                continue
+
+            elif self.current() == ")":
+                tokens.append(Token("RPARAM", ")", row, column))
+                self.index += 1
+                continue
+
+            elif char.isalpha():
                 ident = ""
 
-            if not self.peek().isalnum() and ident:
-                if ident in ["say", "get"]:
-                    tokens.append(Token("KEYWORD", ident, row, column))
-                else:
-                    tokens.append(Token("IDENTIFIER", ident, row, column))
+                while self.current() and self.current().isalnum():
+                    ident += self.current()
+                    self.index += 1
 
-                ident = ""
-
-            self.index += 1
+                token_type = "KEYWORD" if ident in ["say", "get"] else "IDENTIFIER"
+                tokens.append(Token(token_type, ident, row, column))
+                continue
+            
+            else:
+                self.index += 1
 
         tokens.append(Token("NEWLINE", "\\n", row, column))
         tokens.append(Token("EOF", "EOF", row, column))

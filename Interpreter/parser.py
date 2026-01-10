@@ -56,18 +56,12 @@ class Parser:
 
   def parse_expression(self):
     left = self.parse_primary()
-    # self.advance()
 
     while self.token.type == "OPERATOR":
       oper = self.token.value
       self.advance()
       
       right = self.parse_primary()
-      
-      if self.token.type == "IDENTIFIER":
-        print("CRINGE")
-        right = BinOperNode(oper, right, self.peek(1), self.token.line, self.token.column)
-
       left = BinOperNode(oper, left, right, self.token.line, self.token.column)
     
     return left
@@ -110,7 +104,10 @@ class Parser:
     else:
       raise SyntaxError("Expected identifier after 'get'.")
 
-    return GetNode(var_name, self.parse_expression(), self.token.line, self.token.column)
+    if self.peek(1).type != "EOL":
+      prompt = self.parse_expression()
+
+    return GetNode(var_name, prompt, self.token.line, self.token.column)
 
   def parse_set_variable(self):
     var_name = self.token.value
@@ -143,7 +140,8 @@ class Parser:
       elif token.type == "IDENTIFIER":
         self.parsed.append(self.parse_set_variable())
 
-      self.advance()
+      else:
+        self.advance()
 
     return self.parsed
 

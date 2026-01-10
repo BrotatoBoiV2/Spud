@@ -96,9 +96,6 @@ class VariableNode(Node):
       if value is not None:
         return value
 
-      if memory.get(self.value):
-        return memory.get(self.value)
-
       raise ValueError(f"Variable {self.value} is not defined.")
 
     else:
@@ -115,7 +112,7 @@ class SayNode(Node):
   def execute(self, memory):
     prompt = join_parts(self.value, memory)
 
-    print(prompt, end="")
+    print(prompt, end="", flush=True)
 
 
 class GetNode(Node):
@@ -125,6 +122,19 @@ class GetNode(Node):
     self.prompt = prompt
 
   def execute(self, memory):
-    value = input(self.prompt.value)
+    is_num = True
+    prompt = join_parts(self.prompt, memory) if self.prompt else ""
+    value = input(prompt)
+
+    if not value:
+      raise ValueError("No value provided.")
+
+    for val in value:
+      if not val.isdigit():
+        is_num = False
+        break
+
+    if is_num:
+      value = int(value)
+    
     memory.set(self.value, value)
-    # print(VARIABLES)

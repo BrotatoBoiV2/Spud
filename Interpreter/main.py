@@ -46,8 +46,6 @@ class Main:
             print("File is not a `.pot` file!")
             self.display_usage()
 
-        self._is_running = True
-
     def display_usage(self):
         print(f"Usage: python3 {argv[0]} <file.pot>")
         exit()
@@ -58,21 +56,15 @@ class Main:
 
     def execute(self):
         global_memory = Environment()
-
-        while self._is_running:
-            file_string = self.read_file()
-            tokens = self.tokenizer.tokenize(file_string)
-            # for token in tokens:
-            #     print(token)
-            ast = self.parser.parse(tokens)
+        file_string = self.read_file()
+        tokens = self.tokenizer.tokenize(file_string)
+        ast = self.parser.parse(tokens)
             
-            for node in ast:
-                if node:
-                    node.execute(global_memory)
+        for node in ast:
+            if node:
+                node.execute(global_memory)
 
-            print("")
-
-            self._is_running = False
+        print("")
 
 
 if __name__ == '__main__':
