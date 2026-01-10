@@ -1,8 +1,15 @@
 # Spud Language
 
 ## Summary
-Spud is going to be a low-level programming language with a high-level, developer-friendly syntax. The long-term goal is for Spud to become a fully self-hosted systems language capable of building everything from operating systems and VGA-level graphical software to AI tools and quantum-focused computation.  
-Spud will eventually support importing its own source files as well as code written in other languages.
+Spud is an experimental programming language. Currently, it is a high-level interpreted language designed for ease of use. The long-term roadmap is to evolve Spud into a low-level, self-hosted systems language capable of building operating systems and low-level graphical software.
+
+## Current Features (v1.1)
+  * Recursive Expression Parsing: Supports complex mathematical operations including addition and string concatenation.
+  * Operation Grouping: Full support for parentheses `( )` to control operator precedence.
+  * Variable Scoping: Implements a Lexical Environment system via `memory.py` for robust variable management.
+  * Dynamic Type Coercion: Automatically handles integer and string conversions for seamless `say` output.
+  * Interactive Input: Capture user input with the `get` keyword, featuring automatic numeric detection.
+  * Informative Error Handling: Detects unterminated strings and unclosed comments (`(~` `~)`) during tokenization.
 
 ---
 
