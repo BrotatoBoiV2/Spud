@@ -42,7 +42,7 @@ def join_parts(parts, memory):
     if not parts: return None
   
     return parts.execute(memory)
-    
+
 
 class Node:
     """
@@ -253,7 +253,7 @@ class VariableNode(Node):
 
         else:
             value = join_parts(self.value_parts, memory)
-            memory.set(self.value, value)
+            memory.set_var(self.value, value)
 
 
 class SayNode(Node):
@@ -341,4 +341,4 @@ class GetNode(Node):
         if is_num:
             value = int(value)
     
-        memory.set(self.value, value)
+        memory.set_var(self.value, value)
