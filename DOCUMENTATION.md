@@ -10,7 +10,7 @@
 ---
 
 ## Developers Log
-*2026-01-02:**
+**2026-01-02:**
     
     19:18
         Initially creating the programs structure.
