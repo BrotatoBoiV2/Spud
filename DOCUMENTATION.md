@@ -138,6 +138,9 @@
     19:44
         Included parentheses to allow for more complex mathematical operations.
 
+2026-01-12:
+    15:20
+        Cleaned and rewritten `main.py`, now moving onto the `tokenizer.py` file.
 
 ---
 
@@ -145,5 +148,4 @@
     *** Profesionalize the errors:
         Error: {error}
         Line {line}: {line text} ***
-    * I need to add more comments. *
     
