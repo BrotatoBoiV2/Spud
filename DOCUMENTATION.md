@@ -1,38 +1,17 @@
-*Note:* All time is in **UTC**.
+**Note:** All time is in *UTC*.
 
 ---
 
 ## Weekly Plan
-    *Week Date:* 2026-01-05/2026-01-09
+    *Week Date:* 2026-01-12/2026-01-16
 
-    Expected output:
-        Able to run the test file and have each line function as intended.
-
-        test.pot:
-        ```
-        (~ This is a comment. ~)
-        count = 10
-        say "The result of 'count' is: " + (count + 1)
-        say "throw an error here
-        ```
-
-        When that is done I can move on to the next version of the interpreter.
-
-    Path:
-        Start off with comments (DONE)
-        Then move onto the `say` keyword and allowing strings (DONE)
-        Then allow for setting and manipulating variables (DONE)
-        Introduce variable expansions (DONE)
-        Have string concationation and allow for int to string conversion (DONE)
-        Allow for error handling (DONE)
-
-    What is next?
-        A codebase rewrite before implementing any new features and ensure errors.
+    Essentially all I need to do is refacor the code and make sure the examples work as intended.
 
 ---
 
 ## Developers Log
-2026-01-02:
+*2026-01-02:**
+    
     19:18
         Initially creating the programs structure.
 
@@ -45,7 +24,8 @@
     19:50
         Both files `executor.py` and `parser.py` have base skeletons.
 
-2026-01-03:
+**2026-01-03:**
+    
     04:46
         Test files have been written for the tokenizer.
 
@@ -55,11 +35,13 @@
     19:06
         Fixed aome identifier errors like double spaces and root words. (i.e.: say -> saying)
 
-2026-01-04:
+**2026-01-04:**
+    
     19:45
         Updated the say function so that it is now able to handle string concatenation and integers.
 
-2026-01-05:
+**2026-01-05:**
+    
     05:52
         Created the GetNode so now input can be received from the user.
         I suspect the VARIABLE handling may be fragile, but I will cross that bridge when I come to it.
@@ -74,11 +56,13 @@
     18:20
         Created a part iterator helpr method in `nodes.py` to help with variable expansion.
 
-2026-01-06:
+**2026-01-06:**
+    
     14:57
         Started to work on enforcing string concatenation so I can add functionality to keywords later. I need to test if this works for other keywords and such.
 
-2026-01-07:
+**2026-01-07:**
+
     16:25
         Noticed there was an error with the update running the examples, but patched them.
         The `parse_set_variable` method was not sending Nodes, and that broke functionality.
@@ -101,7 +85,8 @@
     20:40
         Updated to version 0.8-2026.01.07 in the Changelogs and filestamps.
 
-2026-01-08:
+**2026-01-08:**
+
     04:08
         Introduced the first error of an unterminated string.
 
@@ -125,7 +110,8 @@
     21:20
         Created the `memory.py` file to handle variable memory.
 
-2026-01-09:
+**2026-01-09:**
+
     04:46
         Created a memory environment to handle variable memory, so it is no longer fragile.
 
@@ -138,7 +124,8 @@
     19:44
         Included parentheses to allow for more complex mathematical operations.
 
-2026-01-12:
+**2026-01-12:**
+
     15:20
         Cleaned and rewritten `main.py`, now moving onto the `tokenizer.py` file.
 
@@ -148,7 +135,8 @@
 ---
 
 # TO-DO:
-    *** Profesionalize the errors:
-        Error: {error}
-        Line {line}: {line text} ***
+*** Profesionalize the errors:
+    Error: {error}
+    Line {line}: {line text}
+***
     
