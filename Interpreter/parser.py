@@ -5,7 +5,7 @@
 					Description: My custom language.
 							File: parser.py
 							Date: 2026/01/02
-						Version: 1.1-2026.01.09
+						Version: 1.1.1-2026.01.12
 
 ===============================================================================
 
@@ -102,7 +102,7 @@ class Parser:
 				SayNode          : The parsed 'say' statement.
 		"""
 
-		line, col = self.token.line, self.token.column
+		line, col = self.token.line, self.token.col
 		self.advance()
 
 		return SayNode(self.parse_expression(), line, col)
@@ -127,7 +127,7 @@ class Parser:
 				left,
 				right,
 				self.token.line,
-				self.token.column
+				self.token.col
 			)
 		
 		return left
@@ -144,15 +144,15 @@ class Parser:
 
 		if token.type == "INTEGER":
 			self.advance()
-			return IntegerNode(token.value, token.line, token.column)
+			return IntegerNode(token.value, token.line, token.col)
 
 		elif token.type == "STRING":
 			self.advance()
-			return StringNode(token.value, token.line, token.column)
+			return StringNode(token.value, token.line, token.col)
 
 		elif token.type == "IDENTIFIER":
 			self.advance()
-			return VariableNode(token.value, token.line, token.column)
+			return VariableNode(token.value, token.line, token.col)
 
 		elif token.type == "LPARAM":
 			self.advance()
@@ -186,10 +186,10 @@ class Parser:
 		else:
 			raise SyntaxError("Expected identifier after 'get'.")
 
-		if self.token.type no in ["EOL", "EOF"]:
+		if self.token.type not in ["EOL", "EOF"]:
 			prompt = self.parse_expression()
 
-		return GetNode(var_name, prompt, self.token.line, self.token.column)
+		return GetNode(var_name, prompt, self.token.line, self.token.col)
 
 	def parse_set_variable(self):
 		"""
@@ -200,7 +200,7 @@ class Parser:
 		"""
 
 		var_name = self.token.value
-		line, col = self.token.line, self.token.column
+		line, col = self.token.line, self.token.col
 		self.advance()
 
 		if self.token.type != "EQUAL":

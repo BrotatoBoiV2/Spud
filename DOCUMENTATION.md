@@ -129,7 +129,9 @@ the examples work as intended.
     - Refactored the `parser.py` file, now going to the `nodes.py` file.
 *20:10
     - Finished refactoring the `nodes.py` file.
-    
+*20:20
+    - Entire codebase has now been refactored and is ready to be tested.
+    - Updated changelog to version 1.1.1-2026.01.12 and in the filestamps.
 ---
 
 # TO-DO:
