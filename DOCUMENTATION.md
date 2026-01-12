@@ -109,7 +109,6 @@
     * 18:58
         - Updated the parser to allow for cleaner code and chained 
           mathematical operations.
-
     * 19:44
         - Included parentheses for more complex mathematical operations.
 
