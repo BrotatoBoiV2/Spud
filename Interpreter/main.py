@@ -5,11 +5,11 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 1.1-2026.01.09
+                        Version: 1.1.1-2026.01.12
 
 ===============================================================================
 
-                        Copyright (C) 2025 BrotatoBoi
+                    Copyright (C) 2025 BrotatoBoi
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
@@ -41,10 +41,10 @@ class SpudInterpreter:
         ~ The interpreter class responsible for executing the source code. ~
 
         Functions:
-            - __init__      : Initializes the interpreter.
-            - display_usage : Displays the usage of the interpreter.
-            - read_file     : Reads the file.
-            - execute       : Executes the file.
+            - __init__                    : Initializes the interpreter.
+            - display_usage               : Displays the usage of the interpreter.
+            - read_file                   : Reads the file.
+            - execute                     : Executes the file.
     """
 
     def __init__(self, file_path):
@@ -52,7 +52,13 @@ class SpudInterpreter:
             ~ Initialize the Interpreter. ~
 
             Arguments:
-                file_path (str) : The path to the file to be executed.
+                file_path       (str)     : The path to the file to be executed.
+
+            Attributes:
+                tokenizer    (Tokenizer)  : The tokenizer instance.
+                parser        (Parser)    : The parser instance.
+                environment (Environment) : The environment instance.
+                file_path      (str)      : The path to the file to be executed.
         """
 
         self.tokenizer = Tokenizer()
@@ -129,6 +135,8 @@ if __name__ == '__main__':
     else:
         try:
             interpreter.execute()
+            sys.exit(0)
+
         except Exception as e:
             print(f"Error: {e}")
             sys.exit(1)
