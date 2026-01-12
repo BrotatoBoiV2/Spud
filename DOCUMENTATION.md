@@ -136,7 +136,9 @@
 
 # TO-DO:
 *** Profesionalize the errors:
+```
     Error: {error}
     Line {line}: {line text}
+```
 ***
     
