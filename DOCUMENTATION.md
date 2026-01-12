@@ -142,6 +142,9 @@
     15:20
         Cleaned and rewritten `main.py`, now moving onto the `tokenizer.py` file.
 
+    16:50
+        Finished refactoring the `tokenizer.py` file, will move on to the `parser.py` file after a break.
+
 ---
 
 # TO-DO:

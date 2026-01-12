@@ -5,182 +5,252 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.1-2026.01.09
+                        Version: 1.1.1-2026.01.12
 
 ===============================================================================
 
-                        Copyright (C) 2025 BrotatoBoi 
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU Affero General Public License as published
-        by the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+                    Copyright (C) 2025 BrotatoBoi 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-        You should have received a copy of the GNU Affero General Public License
-        along with this program. If not, see <https://www.gnu.org/licenses/>
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see <https://www.gnu.org/licenses/>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 
 class Token:
+    """
+        ~ Represents a token in the source code. ~
+
+        Functions:
+            - __init__             : Initializes the token.
+            - __str__              : Displays the Token as a string.
+    """
+
     def __init__(self, token_type, token_value, token_line, token_column):
+        """
+            ~ Initialize the Token. ~
+
+            Arguments:
+                token_type   (str) : The type of the token.
+                token_value  (str) : The value of the token.
+                token_line   (int) : The line number of the token.
+                token_column (int) : The column number of the token.
+        
+        """
+
         self.type = token_type
         self.value = token_value
         self.line = token_line
-        self.column = token_column
+        self.col = token_column
 
     def __str__(self):
-        return f"Token({self.type} | {self.value} | {self.line} | {self.column})"
+        """
+            ~ Print the Token in a string format for debugging. ~
+
+            Returns:
+                str                : A string representation of the token.
+        """
+
+        return f"Token({self.type} | {self.value} | {self.line} | {self.col})"
 
 
 class Tokenizer:
+    """
+        ~ The class to turn the source code into tokens for the parser. ~
+
+        Functions:
+            - __init__       : Initializes the tokenizer.
+            - tokenize       : Tokenizes the source code.
+            - peek           : Peek at the curretn or next token.
+    """
+
     def __init__(self):
+        """
+            ~ Initialize the Tokenizer. ~
+
+            Attributes:
+                code   (str) : The source code.
+                index  (int) : The current index in the code.
+                column (int) : The current column in the code.
+                row    (int) : The current row in the code.
+        """
+
         self.code = None
         self.index = 0
+        self.col = 1
+        self.row = 1
 
-    def peek(self, amount=1):
-        if self.index + amount < len(self.code):   return self.code[self.index+amount]
+    def peek(self, amount=0):
+        """
+            ~ Peek at the next token. ~
+
+            Arguments:
+                amount (int) : The amount to peek ahead.
+
+            Returns:
+                str          : The next token to process.
+        """
+
+        # ~ Check if the token exists to avoid errors. ~ #
+        if self.index + amount < len(self.code):
+            return self.code[self.index + amount]
+        
         return ""
 
-    def current(self):
-        if self.index < len(self.code): return self.code[self.index]
+    def process_string(self):
+        string_text = ""
+        start_col = self.col
+        self.index += 1
+        self.col += 1
+
+        while self.index < len(self.code) and self.peek() != '"':
+            if self.peek() == "\\" and self.peek(1) == "n":
+                string_text += "\n"
+                self.index += 2
+                self.col += 2
+
+            else:
+                string_text += self.peek()
+                self.index += 1
+                self.col += 1
+
+                
+            if self.index >= len(self.code):
+                raise SyntaxError(
+                    f"The string on line {self.row} at column {start_col}"
+                    "is missing a closing quote."
+                )
+        self.index += 1
+        self.col += 1
+
+        return string_text, start_col
+
+    def process_comment(self):
+        comment_text = ""
+        start_col = self.col
+        self.index += 2
+        self.col += 2
+
+        while self.index < len(self.code):
+            if self.peek() == "~" and self.peek(1) == ")":
+                break
+
+            comment_text += self.peek()
+            self.index += 1
+            self.col += 1
+
+            if self.index >= len(self.code):
+                raise SyntaxError(
+                    f"The comment on line {self.row} at column {self.col}"
+                    "is missing a Right Potato Ear '~)'."
+                )
+
+        self.index += 2
+        self.col += 2
+
+        return comment_text, start_col
 
     def tokenize(self, code):
+        """
+            ~ Tokenize the source code. ~
+
+            Arguments:
+                code (str)   : The source code.
+
+            Returns:
+                list         : A list of tokens.
+        """
+
         self.code = code
-
-        column = 1
-        row = 1
-        ident = ""
+        self.index = 0
+        self.col = 1
+        self.row = 1
         tokens = []
+        symbols = {
+            "=": "EQUAL", "+": "OPERATOR",
+            "(": "LPARAM", ")": "RPARAM"
+        }
 
+        # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
-            column += 1
-            char = self.current()
+            char = self.peek()
 
             if char.isspace():
                 if char == "\n":
-                    tokens.append(Token("EOL", "EOL", row, column))
-                    row += 1
-                    column = 1
+                    tokens.append(Token("EOL", "EOL", self.row, self.col))
+                    self.row += 1
+                    self.col = 1
+
+                else:
+                    self.col += 1
                 
                 self.index += 1
-                continue
+
+                
 
             elif char == '"':
-                string_text = ""
-                self.index += 1
-
-                while True:
-                    if self.index == len(self.code):
-                        error_msg = f"The string on line {row} at column {column} is missing a closing quote."
-
-                        raise SyntaxError(error_msg)
-
-                    if self.current() == '"' or self.current() == None:
-                        self.index += 1
-                        break
-
-                    elif self.current() == "\\" and self.peek() == "n":
-                        string_text += "\n"
-                        self.index += 2
-                        continue
-                    else:
-                        if self.current():
-                            string_text += self.current()
-
-                        self.index += 1
-
-                        continue
-
-                    self.index += 1
-
-                tokens.append(Token("STRING", string_text, row, column))
-
-            elif char == "~" and self.peek() == ")":
-                error_msg = f"There hasn't been a Left Potato Ear '(~' found for the matching pair on line {row} at column {column}."
-
-                raise SyntaxError(error_msg)
-
-
-            elif char == "(" and self.peek() == "~":
-                comment_text = ""
-                self.index += 2
-
-                while True:
-                    if self.index == len(self.code):
-                        error_msg = f"The comment on line {row} at column {column} is missing a Right Potato Ear '~)'."
-
-                        raise SyntaxError(error_msg)
-
-                    if self.current() == "~" and self.peek() == ")":
-                        self.index += 1
-                        break
-
-                    if self.current() == None:
-                        break
-
-                    comment_text += self.current()
-                    self.index += 1
-
-                tokens.append(Token("COMMENT", comment_text, row, column))
-                continue
+                text, col = self.process_string()
+                tokens.append(Token("STRING", text, self.row, col))
+    
+            elif char == "(" and self.peek(1) == "~":
+                text, col = self.process_comment()
+                tokens.append(Token("COMMENT", text, self.row, col))
+                
+            elif char == "~" and self.peek(1) == ")":
+                raise SyntaxError(
+                    "No Left Potato Ear '(~' found for matching pair "
+                    f"on line {self.row} column {self.col}."
+                )
 
             elif char.isdigit():
-                while True:
-                    ident += self.current()
+                num_text = ""
+                start_col = self.col
+
+                while self.index < len(self.code) and self.peek().isdigit():
+                    num_text += self.peek()
                     self.index += 1
+                    self.col += 1
 
-                    if self.current() == None or not self.current().isdigit():
-                        break
+                tokens.append(Token("INTEGER", num_text, self.row, start_col))
 
-                tokens.append(Token("INTEGER", ident, row, column))
+                
+
+            elif char.isalpha(): # maybe a `process_word()`
                 ident = ""
+                start_col = self.col
+                keywords = ["say", "get"]
 
-                continue
-
-            elif char == "=":
-                tokens.append(Token("EQUAL", "=", row, column))
-                self.index += 1
-                continue
-
-            elif self.current() == "+":
-                tokens.append(Token("OPERATOR", self.current(), row, column))
-                self.index += 1
-                continue 
-
-            elif self.current() == "(":
-                tokens.append(Token("LPARAM", "(", row, column))
-                self.index += 1
-                continue
-
-            elif self.current() == ")":
-                tokens.append(Token("RPARAM", ")", row, column))
-                self.index += 1
-                continue
-
-            elif char.isalpha():
-                ident = ""
-
-                while self.current() and self.current().isalnum():
-                    ident += self.current()
+                while self.index < len(self.code) and self.peek().isalnum():
+                    ident += self.peek()
                     self.index += 1
+                    self.col += 1
+                
+                token_type = "KEYWORD" if ident in keywords else "IDENTIFIER"
+                tokens.append(Token(token_type, ident, self.row, start_col))
 
-                token_type = "KEYWORD" if ident in ["say", "get"] else "IDENTIFIER"
-                tokens.append(Token(token_type, ident, row, column))
+                
 
-                ident = ""
-                continue
-            
+            elif char in symbols:
+                tokens.append(Token(symbols[char], char, self.row, self.col))
+                self.index += 1
+                self.col += 1
+
             else:
                 self.index += 1
+                self.col += 1
 
-        tokens.append(Token("NEWLINE", "\\n", row, column))
-        tokens.append(Token("EOF", "EOF", row, column))
+        tokens.append(Token("NEWLINE", "\\n", self.row, self.col))
+        tokens.append(Token("EOF", "EOF", self.row, self.col))
 
         return tokens
 
