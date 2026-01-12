@@ -127,6 +127,9 @@ the examples work as intended.
       Need to add output for the line in question.
 * 19:32
     - Refactored the `parser.py` file, now going to the `nodes.py` file.
+*20:10
+    - Finished refactoring the `nodes.py` file.
+    
 ---
 
 # TO-DO:
