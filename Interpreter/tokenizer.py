@@ -126,10 +126,11 @@ class Tokenizer:
 
                 
             if self.index >= len(self.code):
-                raise SyntaxError(
-                    f"The string on line {self.row} at column {start_col}"
-                    "is missing a closing quote."
-                )
+                error_msg = "Error: A string is not enclosed with a matching quote character!"
+                location = f"Line: {self.row} ; Column:{self.col}"
+
+                raise SyntaxError(error_msg + "\n" + location)
+
         self.index += 1
         self.col += 1
 
@@ -150,10 +151,11 @@ class Tokenizer:
             self.col += 1
 
             if self.index >= len(self.code):
-                raise SyntaxError(
-                    f"The comment on line {self.row} at column {self.col}"
-                    "is missing a Right Potato Ear '~)'."
-                )
+                error_msg = "Error: A comment is not enclosed with a pair of Right Potato Ears! '~)'"
+                location = f"Line: {self.row} ; Column:{self.col}"
+
+
+                raise SyntaxError(error_msg + "\n" + location)
 
         self.index += 2
         self.col += 2
@@ -207,10 +209,10 @@ class Tokenizer:
                 tokens.append(Token("COMMENT", text, self.row, col))
                 
             elif char == "~" and self.peek(1) == ")":
-                raise SyntaxError(
-                    "No Left Potato Ear '(~' found for matching pair "
-                    f"on line {self.row} column {self.col}."
-                )
+                error_msg = "Error: No Left Potato Ear '(~' found to close comment!"
+                location = f"Line: {self.row} ; Column:{self.col}"
+
+                raise SyntaxError(error_msg + "\n" + location)
 
             elif char.isdigit():
                 num_text = ""

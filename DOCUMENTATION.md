@@ -118,14 +118,15 @@ the examples work as intended.
 * 16:50
     - Finished refactoring the `tokenizer.py` file, will move on to the
         `parser.py` file after a break.
-
+* 17:50
+    - Changed error output to the prefered version:
+        ```
+        Error: {error}
+        Row: {row} ; Column: {column}
+        ```
+      Need to add output for the line in question.
 ---
 
 # TO-DO:
-*** Profesionalize the errors:
-```
-    Error: {error}
-    Line {line}: {line text}
-```
-***
+*** Add Line output to the errors. ***
     
