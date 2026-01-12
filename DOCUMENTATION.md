@@ -5,7 +5,7 @@
 ## Weekly Plan
     *Week Date:* 2026-01-12/2026-01-16
 
-    Essentially all I need to do is refacor the code and make sure the examples work as intended.
+    Essentially all I need to do is refactor the code and make sure the examples work as intended.
 
 ---
 
