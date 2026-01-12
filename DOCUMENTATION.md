@@ -125,6 +125,8 @@ the examples work as intended.
         Row: {row} ; Column: {column}
         ```
       Need to add output for the line in question.
+* 19:32
+    - Refactored the `parser.py` file, now going to the `nodes.py` file.
 ---
 
 # TO-DO:
