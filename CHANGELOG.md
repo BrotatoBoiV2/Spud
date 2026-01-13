@@ -1,6 +1,6 @@
 # Current Version
 
-**V1.1.2-2026.0112**
+**V1.1.2-2026.01.13**
 
   - I have refactored the code, added more 
   - comments and pruned lines to <= 80 characters.
