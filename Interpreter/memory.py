@@ -5,11 +5,11 @@
                      Description: My custom language.
                              File: memory.py
                             Date: 2026/01/08
-                        Version: 1.1.1-2026.01.12
+                        Version: 1.1.2-2026.01.13
 
 ===============================================================================
 
-                    Copyright (C) 2025 BrotatoBoi 
+                    Copyright (C) 2025 BrotatoBoi
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
@@ -29,24 +29,24 @@
 
 class Environment:
     """
-        ~ Represents the variable environment in the AST. ~
+    ~ Represents the variable environment in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the environment.
-            - get                      : Get a variable from the environment.
-            - set_var                   Set a variable in the environment.
+    Functions:
+        - __init__                     : Initializes the environment.
+        - get                          : Get a variable from the environment.
+        - set_var                      : Set a variable in the environment.
     """
 
     def __init__(self, parent=None):
         """
-            ~ Initialize the Environment. ~
+        ~ Initialize the Environment. ~
 
-            Arguments:
-                parent (Environment)   : The parent environment.
+        Arguments:
+            parent       (Environment) : The parent environment.
 
-            Attributes:
-                variables (dict)       : The variables in the environment.
-                parent (Environment)   : The parent environment.
+        Attributes:
+            variables           (dict) : The variables in the environment.
+            parent       (Environment) : The parent environment.
         """
 
         self.variables = {}
@@ -54,13 +54,13 @@ class Environment:
 
     def get(self, name):
         """
-            ~ Get a variable from the environment. ~
+        ~ Get a variable from the environment. ~
 
-            Arguments:
-                name (str)             : The name of the variable.
+        Arguments:
+            name                 (str) : The name of the variable.
 
-            Returns:
-                any                    : The value of the variable.
+        Returns:
+            any                        : The value of the variable.
         """
 
         if name in self.variables:
@@ -73,11 +73,11 @@ class Environment:
 
     def set_var(self, name, value):
         """
-            ~ Set a variable in the environment. ~
+        ~ Set a variable in the environment. ~
 
-            Arguments:
-                name (str)             : The name of the variable.
-                value (any)            : The value of the variable.
+        Arguments:
+            name                 (str) : The name of the variable.
+            value                (any) : The value of the variable.
         """
 
         self.variables[name] = value

@@ -8,6 +8,11 @@
 Essentially all I need to do is refactor the code and make sure
 the examples work as intended.
 
+**Next Plan:**
+*** Conditionals (Next Week)
+** Loops (After Conditionals)
+* Functions (After Loops)
+
 ---
 
 ## Developers Log
@@ -132,8 +137,30 @@ the examples work as intended.
 *20:20
     - Entire codebase has now been refactored and is ready to be tested.
     - Updated changelog to version 1.1.1-2026.01.12 and in the filestamps.
+
+*2026-01-13:*
+* 14:50
+    - Started to clean up the docstrings and comments while linting the code with:
+        [Black Formatter](https://github.com/microsoft/vscode-black-formatter)
+* 15:09
+    - Cleaned both the `main.py` and `parser.py` files.
+    - Moving onto the `tokenizer.py` file now.
+* 15:11
+    - It was already cleaned and up to par, but I need to add more comments.
+    - Perhaps most of the modules could benefit from more comments.
+    - Moving onto the `nodes.py` file, then afterward 
+      the `memory.py` file and a short break.
+* 15:23
+    - `nodes.py` was linted and cleaned, now the final one before a line check.
+* 15:26
+    - All files have been cleaned and linted, now for the line check.
+* 15:35
+    - All modules seem to have no lines exceeding 80 characters long.
+    - Now pushing, taking a short break and planning out
+      the next feature - Conditionals.
 ---
 
 # TO-DO:
-*** Add Line output to the errors. ***
+\*\*\*Add Line output to the errors.\*\*\*
+\*Include a bit more commentation.\*
     

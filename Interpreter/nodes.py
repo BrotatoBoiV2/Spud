@@ -5,11 +5,11 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.1.1-2026.01.12
+                        Version: 1.1.2-2026.01.13
 
 ===============================================================================
 
-                    Copyright (C) 2025 BrotatoBoi 
+                    Copyright (C) 2025 BrotatoBoi
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
@@ -29,54 +29,54 @@
 
 def join_parts(parts, memory):
     """
-        ~ Join the parts of the expression. ~
+    ~ Join the parts of the expression. ~
 
-        Arguments:
-            parts        (Node)    : The parts of the expression.
-            memory   (Environment) : The memory environment.
-    
-        Returns:
-            str                    : The joined expression.
+    Arguments:
+        parts                   (Node) : The parts of the expression.
+        memory           (Environment) : The memory environment.
+
+    Returns:
+        str                            : The joined expression.
     """
 
-    if not parts: return None
-  
+    if not parts:
+        return None
+
     return parts.execute(memory)
 
 
 class Node:
     """
-        ~ Represents a node in the AST. ~
+    ~ Represents a node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the node.
-            - execute                  : Executes the node.
+    Functions:
+        - __init__                     : Initializes the node.
+        - execute                      : Executes the node.
     """
 
     def __init__(self, value, line, column):
         """
-            ~ Initialize the Node. ~
+        ~ Initialize the Node. ~
 
-            Arguments:
-                value     (str)        : The value of the node.
-                line      (int)        : The line number of the node.
-                column    (int)        : The column number of the node
+        Arguments:
+            value                (str) : The value of the node.
+            line                 (int) : The line number of the node.
+            column               (int) : The column number of the node
 
-            Attributes:
-                value     (str)        : The value of the node.
+        Attributes:
+            value                (str) : The value of the node.
         """
 
         self.value = value
         self.line = line
         self.column = column
 
-
     def execute(self, memory):
         """
-            ~ Execute the node. ~
+        ~ Execute the node. ~
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
         """
 
         pass
@@ -84,34 +84,34 @@ class Node:
 
 class IntegerNode(Node):
     """
-        ~ Represents an integer node in the AST. ~
+    ~ Represents an integer node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the integer node.
-            - execute                  : Executes the integer node.
+    Functions:
+        - __init__                     : Initializes the integer node.
+        - execute                      : Executes the integer node.
     """
 
     def __init__(self, value, line, column):
         """
-            Initialize the IntegerNode.
+        Initialize the IntegerNode.
 
-            Arguments:
-                value (str)            : The value of the integer node.
-                line (int)             : The line number of the integer node.
-                column (int)           : The column number of the integer node.
+        Arguments:
+            value                (str) : The value of the integer node.
+            line                 (int) : The line number of the integer node.
+            column               (int) : The column number of the integer node.
         """
 
         super().__init__(value, line, column)
 
     def execute(self, memory):
         """
-            Execute the integer node.
+        Execute the integer node.
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
 
-            Returns:
-                int                    : The value of the integer node.
+        Returns:
+            int                        : The value of the integer node.
         """
 
         return int(self.value)
@@ -119,62 +119,62 @@ class IntegerNode(Node):
 
 class StringNode(Node):
     """
-        ~ Represents a string node in the AST. ~
+    ~ Represents a string node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the string node.
-            - execute                  : Executes the string node.
+    Functions:
+        - __init__                     : Initializes the string node.
+        - execute                      : Executes the string node.
     """
 
     def __init__(self, value, line, column):
         """
-            Initialize the StringNode.
+        Initialize the StringNode.
 
-            Arguments:
-                value (str)            : The value of the string node.
-                line (int)             : The line number of the string node.
-                column (int)           : The column number of the string node.
+        Arguments:
+            value                (str) : The value of the string node.
+            line                 (int) : The line number of the string node.
+            column               (int) : The column number of the string node.
         """
 
         super().__init__(value, line, column)
 
     def execute(self, memory):
         """
-            Execute the string node.
+        Execute the string node.
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
 
-            Returns:
-                str                    : The value of the string node.
+        Returns:
+            str                        : The value of the string node.
         """
-        
+
         return str(self.value)
 
-  
+
 class BinOperNode(Node):
     """
-        ~ Represents a binary operation node in the AST. ~
+    ~ Represents a binary operation node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the binary operation node.
-            - execute                  : Executes the binary operation node.
+    Functions:
+        - __init__                     : Initializes the binary operation node.
+        - execute                      : Executes the binary operation node.
     """
 
     def __init__(self, value, left, right, line, column):
         """
-            Initialize the BinOperNode.
+        Initialize the BinOperNode.
 
-            Arguments:
-                value (str)            : The value of the node.
-                left (Node)            : The left child of the node.
-                right (Node)           : The right child of the node.
-                line (int)             : The line number of the node.
-                column (int)           : The column number of the  node.
+        Arguments:
+            value                (str) : The value of the node.
+            left                (Node) : The left child of the node.
+            right               (Node) : The right child of the node.
+            line                 (int) : The line number of the node.
+            column               (int) : The column number of the  node.
 
-            Attributes:
-                left (Node)            : The left child of the node.
-                right (Node)           : The right child of the node.  
+        Attributes:
+            left                (Node) : The left child of the node.
+            right               (Node) : The right child of the node.
         """
 
         super().__init__(value, line, column)
@@ -184,13 +184,13 @@ class BinOperNode(Node):
 
     def execute(self, memory):
         """
-            ~ Execute the BinOperNode. ~
+        ~ Execute the BinOperNode. ~
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
 
-            Returns:
-                any                    : The value of the node.
+        Returns:
+            any                        : The value of the node.
         """
 
         left = self.left.execute(memory)
@@ -207,25 +207,25 @@ class BinOperNode(Node):
 
 class VariableNode(Node):
     """
-        ~ Represents a variable node in the AST. ~
+    ~ Represents a variable node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the variable node.
-            - execute                  : Executes the variable node.
+    Functions:
+        - __init__                     : Initializes the variable node.
+        - execute                      : Executes the variable node.
     """
 
     def __init__(self, value, line, column, value_parts=None):
         """
-            Initialize the VariableNode.
+        Initialize the VariableNode.
 
-            Arguments:
-                value (str)            : The value of the variable node.
-                line (int)             : The line number of the variable node.
-                column (int)           : The column number of the node.
-                value_parts (Node)     : The value parts of the variable node.
+        Arguments:
+            value                (str) : The value of the variable node.
+            line                 (int) : The line number of the variable node.
+            column               (int) : The column number of the node.
+            value_parts         (Node) : The value parts of the variable node.
 
-            Attributes:
-                value_parts (Node)     : The value parts of the variable node.
+        Attributes:
+            value_parts         (Node) : The value parts of the variable node.
         """
 
         super().__init__(value, line, column)
@@ -234,13 +234,13 @@ class VariableNode(Node):
 
     def execute(self, memory):
         """
-            ~ Execute the VariableNode. ~
+        ~ Execute the VariableNode. ~
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
 
-            Returns:
-                any                    : The value of the variable node.
+        Returns:
+            any                        : The value of the variable node.
         """
 
         if not self.value_parts:
@@ -258,32 +258,31 @@ class VariableNode(Node):
 
 class SayNode(Node):
     """
-        ~ Represents a say node in the AST. ~
+    ~ Represents a say node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the say node.
-            - execute                  : Executes the say node.
+    Functions:
+        - __init__                     : Initializes the say node.
+        - execute                      : Executes the say node.
     """
 
     def __init__(self, value, line, column):
         """
-            Initialize the SayNode.
+        Initialize the SayNode.
 
-            Arguments:
-                value (Node)           : The value of the say node.
-                line (int)             : The line number of the say node.
-                column (int)           : The column number of the say node
+        Arguments:
+            value               (Node) : The value of the say node.
+            line                 (int) : The line number of the say node.
+            column               (int) : The column number of the say node
         """
 
         super().__init__(value, line, column)
 
-
     def execute(self, memory):
         """
-            ~ Execute the SayNode. ~
+        ~ Execute the SayNode. ~
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
         """
 
         prompt = join_parts(self.value, memory)
@@ -293,25 +292,25 @@ class SayNode(Node):
 
 class GetNode(Node):
     """
-        ~ Represents a get node in the AST. ~
+    ~ Represents a get node in the AST. ~
 
-        Functions:
-            - __init__                 : Initializes the get node.
-            - execute                  : Executes the get node.
+    Functions:
+        - __init__                     : Initializes the get node.
+        - execute                      : Executes the get node.
     """
 
     def __init__(self, value, prompt, line, column):
         """
-            Initialize the GetNode.
+        Initialize the GetNode.
 
-            Arguments:
-                value (str)            : The value of the get node.
-                prompt (Node)          : The prompt of the get node.
-                line (int)             : The line number of the get node.
-                column (int)           : The column number of the get node
+        Arguments:
+            value                (str) : The value of the get node.
+            prompt              (Node) : The prompt of the get node.
+            line                 (int) : The line number of the get node.
+            column               (int) : The column number of the get node
 
-            Attributes:
-                prompt (Node)          : The prompt of the get node.
+        Attributes:
+            prompt              (Node) : The prompt of the get node.
         """
 
         super().__init__(value, line, column)
@@ -320,10 +319,10 @@ class GetNode(Node):
 
     def execute(self, memory):
         """
-            ~ Execute a GetNode.~
+        ~ Execute a GetNode.~
 
-            Arguments:
-                memory   (Environment) : The memory environment.
+        Arguments:
+            memory       (Environment) : The memory environment.
         """
 
         is_num = True
@@ -340,5 +339,5 @@ class GetNode(Node):
 
         if is_num:
             value = int(value)
-    
+
         memory.set_var(self.value, value)

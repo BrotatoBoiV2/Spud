@@ -5,11 +5,11 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.1.1-2026.01.12
+                        Version: 1.1.2-2026.01.13
 
 ===============================================================================
 
-                    Copyright (C) 2025 BrotatoBoi 
+                    Copyright (C) 2025 BrotatoBoi
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
@@ -29,23 +29,23 @@
 
 class Token:
     """
-        ~ Represents a token in the source code. ~
+    ~ Represents a token in the source code. ~
 
-        Functions:
-            - __init__             : Initializes the token.
-            - __str__              : Displays the Token as a string.
+    Functions:
+        - __init__                     : Initializes the token.
+        - __str__                      : Displays the Token as a string.
     """
 
     def __init__(self, token_type, token_value, token_line, token_column):
         """
-            ~ Initialize the Token. ~
+        ~ Initialize the Token. ~
 
-            Arguments:
-                token_type   (str) : The type of the token.
-                token_value  (str) : The value of the token.
-                token_line   (int) : The line number of the token.
-                token_column (int) : The column number of the token.
-        
+        Arguments:
+            token_type           (str) : The type of the token.
+            token_value          (str) : The value of the token.
+            token_line           (int) : The line number of the token.
+            token_column         (int) : The column number of the token.
+
         """
 
         self.type = token_type
@@ -55,10 +55,10 @@ class Token:
 
     def __str__(self):
         """
-            ~ Print the Token in a string format for debugging. ~
+        ~ Print the Token in a string format for debugging. ~
 
-            Returns:
-                str                : A string representation of the token.
+        Returns:
+            str                        : A string representation of the token.
         """
 
         return f"Token({self.type} | {self.value} | {self.line} | {self.col})"
@@ -66,23 +66,25 @@ class Token:
 
 class Tokenizer:
     """
-        ~ The class to turn the source code into tokens for the parser. ~
+    ~ The class to turn the source code into tokens for the parser. ~
 
-        Functions:
-            - __init__       : Initializes the tokenizer.
-            - tokenize       : Tokenizes the source code.
-            - peek           : Peek at the curretn or next token.
+    Functions:
+        - __init__                     : Initializes the tokenizer.
+        - tokenize                     : Tokenizes the source code.
+        - peek                         : Peek at the curretn or next token.
+        - process_string               : Process a string token.
+        - process_comment              : Process a comment token.
     """
 
     def __init__(self):
         """
-            ~ Initialize the Tokenizer. ~
+        ~ Initialize the Tokenizer. ~
 
-            Attributes:
-                code   (str) : The source code.
-                index  (int) : The current index in the code.
-                column (int) : The current column in the code.
-                row    (int) : The current row in the code.
+        Attributes:
+            code                 (str) : The source code.
+            index                (int) : The current index in the code.
+            column               (int) : The current column in the code.
+            row                  (int) : The current row in the code.
         """
 
         self.code = None
@@ -92,22 +94,29 @@ class Tokenizer:
 
     def peek(self, amount=0):
         """
-            ~ Peek at the next token. ~
+        ~ Peek at the next token. ~
 
-            Arguments:
-                amount (int) : The amount to peek ahead.
+        Arguments:
+            amount               (int) : The amount to peek ahead.
 
-            Returns:
-                str          : The next token to process.
+        Returns:
+            str                        : The next token to process.
         """
 
         # ~ Check if the token exists to avoid errors. ~ #
         if self.index + amount < len(self.code):
             return self.code[self.index + amount]
-        
+
         return ""
 
     def process_string(self):
+        """
+        ~ Process a string token. ~
+
+        Returns:
+            str                        : The string token.
+        """
+
         string_text = ""
         start_col = self.col
         self.index += 1
@@ -124,12 +133,11 @@ class Tokenizer:
                 self.index += 1
                 self.col += 1
 
-                
             if self.index >= len(self.code):
-                error_msg = "Error: A string is not enclosed with a matching quote character!"
+                error_msg = "String isn't closed with a matching quotation!"
                 location = f"Line: {self.row} ; Column:{self.col}"
 
-                raise SyntaxError(error_msg + "\n" + location)
+                raise SyntaxError("Error: " + error_msg + "\n" + location)
 
         self.index += 1
         self.col += 1
@@ -137,6 +145,13 @@ class Tokenizer:
         return string_text, start_col
 
     def process_comment(self):
+        """
+        ~ Process a comment token. ~
+
+        Returns:
+            str                        : The comment token.
+        """
+
         comment_text = ""
         start_col = self.col
         self.index += 2
@@ -151,11 +166,10 @@ class Tokenizer:
             self.col += 1
 
             if self.index >= len(self.code):
-                error_msg = "Error: A comment is not enclosed with a pair of Right Potato Ears! '~)'"
+                error_msg = "Comment isn't closed with Right Potato Ears! '~)'"
                 location = f"Line: {self.row} ; Column:{self.col}"
 
-
-                raise SyntaxError(error_msg + "\n" + location)
+                raise SyntaxError("Error: " + error_msg + "\n" + location)
 
         self.index += 2
         self.col += 2
@@ -164,13 +178,13 @@ class Tokenizer:
 
     def tokenize(self, code):
         """
-            ~ Tokenize the source code. ~
+        ~ Tokenize the source code. ~
 
-            Arguments:
-                code (str)   : The source code.
+        Arguments:
+            code                 (str) : The source code.
 
-            Returns:
-                list         : A list of tokens.
+        Returns:
+            list                       : A list of tokens.
         """
 
         self.code = code
@@ -178,10 +192,7 @@ class Tokenizer:
         self.col = 1
         self.row = 1
         tokens = []
-        symbols = {
-            "=": "EQUAL", "+": "OPERATOR",
-            "(": "LPARAM", ")": "RPARAM"
-        }
+        symbols = {"=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM"}
 
         # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
@@ -195,24 +206,22 @@ class Tokenizer:
 
                 else:
                     self.col += 1
-                
-                self.index += 1
 
-                
+                self.index += 1
 
             elif char == '"':
                 text, col = self.process_string()
                 tokens.append(Token("STRING", text, self.row, col))
-    
+
             elif char == "(" and self.peek(1) == "~":
                 text, col = self.process_comment()
                 tokens.append(Token("COMMENT", text, self.row, col))
-                
+
             elif char == "~" and self.peek(1) == ")":
-                error_msg = "Error: No Left Potato Ear '(~' found to close comment!"
+                error_msg = "No Left Potato Ear '(~' found to close comment!"
                 location = f"Line: {self.row} ; Column:{self.col}"
 
-                raise SyntaxError(error_msg + "\n" + location)
+                raise SyntaxError("Error: " + error_msg + "\n" + location)
 
             elif char.isdigit():
                 num_text = ""
@@ -225,9 +234,7 @@ class Tokenizer:
 
                 tokens.append(Token("INTEGER", num_text, self.row, start_col))
 
-                
-
-            elif char.isalpha(): # maybe a `process_word()`
+            elif char.isalpha():  # maybe a `process_word()`
                 ident = ""
                 start_col = self.col
                 keywords = ["say", "get"]
@@ -236,11 +243,9 @@ class Tokenizer:
                     ident += self.peek()
                     self.index += 1
                     self.col += 1
-                
+
                 token_type = "KEYWORD" if ident in keywords else "IDENTIFIER"
                 tokens.append(Token(token_type, ident, self.row, start_col))
-
-                
 
             elif char in symbols:
                 tokens.append(Token(symbols[char], char, self.row, self.col))
@@ -255,4 +260,3 @@ class Tokenizer:
         tokens.append(Token("EOF", "EOF", self.row, self.col))
 
         return tokens
-

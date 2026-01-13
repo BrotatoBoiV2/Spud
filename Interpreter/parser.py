@@ -1,31 +1,30 @@
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				Programmer: Aaron "A.J." Cassell. (@BrotatoBoi)
-						Program Name: Spud Language.
-					Description: My custom language.
-							File: parser.py
-							Date: 2026/01/02
-						Version: 1.1.1-2026.01.12
+                Programmer: Aaron "A.J." Cassell. (@BrotatoBoi)
+                        Program Name: Spud Language.
+                     Description: My custom language.
+                            File: parser.py
+                            Date: 2026/01/02
+                        Version: 1.1.2-2026.01.13
 
 ===============================================================================
 
-					Copyright (C) 2025 BrotatoBoi 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+                    Copyright (C) 2025 BrotatoBoi
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with this program. If not, see <https://www.gnu.org/licenses/>
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see <https://www.gnu.org/licenses/>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
-
 
 # ~ Import Local Modules. ~ #
 from nodes import (
@@ -35,218 +34,211 @@ from tokenizer import Token
 
 
 class Parser:
-	"""
-		~ The parser class that is responsible for creating nodes from tokens. ~
+    """
+    ~ The parser class that is responsible for creating nodes from tokens. ~
 
-		Functions:
-			- __init__           : Initializes the parser.
-			- peek               : Peek at the next token.
-			- advance            : Advance to the next token.
-			- parse_say          : Parse a 'say' statement.
-			- parse_expression   : Parse an expression.
-			- parse_primary      : Parse a primary expression.
-			- parse_get          : Parse a 'get' statement.
-			- parse_set_variable : Parse a variable assignment.
-			- parse              : Parse the source code.
-	"""
+    Functions:
+		- __init__                     : Initializes the parser.
+		- peek                         : Peek at the next token.
+		- advance                      : Advance to the next token.
+		- parse_say                    : Parse a 'say' statement.
+		- parse_expression             : Parse an expression.
+		- parse_primary                : Parse a primary expression.
+		- parse_get                    : Parse a 'get' statement.
+		- parse_set_variable           : Parse a variable assignment.
+		- parse                        : Parse the source code.
+    """
 
-	def __init__(self):
-		"""
-			~ Initialize the Parser. ~
+    def __init__(self):
+        """
+        ~ Initialize the Parser. ~
 
-			Attributes:
-				index      (int) : The current index in the tokens.
-				tokens    (list) : The list of tokens.
-				token    (Token) : The current token.
-				parsed    (list) : The list of parsed nodes.
-		"""
+        Attributes:
+			index                (int) : The current index in the tokens.
+			tokens              (list) : The list of tokens.
+			token              (Token) : The current token.
+			parsed              (list) : The list of parsed nodes.
+        """
 
-		self.index = 0
-		self.tokens = None
-		self.token = None
-		self.parsed = []
+        self.index = 0
+        self.tokens = None
+        self.token = None
+        self.parsed = []
 
-	def peek(self, amount=0):
-		"""
-			~ Peek at the next token. ~
+    def peek(self, amount=0):
+        """
+        ~ Peek at the next token. ~
 
-			Arguments:
-				amount     (int) : The amount to peek ahead.
+        Arguments:
+			amount               (int) : The amount to peek ahead.
 
-			Returns:
-				Token            : The next token to process.
-		"""
+        Returns:
+			Token                      : The next token to process.
+        """
 
-		if self.tokens and self.index + amount < len(self.tokens):
-			return self.tokens[self.index + amount]
+        if self.tokens and self.index + amount < len(self.tokens):
+            return self.tokens[self.index + amount]
 
-	def advance(self, amount=1):
-		"""
-			~ Advance to the next token. ~
+    def advance(self, amount=1):
+        """
+        ~ Advance to the next token. ~
 
-			Arguments:
-				amount     (int) : The amount to advance.
-		"""
+        Arguments:
+			amount               (int) : The amount to advance.
+        """
 
-		self.index += amount
-		self.token = self.peek()
+        self.index += amount
+        self.token = self.peek()
 
-		if not self.token:
-			self.token = Token("EOF", "EOF", None, None)
+        if not self.token:
+            self.token = Token("EOF", "EOF", None, None)
 
-	def parse_say(self):
-		"""
-			~ Parse a 'say' statement. ~
+    def parse_say(self):
+        """
+        ~ Parse a 'say' statement. ~
 
-			Returns:
-				SayNode          : The parsed 'say' statement.
-		"""
+        Returns:
+			SayNode                    : The parsed 'say' statement.
+        """
 
-		line, col = self.token.line, self.token.col
-		self.advance()
+        line, col = self.token.line, self.token.col
+        self.advance()
 
-		return SayNode(self.parse_expression(), line, col)
+        return SayNode(self.parse_expression(), line, col)
 
-	def parse_expression(self):
-		"""
-			~ Parse an expression. ~
+    def parse_expression(self):
+        """
+        ~ Parse an expression. ~
 
-			Returns:
-				BinOperNode      : The parsed expression.
-		"""
+        Returns:
+			BinOperNode                : The parsed expression.
+        """
 
-		left = self.parse_primary()
+        left = self.parse_primary()
 
-		while self.token.type == "OPERATOR":
-			oper = self.token.value
-			self.advance()
-			
-			right = self.parse_primary()
-			left = BinOperNode(
+        while self.token.type == "OPERATOR":
+            oper = self.token.value
+            self.advance()
+
+            right = self.parse_primary()
+            left = BinOperNode(
 				oper,
 				left,
 				right,
 				self.token.line,
 				self.token.col
 			)
-		
-		return left
 
-	def parse_primary(self):
-		"""
-			~ Parse a primary expression. ~
+        return left
 
-			Returns:
-				Node             : The parsed primary expression.
-		"""
+    def parse_primary(self):
+        """
+        ~ Parse a primary expression. ~
 
-		token = self.token
+        Returns:
+			Node                       : The parsed primary expression.
+        """
 
-		if token.type == "INTEGER":
-			self.advance()
-			return IntegerNode(token.value, token.line, token.col)
+        token = self.token
 
-		elif token.type == "STRING":
-			self.advance()
-			return StringNode(token.value, token.line, token.col)
+        if token.type == "INTEGER":
+            self.advance()
+            return IntegerNode(token.value, token.line, token.col)
 
-		elif token.type == "IDENTIFIER":
-			self.advance()
-			return VariableNode(token.value, token.line, token.col)
+        elif token.type == "STRING":
+            self.advance()
+            return StringNode(token.value, token.line, token.col)
 
-		elif token.type == "LPARAM":
-			self.advance()
-			node = self.parse_expression()
+        elif token.type == "IDENTIFIER":
+            self.advance()
+            return VariableNode(token.value, token.line, token.col)
 
-			if self.token.type != "RPARAM":
-				raise SyntaxError("Expected ')' after expression.")
+        elif token.type == "LPARAM":
+            self.advance()
+            node = self.parse_expression()
 
-			self.advance()
-			return node
+            if self.token.type != "RPARAM":
+                raise SyntaxError("Expected ')' after expression.")
 
-		elif token.type == "RPARAM":
-			raise SyntaxError("Found a ')' that does not close an expression.")
+            self.advance()
+            return node
 
-	def parse_get(self):
-		"""
-			~ Parse a 'get' statement. ~
+        elif token.type == "RPARAM":
+            raise SyntaxError("Found a ')' that does not close an expression.")
 
-			Returns:
-				GetNode          : The parsed 'get' statement.
-		"""
+    def parse_get(self):
+        """
+        ~ Parse a 'get' statement. ~
 
-		self.advance()
-		var_name = ""
-		prompt = ""
+        Returns:
+			GetNode                    : The parsed 'get' statement.
+        """
 
-		if self.token.type == "IDENTIFIER":
-			var_name = self.token.value
-			self.advance()
+        self.advance()
+        var_name = ""
+        prompt = ""
 
-		else:
-			raise SyntaxError("Expected identifier after 'get'.")
+        if self.token.type == "IDENTIFIER":
+            var_name = self.token.value
+            self.advance()
 
-		if self.token.type not in ["EOL", "EOF"]:
-			prompt = self.parse_expression()
+        else:
+            raise SyntaxError("Expected identifier after 'get'.")
 
-		return GetNode(var_name, prompt, self.token.line, self.token.col)
+        if self.token.type not in ["EOL", "EOF"]:
+            prompt = self.parse_expression()
 
-	def parse_set_variable(self):
-		"""
-			~ Parse a variable assignment. ~
+        return GetNode(var_name, prompt, self.token.line, self.token.col)
 
-			Returns:
-				VariableNode     : The parsed variable assignment.
-		"""
+    def parse_set_variable(self):
+        """
+        ~ Parse a variable assignment. ~
 
-		var_name = self.token.value
-		line, col = self.token.line, self.token.col
-		self.advance()
+        Returns:
+			VariableNode               : The parsed variable assignment.
+        """
 
-		if self.token.type != "EQUAL":
-			raise SyntaxError("Expected '=' after variable name.")
+        var_name = self.token.value
+        line, col = self.token.line, self.token.col
+        self.advance()
 
-		self.advance()
+        if self.token.type != "EQUAL":
+            raise SyntaxError("Expected '=' after variable name.")
 
-		expression_tree = self.parse_expression()
+        self.advance()
 
-		return VariableNode(
-			var_name,
-			line,
-			col,
-			value_parts=expression_tree
-		)
+        expression_tree = self.parse_expression()
 
+        return VariableNode(var_name, line, col, value_parts=expression_tree)
 
-	def parse(self, tokens):
-		"""
-			~ Parse the source code. ~
+    def parse(self, tokens):
+        """
+        ~ Parse the source code. ~
 
-			Arguments:
-				tokens    (list) : The list of tokens.
+        Arguments:
+			tokens              (list) : The list of tokens.
 
-			Returns:
-				list             : The list of parsed nodes.
-		"""
+        Returns:
+			list                       : The list of parsed nodes.
+        """
 
-		self.tokens = tokens
-		self.token = self.peek() or Token("EOF", "EOF", None, None)
+        self.tokens = tokens
+        self.token = self.peek() or Token("EOF", "EOF", None, None)
 
-		while self.token.type != "EOF":
-			token = self.token
+        while self.token.type != "EOF":
+            token = self.token
 
-			if token.type == "KEYWORD":
-				if token.value == "say":
-					self.parsed.append(self.parse_say())
-				
-				elif token.value == "get":
-					self.parsed.append(self.parse_get())
+            if token.type == "KEYWORD":
+                if token.value == "say":
+                    self.parsed.append(self.parse_say())
 
-			elif token.type == "IDENTIFIER":
-				self.parsed.append(self.parse_set_variable())
+                elif token.value == "get":
+                    self.parsed.append(self.parse_get())
 
-			else:
-				self.advance()
+            elif token.type == "IDENTIFIER":
+                self.parsed.append(self.parse_set_variable())
 
-		return self.parsed
+            else:
+                self.advance()
 
+        return self.parsed
