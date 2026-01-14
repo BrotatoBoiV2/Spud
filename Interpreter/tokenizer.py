@@ -260,6 +260,9 @@ class Tokenizer:
             elif char == "~":
                 sprouts = 1
                 start_col = self.col
+                self.index += 1
+                self.col += 1
+
 
                 while self.index < len(self.code) and self.peek() == "~":
                     sprouts += 1
@@ -277,7 +280,7 @@ class Tokenizer:
                 self.index += 1
                 self.col += 1
 
-        tokens.append(Token("NEWLINE", "\\n", self.row, self.col))
+        tokens.append(Token("EOL", "EOL", self.row, self.col))
         tokens.append(Token("EOF", "EOF", self.row, self.col))
 
         return tokens

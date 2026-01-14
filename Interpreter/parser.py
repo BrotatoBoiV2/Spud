@@ -65,7 +65,7 @@ class Parser:
         self.tokens = None
         self.token = None
         self.parsed = []
-        self.sprouts = 1
+        self.sprouts = 0
 
     def peek(self, amount=0):
         """
@@ -258,18 +258,25 @@ class Parser:
         conditions = self.parse_condition()
         code = []
         self.advance()
+        # print(self.token)
+        # for token in self.tokens:
+        #     print(token)
 
         if self.token.type == "SPROUT":
             sprouts = self.token.value
+            # print(sprouts)
+            # print("HEHE")
             if sprouts == self.sprouts + 1:
+                # print("HAHA")
                 self.sprouts = self.token.value
 
-                while self.token.type != "TERMINATOR":
-                    if self.token.type == "EOL" and self.peek(1).type == "SPROUT":
-                        if self.peek(1).value != self.sprouts:
-                            raise SyntaxError("Expected '&\n' to terminate sprouts.")
-
-                    self.advance()
+                while self.index <= len(self.tokens):
+                    # print("TOKEN")
+                    # print(self.token)
+                    if self.token.type == "TERMINATOR":
+                        self.advance()
+                        break  
+                    
                     token = self.token
                     if token.type == "KEYWORD":
                         if token.value == "say":
@@ -284,6 +291,23 @@ class Parser:
                     elif token.type == "IDENTIFIER":
                         code.append(self.parse_set_variable())
 
+                    if self.token.type == "EOL":
+                        if self.peek(1).type == "TERMINATOR":
+                            self.advance()
+                            break
+                        elif self.peek(1).type != "SPROUT":
+                            raise SyntaxError("Expected sprout after code.")
+
+
+
+                    # self.advance()
+                    # print(self.token)
+                    # if self.token.type != "SPROUT":
+                    #     raise SyntaxError("Expected sprout after code.")
+
+                    self.advance()
+
+                print(code)
                 
             elif sprouts > self.sprouts:
                 raise SyntaxError("Code has been over-sprouted.")
