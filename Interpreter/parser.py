@@ -28,7 +28,8 @@
 
 # ~ Import Local Modules. ~ #
 from nodes import (
-	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode
+	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode,
+    LogicNode, BoolNode, CheckNode
 )
 from tokenizer import Token
 
@@ -64,6 +65,7 @@ class Parser:
         self.tokens = None
         self.token = None
         self.parsed = []
+        self.sprouts = 0
 
     def peek(self, amount=0):
         """
@@ -78,6 +80,8 @@ class Parser:
 
         if self.tokens and self.index + amount < len(self.tokens):
             return self.tokens[self.index + amount]
+
+        return ""
 
     def advance(self, amount=1):
         """
@@ -166,6 +170,11 @@ class Parser:
         elif token.type == "RPARAM":
             raise SyntaxError("Found a ')' that does not close an expression.")
 
+        elif token.type == "LOGIC":
+            self.advance()
+
+            return LogicNode(token.value, token.line, token.col)
+
     def parse_get(self):
         """
         ~ Parse a 'get' statement. ~
@@ -211,6 +220,97 @@ class Parser:
 
         return VariableNode(var_name, line, col, value_parts=expression_tree)
 
+    def parse_condition(self):
+        """
+        ~ Parse a condition. ~
+
+        Returns:
+			BoolNode                   : The parsed condition.
+        """
+        
+        left = self.parse_expression()
+
+
+        while self.token.type == "LOGIC":
+            logic = self.token.value
+            self.advance()
+
+            right = self.parse_expression()
+
+            left = BoolNode(
+                logic,
+                left,
+                right,
+                self.token.line,
+                self.token.col
+            )
+
+        return left
+
+
+    def parse_check(self, branch=0):
+        """
+        ~ Parse a 'check' statement. ~
+
+        Arguments:
+
+
+        Returns:
+			CheckNode                  : The parsed 'check' statement.
+        """
+
+        branches = {}
+
+        while self.index < len(self.tokens):
+            self.advance()
+
+            if branch == 0:
+                condition = self.parse_condition()
+                
+            else:
+                condition = True
+
+            if condition:
+                self.advance()
+
+                if self.token.type == "SPROUT":
+                    code = []
+
+                    while self.index < len(self.tokens):
+                        self.advance()
+
+                        token = self.token
+                        if token.type == "KEYWORD":
+                            if token.value == "say":
+                                code.append(self.parse_say())
+
+                            elif token.value == "get":
+                                code.append(self.parse_get())
+
+                            elif token.value == "but":
+                                branches[condition] = code
+                                code = []
+                                self.advance()
+                                condition = self.parse_condition()
+
+                            elif token.value == "otherwise":
+                                branches[condition] = code
+                                code = []
+                                
+                                self.advance()
+                                condition = BoolNode("equals", IntegerNode("1", None, None), IntegerNode("1", None, None), self.token.line, self.token.col)
+
+                        elif token.type == "IDENTIFIER":
+                            code.append(self.parse_set_variable())
+
+                else:
+                    raise SyntaxError("Expected 'sprouts' after 'check'.")
+
+            branches[condition] = code
+            return CheckNode(branches, self.token.line, self.token.col)
+
+
+
     def parse(self, tokens):
         """
         ~ Parse the source code. ~
@@ -234,6 +334,9 @@ class Parser:
 
                 elif token.value == "get":
                     self.parsed.append(self.parse_get())
+
+                elif token.value == "check":
+                    self.parsed.append(self.parse_check())
 
             elif token.type == "IDENTIFIER":
                 self.parsed.append(self.parse_set_variable())

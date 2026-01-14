@@ -341,3 +341,77 @@ class GetNode(Node):
             value = int(value)
 
         memory.set_var(self.value, value)
+
+
+class BoolNode(Node):
+    """
+    ~ Represents a boolean node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the boolean node.
+        - execute                      : Executes the boolean node.
+    """
+
+    def __init__(self, value, left, right, line, column):
+        """
+        Initialize the BoolNode.
+
+        Arguments:
+            left                (Node) : The left side of the bool node.
+            right               (Node) : The right side of the bool node.
+
+        """
+
+        super().__init__(value, line, column)
+
+        self.left = left
+        self.right = right
+
+    def execute(self, memory):
+        if self.value== "equals":
+            return self.left.execute(memory) == self.right.execute(memory)
+
+
+class LogicNode(Node):
+    """
+    ~ Represents a logic node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the logic node.
+        - execute                      : Executes the logic node.
+    """
+
+    def __init__(self, value, line, column):
+        """
+        ~ Initialize the LogicNode. ~
+        """
+        
+        super().__init__(value, line, column)
+
+    def execute(self, memory):
+        return self.value
+
+
+class CheckNode(Node):
+    """
+    ~ Represents a check node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the check node.
+        - execute                      : Executes the check node.
+    """
+
+    def __init__(self, value, line, column):
+        super().__init__(value, line, column)
+
+    def execute(self, memory):
+        run = None
+        
+        for condition, code in self.value.items():
+            if condition.execute(memory):
+                run = code
+                break
+
+        if run:
+            for node in run:
+                node.execute(memory)
