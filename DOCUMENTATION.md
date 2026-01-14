@@ -162,6 +162,9 @@ the examples work as intended.
 *2026-01-14*
 * 05:15
     - Implemented a basic conditional statement.
+* 06:18
+    - Fixed tildentation.
+    - Need to add 'but' keyword.
 ---
 
 # TO-DO:
