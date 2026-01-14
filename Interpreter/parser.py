@@ -28,7 +28,8 @@
 
 # ~ Import Local Modules. ~ #
 from nodes import (
-	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode
+	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode,
+    LogicNode, BoolNode, CheckNode
 )
 from tokenizer import Token
 
@@ -64,6 +65,7 @@ class Parser:
         self.tokens = None
         self.token = None
         self.parsed = []
+        self.sprouts = 1
 
     def peek(self, amount=0):
         """
@@ -166,6 +168,11 @@ class Parser:
         elif token.type == "RPARAM":
             raise SyntaxError("Found a ')' that does not close an expression.")
 
+        elif token.type == "LOGIC":
+            self.advance()
+
+            return LogicNode(token.value, token.line, token.col)
+
     def parse_get(self):
         """
         ~ Parse a 'get' statement. ~
@@ -211,6 +218,85 @@ class Parser:
 
         return VariableNode(var_name, line, col, value_parts=expression_tree)
 
+    def parse_condition(self):
+        """
+        ~ Parse a condition. ~
+
+        Returns:
+			BoolNode                   : The parsed condition.
+        """
+        
+        left = self.parse_expression()
+
+
+        while self.token.type == "LOGIC":
+            logic = self.token.value
+            self.advance()
+
+            right = self.parse_expression()
+
+            left = BoolNode(
+                logic,
+                left,
+                right,
+                self.token.line,
+                self.token.col
+            )
+
+        return left
+
+
+    def parse_check(self):
+        """
+        ~ Parse a 'check' statement. ~
+
+        Returns:
+			CheckNode                  : The parsed 'check' statement.
+        """
+
+        self.advance()
+        conditions = self.parse_condition()
+        code = []
+        self.advance()
+
+        if self.token.type == "SPROUT":
+            sprouts = self.token.value
+            if sprouts == self.sprouts + 1:
+                self.sprouts = self.token.value
+
+                while self.token.type != "TERMINATOR":
+                    if self.token.type == "EOL" and self.peek(1).type == "SPROUT":
+                        if self.peek(1).value != self.sprouts:
+                            raise SyntaxError("Expected '&\n' to terminate sprouts.")
+
+                    self.advance()
+                    token = self.token
+                    if token.type == "KEYWORD":
+                        if token.value == "say":
+                            code.append(self.parse_say())
+
+                        elif token.value == "get":
+                            code.append(self.parse_get())
+
+                        elif token.value == "check":
+                            code.append(self.parse_check())
+
+                    elif token.type == "IDENTIFIER":
+                        code.append(self.parse_set_variable())
+
+                
+            elif sprouts > self.sprouts:
+                raise SyntaxError("Code has been over-sprouted.")
+
+            elif sprouts < self.sprouts:
+                raise SyntaxError("Code has been under-sprouted.")
+
+        else:
+            raise SyntaxError("Expected code to sprout after `check` keyword.")
+
+        return CheckNode(code, self.token.line, self.token.col, condition=conditions)
+
+
     def parse(self, tokens):
         """
         ~ Parse the source code. ~
@@ -234,6 +320,9 @@ class Parser:
 
                 elif token.value == "get":
                     self.parsed.append(self.parse_get())
+
+                elif token.value == "check":
+                    self.parsed.append(self.parse_check())
 
             elif token.type == "IDENTIFIER":
                 self.parsed.append(self.parse_set_variable())

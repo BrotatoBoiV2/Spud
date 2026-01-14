@@ -158,6 +158,10 @@ the examples work as intended.
     - All modules seem to have no lines exceeding 80 characters long.
     - Now pushing, taking a short break and planning out
       the next feature - Conditionals.
+
+*2026-01-14*
+* 05:15
+    - Implemented a basic conditional statement.
 ---
 
 # TO-DO:

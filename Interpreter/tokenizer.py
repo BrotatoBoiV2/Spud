@@ -193,6 +193,7 @@ class Tokenizer:
         self.row = 1
         tokens = []
         symbols = {"=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM"}
+        logic = ["equals", "not"]
 
         # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
@@ -237,18 +238,38 @@ class Tokenizer:
             elif char.isalpha():  # maybe a `process_word()`
                 ident = ""
                 start_col = self.col
-                keywords = ["say", "get"]
+                keys = ["say", "get", "check"]
 
                 while self.index < len(self.code) and self.peek().isalnum():
                     ident += self.peek()
                     self.index += 1
                     self.col += 1
 
-                token_type = "KEYWORD" if ident in keywords else "IDENTIFIER"
+                if ident in logic:
+                    token_type = "LOGIC"
+                else:
+                    token_type = "KEYWORD" if ident in keys else "IDENTIFIER"
+                
                 tokens.append(Token(token_type, ident, self.row, start_col))
 
             elif char in symbols:
                 tokens.append(Token(symbols[char], char, self.row, self.col))
+                self.index += 1
+                self.col += 1
+
+            elif char == "~":
+                sprouts = 1
+                start_col = self.col
+
+                while self.index < len(self.code) and self.peek() == "~":
+                    sprouts += 1
+                    self.index += 1
+                    self.col += 1
+
+                tokens.append(Token("SPROUT", sprouts, self.row, start_col))
+
+            elif char == "&":
+                tokens.append(Token("TERMINATOR", char, self.row, self.col))
                 self.index += 1
                 self.col += 1
 
