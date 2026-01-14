@@ -81,6 +81,8 @@ class Parser:
         if self.tokens and self.index + amount < len(self.tokens):
             return self.tokens[self.index + amount]
 
+        return ""
+
     def advance(self, amount=1):
         """
         ~ Advance to the next token. ~
@@ -246,79 +248,67 @@ class Parser:
         return left
 
 
-    def parse_check(self):
+    def parse_check(self, branch=0):
         """
         ~ Parse a 'check' statement. ~
+
+        Arguments:
+
 
         Returns:
 			CheckNode                  : The parsed 'check' statement.
         """
 
-        self.advance()
-        conditions = self.parse_condition()
-        code = []
-        self.advance()
-        # print(self.token)
-        # for token in self.tokens:
-        #     print(token)
+        branches = {}
 
-        if self.token.type == "SPROUT":
-            sprouts = self.token.value
-            # print(sprouts)
-            # print("HEHE")
-            if sprouts == self.sprouts + 1:
-                # print("HAHA")
-                self.sprouts = self.token.value
+        while self.index < len(self.tokens):
+            self.advance()
 
-                while self.index <= len(self.tokens):
-                    # print("TOKEN")
-                    # print(self.token)
-                    if self.token.type == "TERMINATOR":
-                        self.advance()
-                        break  
-                    
-                    token = self.token
-                    if token.type == "KEYWORD":
-                        if token.value == "say":
-                            code.append(self.parse_say())
-
-                        elif token.value == "get":
-                            code.append(self.parse_get())
-
-                        elif token.value == "check":
-                            code.append(self.parse_check())
-
-                    elif token.type == "IDENTIFIER":
-                        code.append(self.parse_set_variable())
-
-                    if self.token.type == "EOL":
-                        if self.peek(1).type == "TERMINATOR":
-                            self.advance()
-                            break
-                        elif self.peek(1).type != "SPROUT":
-                            raise SyntaxError("Expected sprout after code.")
-
-
-
-                    # self.advance()
-                    # print(self.token)
-                    # if self.token.type != "SPROUT":
-                    #     raise SyntaxError("Expected sprout after code.")
-
-                    self.advance()
-
-                print(code)
+            if branch == 0:
+                condition = self.parse_condition()
                 
-            elif sprouts > self.sprouts:
-                raise SyntaxError("Code has been over-sprouted.")
+            else:
+                condition = True
 
-            elif sprouts < self.sprouts:
-                raise SyntaxError("Code has been under-sprouted.")
+            if condition:
+                self.advance()
 
-        else:
-            raise SyntaxError("Expected code to sprout after `check` keyword.")
+                if self.token.type == "SPROUT":
+                    code = []
 
-        return CheckNode(code, self.token.line, self.token.col, condition=conditions)
+                    while self.index < len(self.tokens):
+                        self.advance()
+
+                        token = self.token
+                        if token.type == "KEYWORD":
+                            if token.value == "say":
+                                code.append(self.parse_say())
+
+                            elif token.value == "get":
+                                code.append(self.parse_get())
+
+                            elif token.value == "but":
+                                branches[condition] = code
+                                code = []
+                                self.advance()
+                                condition = self.parse_condition()
+
+                            elif token.value == "otherwise":
+                                branches[condition] = code
+                                code = []
+                                
+                                self.advance()
+                                condition = BoolNode("equals", IntegerNode("1", None, None), IntegerNode("1", None, None), self.token.line, self.token.col)
+
+                        elif token.type == "IDENTIFIER":
+                            code.append(self.parse_set_variable())
+
+                else:
+                    raise SyntaxError("Expected 'sprouts' after 'check'.")
+
+            branches[condition] = code
+            return CheckNode(branches, self.token.line, self.token.col)
+
 
 
     def parse(self, tokens):

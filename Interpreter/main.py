@@ -64,7 +64,7 @@ class SpudInterpreter:
         self.parser = Parser()
         self.environment = Environment()
         self.file_path = file_path
-
+        
         # ~ Check if it is a valid file extension. ~ #
         if not self.file_path.endswith(".pot"):
             err =  f"Invalid file extension: '{self.file_path}'."
@@ -95,11 +95,12 @@ class SpudInterpreter:
         source_code = self._read_file()
         tokens = self.tokenizer.tokenize(source_code)
         nodes = self.parser.parse(tokens)
-
+        # print(nodes)
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:
             for node in nodes:
                 if node:
+                    # print(node)
                     node.execute(self.environment)
 
             print("")

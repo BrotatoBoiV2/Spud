@@ -165,6 +165,14 @@ the examples work as intended.
 * 06:18
     - Fixed tildentation.
     - Need to add 'but' keyword.
+* 17:03
+    - Starting to implement the `but` keyword.
+* 18:00
+    - The `but` keyword is now working, but the logic is slightly flawed.
+       (All `check-but-otherwise` all run instead of only one at a time)
+* 21:20
+    - The check node now processes as a normal `if-elif-else` conditional.
+    - Implemented the `otherwise` keyword as a fallback condition.
 ---
 
 # TO-DO:

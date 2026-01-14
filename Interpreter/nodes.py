@@ -392,7 +392,6 @@ class LogicNode(Node):
         return self.value
 
 
-
 class CheckNode(Node):
     """
     ~ Represents a check node in the AST. ~
@@ -402,12 +401,17 @@ class CheckNode(Node):
         - execute                      : Executes the check node.
     """
 
-    def __init__(self, value, line, column, condition=None):
+    def __init__(self, value, line, column):
         super().__init__(value, line, column)
 
-        self.condition = condition
-
     def execute(self, memory):
-        if self.condition.execute(memory):
-            for code in self.value:
-                code.execute(memory)
+        run = None
+        
+        for condition, code in self.value.items():
+            if condition.execute(memory):
+                run = code
+                break
+
+        if run:
+            for node in run:
+                node.execute(memory)
