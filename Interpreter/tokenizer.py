@@ -41,10 +41,10 @@ class Token:
         ~ Initialize the Token. ~
 
         Arguments:
-            token_type           (str) : The type of the token.
-            token_value          (str) : The value of the token.
-            token_line           (int) : The line number of the token.
-            token_column         (int) : The column number of the token.
+            - token_type         (str) : The type of the token.
+            - token_value        (str) : The value of the token.
+            - token_line         (int) : The line number of the token.
+            - token_column       (int) : The column number of the token.
 
         """
 
@@ -58,7 +58,7 @@ class Token:
         ~ Print the Token in a string format for debugging. ~
 
         Returns:
-            str                        : A string representation of the token.
+            - String                   : String representation of the token.
         """
 
         return f"Token({self.type} | {self.value} | {self.line} | {self.col})"
@@ -81,10 +81,10 @@ class Tokenizer:
         ~ Initialize the Tokenizer. ~
 
         Attributes:
-            code                 (str) : The source code.
-            index                (int) : The current index in the code.
-            column               (int) : The current column in the code.
-            row                  (int) : The current row in the code.
+            - code               (str) : The source code.
+            - index              (int) : The current index in the code.
+            - column             (int) : The current column in the code.
+            - row                (int) : The current row in the code.
         """
 
         self.code = None
@@ -97,10 +97,10 @@ class Tokenizer:
         ~ Peek at the next token. ~
 
         Arguments:
-            amount               (int) : The amount to peek ahead.
+            - amount             (int) : The amount to peek ahead.
 
         Returns:
-            str                        : The next token to process.
+            - String                   : The next token to process.
         """
 
         # ~ Check if the token exists to avoid errors. ~ #
@@ -114,7 +114,7 @@ class Tokenizer:
         ~ Process a string token. ~
 
         Returns:
-            str                        : The string token.
+            - String                   : The string token.
         """
 
         string_text = ""
@@ -149,7 +149,7 @@ class Tokenizer:
         ~ Process a comment token. ~
 
         Returns:
-            str                        : The comment token.
+            - String                   : The comment token.
         """
 
         comment_text = ""
@@ -181,10 +181,10 @@ class Tokenizer:
         ~ Tokenize the source code. ~
 
         Arguments:
-            code                 (str) : The source code.
+            - code               (str) : The source code.
 
         Returns:
-            list                       : A list of tokens.
+            - List                     : A list of tokens.
         """
 
         self.code = code

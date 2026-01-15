@@ -42,11 +42,11 @@ class Environment:
         ~ Initialize the Environment. ~
 
         Arguments:
-            parent       (Environment) : The parent environment.
+            - parent     (Environment) : The parent environment.
 
         Attributes:
-            variables           (dict) : The variables in the environment.
-            parent       (Environment) : The parent environment.
+            - variables         (Dict) : The variables in the environment.
+            - parent     (Environment) : The parent environment.
         """
 
         self.variables = {}
@@ -57,10 +57,10 @@ class Environment:
         ~ Get a variable from the environment. ~
 
         Arguments:
-            name                 (str) : The name of the variable.
+            - name            (String) : The name of the variable.
 
         Returns:
-            any                        : The value of the variable.
+            - Any                      : The value of the variable.
         """
 
         if name in self.variables:
@@ -76,8 +76,8 @@ class Environment:
         ~ Set a variable in the environment. ~
 
         Arguments:
-            name                 (str) : The name of the variable.
-            value                (any) : The value of the variable.
+            - name            (String) : The name of the variable.
+            - value              (Any) : The value of the variable.
         """
 
         self.variables[name] = value

@@ -51,18 +51,18 @@ class SpudInterpreter:
         ~ Initialize the Interpreter. ~
 
         Arguments:
-            file_path            (str) : The path to the file to be executed.
+            - file_path       (String) : The path to the file to be executed.
 
         Attributes:
-            tokenizer      (Tokenizer) : The tokenizer instance.
-            parser            (Parser) : The parser instance.
-            environment  (Environment) : The environment instance.
-            file_path            (str) : The path to the file to be executed.
+            - tokenizer    (Tokenizer) : The tokenizer instance.
+            - parser          (Parser) : The parser instance.
+            - env        (Environment) : The environment instance.
+            - file_path       (String) : The path to the file to be executed.
         """
 
         self.tokenizer = Tokenizer()
         self.parser = Parser()
-        self.environment = Environment()
+        self.env = Environment()
         self.file_path = file_path
 
         # ~ Check if it is a valid file extension. ~ #
@@ -75,7 +75,7 @@ class SpudInterpreter:
         ~ Read the source code from the file. ~
 
         Returns:
-            str                        : The raw source code string.
+            - Stirng                   : The raw source code string.
         """
 
         with open(self.file_path, "r", encoding="utf-8") as f:
@@ -93,13 +93,12 @@ class SpudInterpreter:
         source_code = self._read_file()
         tokens = self.tokenizer.tokenize(source_code)
         nodes = self.parser.parse(tokens)
-        # print(nodes)
+        
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:
             for node in nodes:
                 if node:
-                    # print(node)
-                    node.execute(self.environment)
+                    node.execute(self.env)
 
             print("")
 
@@ -134,10 +133,10 @@ if __name__ == "__main__":
         interpreter.execute()
 
     else:
-        try:  # ~ Debug Mode: Displays Python Errors. ~ #
+        try:                      # ~ Debug Mode: Displays Python Errors. ~ #
             interpreter.execute()
             sys.exit(0)
 
-        except Exception as e:  # ~ Spud Mode: Displays Spud Errors. ~ #
+        except Exception as e:    # ~ Spud Mode: Displays Spud Errors. ~ #
             print(f"Error: {e}")
             sys.exit(1)

@@ -57,10 +57,10 @@ class Parser:
         ~ Initialize the Parser. ~
 
         Attributes:
-			index                (int) : The current index in the tokens.
-			tokens              (list) : The list of tokens.
-			token              (Token) : The current token.
-			parsed              (list) : The list of parsed nodes.
+			- index              (Int) : The current index in the tokens.
+			- tokens            (List) : The list of tokens.
+			- token            (Token) : The current token.
+			- parsed            (List) : The list of parsed nodes.
         """
 
         self.index = 0
@@ -74,10 +74,11 @@ class Parser:
         ~ Peek at the next token. ~
 
         Arguments:
-			amount               (int) : The amount to peek ahead.
+			- amount             (Int) : The amount to peek ahead.
 
         Returns:
-			Token                      : The next token to process.
+			- Token                    : The next token to process.
+            - String                   : Empty string to avoid errors.
         """
 
         if self.tokens and self.index + amount < len(self.tokens):
@@ -90,7 +91,7 @@ class Parser:
         ~ Advance to the next token. ~
 
         Arguments:
-			amount               (int) : The amount to advance.
+			- amount             (Int) : The amount to advance.
         """
 
         self.index += amount
@@ -104,7 +105,7 @@ class Parser:
         ~ Parse a 'say' statement. ~
 
         Returns:
-			SayNode                    : The parsed 'say' statement.
+			- SayNode                  : The parsed 'say' statement.
         """
 
         line, col = self.token.line, self.token.col
@@ -117,7 +118,7 @@ class Parser:
         ~ Parse an expression. ~
 
         Returns:
-			BinOperNode                : The parsed expression.
+			- BinOperNode              : The parsed expression.
         """
 
         left = self.parse_primary()
@@ -142,7 +143,7 @@ class Parser:
         ~ Parse a primary expression. ~
 
         Returns:
-			Node                       : The parsed primary expression.
+			- Node                     : The node based on the token.
         """
 
         token = self.token
@@ -182,7 +183,7 @@ class Parser:
         ~ Parse a 'get' statement. ~
 
         Returns:
-			GetNode                    : The parsed 'get' statement.
+			- GetNode                  : The parsed 'get' statement.
         """
 
         self.advance()
@@ -206,7 +207,7 @@ class Parser:
         ~ Parse a variable assignment. ~
 
         Returns:
-			VariableNode               : The parsed variable assignment.
+			- VariableNode             : The parsed variable assignment.
         """
 
         var_name = self.token.value
@@ -228,7 +229,7 @@ class Parser:
         ~ Parse a condition. ~
 
         Returns:
-			BoolNode                   : The parsed condition.
+			- BoolNode                 : The parsed condition for check node.
         """
         
         left = self.parse_expression()
@@ -251,15 +252,14 @@ class Parser:
         return left
 
 
-    def parse_check(self, branch=0):
+    def parse_check(self):
         """
         ~ Parse a conditional statement block. ~
 
-        Arguments:
-
-
         Returns:
-			CheckNode                  : The parsed statement block.
+			- CheckNode                : The parsed statement block.
+
+        NOTE: Need to shrink this function.
         """
 
         branches = {}
@@ -267,12 +267,7 @@ class Parser:
         while self.index < len(self.tokens):
             self.advance()
 
-            # ~ Check if the keyword is `otherwise` or not. ~ #
-            if branch == 0:
-                condition = self.parse_condition()
-                
-            else:
-                condition = True
+            condition = self.parse_condition()
 
             # ~ Make sure the condition exists. ~ #
             if condition:
@@ -354,13 +349,13 @@ class Parser:
 
     def parse(self, tokens):
         """
-        ~ Parse the source code. ~
+        ~ Parse the source code gotten from the file. ~
 
         Arguments:
-			tokens              (list) : The list of tokens.
+			- tokens            (List) : The list of tokens in the source code.
 
         Returns:
-			list                       : The list of parsed nodes.
+			- List                     : The list of parsed nodes to execute.
         """
 
         self.tokens = tokens
