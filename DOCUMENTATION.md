@@ -177,6 +177,8 @@ the examples work as intended.
 *2026-01-15*
 * 07:10
     - Renamed the `but` key word to `instead` for more clarity.
+* 03:18
+    - Updated the changelog and filestamps to V1.5.2-2026.01.15.
 ---
 
 # TO-DO:

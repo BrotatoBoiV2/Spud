@@ -1,14 +1,21 @@
 # Current Version
 
-**V1.1.2-2026.01.13**
+**V1.5.2-2026.01.15**
 
-  - I have refactored the code, added more 
-  - comments and pruned lines to <= 80 characters.
+  - Conditionals have been introduced so there is now
+    logic flow and "tildentation" - the act of Sprouting Potato Eyes "~"
+    to indicate an indentation for code blocks.
+  - Some errors surrounding the new feature is caught.
 
 ---
 
 ## Previous Versions
 
+**V1.1.2-2026.01.13**
+
+  - I have refactored the code, added more 
+  - comments and pruned lines to <= 80 characters.
+  
 **V1.1-2026.01.09**
   
   - New version allows more complex mathematical equations with parentheses.
