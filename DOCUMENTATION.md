@@ -194,10 +194,14 @@ Conditionals are done, but can clean the logic up a bit.
     - Updated to version 1.5.5-2026.01.15.
 * 16:25
     - Ensured all lines in the codebase are 80 characters and under.
+
+* 16:36
+    - Created the Conditonals example file.
+    - Noticed the comments are broken and need to be fixed.
 ---
 
 # TO-DO:
 \*\*\*Add Line output to the errors.\*\*\*
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
-    
+\*Find out why comments break and fix it.\*

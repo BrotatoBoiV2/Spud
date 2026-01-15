@@ -214,6 +214,7 @@ class Parser:
         self.advance()
 
         if self.token.type != "EQUAL":
+            print(self.token)
             raise SyntaxError("Expected '=' after variable name.")
 
         self.advance()
