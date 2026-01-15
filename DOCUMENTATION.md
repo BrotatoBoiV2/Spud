@@ -173,6 +173,10 @@ the examples work as intended.
 * 21:20
     - The check node now processes as a normal `if-elif-else` conditional.
     - Implemented the `otherwise` keyword as a fallback condition.
+
+*2026-01-15*
+* 07:10
+    - Renamed the `but` key word to `instead` for more clarity.
 ---
 
 # TO-DO:

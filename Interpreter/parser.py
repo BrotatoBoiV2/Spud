@@ -287,7 +287,7 @@ class Parser:
                             elif token.value == "get":
                                 code.append(self.parse_get())
 
-                            elif token.value == "but":
+                            elif token.value == "instead":
                                 branches[condition] = code
                                 code = []
                                 self.advance()

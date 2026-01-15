@@ -238,7 +238,7 @@ class Tokenizer:
             elif char.isalpha():  # maybe a `process_word()`
                 ident = ""
                 start_col = self.col
-                keys = ["say", "get", "check", "but", "otherwise"]
+                keys = ["say", "get", "check", "instead", "otherwise"]
 
                 while self.index < len(self.code) and self.peek().isalnum():
                     ident += self.peek()
