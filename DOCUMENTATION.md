@@ -8,8 +8,9 @@
 Essentially all I need to do is refactor the code and make sure
 the examples work as intended.
 
+Conditionals are done, but can clean the logic up a bit.
+
 **Next Plan:**
-*** Conditionals (Next Week)
 ** Loops (After Conditionals)
 * Functions (After Loops)
 
