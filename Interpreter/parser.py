@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.5.2-2026.01.15
+                        Version: 1.5.5-2026.01.15
 
 ===============================================================================
 
@@ -48,6 +48,8 @@ class Parser:
 		- parse_get                    : Parse a 'get' statement.
 		- parse_set_variable           : Parse a variable assignment.
 		- parse                        : Parse the source code.
+        - parse_condition              : Parse a condition.
+		- parse_check                  : Parse a 'check' statement.
     """
 
     def __init__(self):
@@ -150,7 +152,7 @@ class Parser:
             return IntegerNode(token.value, token.line, token.col)
 
         elif token.type == "STRING":
-            self.advance()
+            # self.advance()
             return StringNode(token.value, token.line, token.col)
 
         elif token.type == "IDENTIFIER":
@@ -239,10 +241,10 @@ class Parser:
 
             left = BoolNode(
                 logic,
-                left,
-                right,
                 self.token.line,
-                self.token.col
+                self.token.col,
+                left=left,
+                right=right
             )
 
         return left
@@ -250,13 +252,13 @@ class Parser:
 
     def parse_check(self, branch=0):
         """
-        ~ Parse a 'check' statement. ~
+        ~ Parse a conditional statement block. ~
 
         Arguments:
 
 
         Returns:
-			CheckNode                  : The parsed 'check' statement.
+			CheckNode                  : The parsed statement block.
         """
 
         branches = {}
@@ -264,22 +266,53 @@ class Parser:
         while self.index < len(self.tokens):
             self.advance()
 
+            # ~ Check if the keyword is `otherwise` or not. ~ #
             if branch == 0:
                 condition = self.parse_condition()
                 
             else:
                 condition = True
 
+            # ~ Make sure the condition exists. ~ #
             if condition:
                 self.advance()
 
-                if self.token.type == "SPROUT":
+                # ~ Check if the block has been sprouted, ~ #
+                # ~ and has the right "tildentation" expected. ~ #
+                if self.token.type == "SPROUT" and self.token.value == self.sprouts + 1:
+                    self.sprouts = self.token.value
                     code = []
 
                     while self.index < len(self.tokens):
                         self.advance()
+                        
+                        # ~ Check if the next token after the End of Line is a valid token. ~ #
+                        if self.token.type == "EOL":
+                            next_token = self.peek(1)
+
+                            if next_token.type == "SPROUT" and next_token.value == self.sprouts:
+                                self.advance()
+                                continue
+
+                            elif next_token.type in ["TERMINATOR", "EOF"]:
+                                # self.advance()
+                                self.sprouts -= 1
+                                break
+
+                            elif next_token.type == "KEYWORD":
+                                if next_token.value == "instead":
+                                    pass
+                                elif next_token.value == "otherwise":
+                                    pass
+
+                                else:
+                                    raise SyntaxError("Unexpected token in block.")
+                            
+                            else:
+                                raise SyntaxError("Unexpected token in block.")
 
                         token = self.token
+                        
                         if token.type == "KEYWORD":
                             if token.value == "say":
                                 code.append(self.parse_say())
@@ -298,16 +331,17 @@ class Parser:
                                 code = []
                                 
                                 self.advance()
-                                condition = BoolNode("equals", IntegerNode("1", None, None), IntegerNode("1", None, None), self.token.line, self.token.col)
+                                condition = BoolNode("ripe", self.token.line, self.token.col)
 
                         elif token.type == "IDENTIFIER":
                             code.append(self.parse_set_variable())
 
                 else:
-                    raise SyntaxError("Expected 'sprouts' after 'check'.")
+                    raise SyntaxError("Unexpected amount of sprouts")
 
-            branches[condition] = code
-            return CheckNode(branches, self.token.line, self.token.col)
+                branches[condition] = code
+
+                return CheckNode(branches, self.token.line, self.token.col)
 
 
 

@@ -180,9 +180,23 @@ Conditionals are done, but can clean the logic up a bit.
     - Renamed the `but` key word to `instead` for more clarity.
 * 03:18
     - Updated the changelog and filestamps to V1.5.2-2026.01.15.
+* 15:05
+    - Starting to clean and lint the code, update documentation and comments
+      and keeping the logic tight and simple.
+* 16:08
+    - Updated some documentation and comments.
+    - Added some error handling. However, I do need to incorperate the following:
+        * More verbose error output.
+        * Column and Line updating fixes.
+    - Started to implement hard-coded booleans:
+        - True: `ripe`
+        - False: `rotten`
+    - Updated to version 1.5.5-2026.01.15.
+
 ---
 
 # TO-DO:
 \*\*\*Add Line output to the errors.\*\*\*
 \*Include a bit more commentation.\*
+\*Fix row/column updating.\*
     

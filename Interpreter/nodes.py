@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.5.2-2026.01.15
+                        Version: 1.5.5-2026.01.15
 
 ===============================================================================
 
@@ -352,7 +352,7 @@ class BoolNode(Node):
         - execute                      : Executes the boolean node.
     """
 
-    def __init__(self, value, left, right, line, column):
+    def __init__(self, value, line, column, left=None, right=None):
         """
         Initialize the BoolNode.
 
@@ -368,8 +368,13 @@ class BoolNode(Node):
         self.right = right
 
     def execute(self, memory):
-        if self.value== "equals":
+        if self.value == "equals":
             return self.left.execute(memory) == self.right.execute(memory)
+        elif self.value == "ripe":
+            return True
+        elif self.value == "rotten":
+            return False
+        
 
 
 class LogicNode(Node):
