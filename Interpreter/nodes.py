@@ -374,7 +374,6 @@ class BoolNode(Node):
             return True
         elif self.value == "rotten":
             return False
-        
 
 
 class LogicNode(Node):
@@ -390,7 +389,7 @@ class LogicNode(Node):
         """
         ~ Initialize the LogicNode. ~
         """
-        
+
         super().__init__(value, line, column)
 
     def execute(self, memory):
@@ -411,7 +410,7 @@ class CheckNode(Node):
 
     def execute(self, memory):
         run = None
-        
+
         for condition, code in self.value.items():
             if condition.execute(memory):
                 run = code

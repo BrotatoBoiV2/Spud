@@ -141,7 +141,7 @@ Conditionals are done, but can clean the logic up a bit.
 
 *2026-01-13:*
 * 14:50
-    - Started to clean up the docstrings and comments while linting the code with:
+    - Started to clean the docstrings/comments and linting the code with:
         [Black Formatter](https://github.com/microsoft/vscode-black-formatter)
 * 15:09
     - Cleaned both the `main.py` and `parser.py` files.
@@ -185,14 +185,15 @@ Conditionals are done, but can clean the logic up a bit.
       and keeping the logic tight and simple.
 * 16:08
     - Updated some documentation and comments.
-    - Added some error handling. However, I do need to incorperate the following:
+    - Added some error handling. However, I do need to include the following:
         * More verbose error output.
         * Column and Line updating fixes.
     - Started to implement hard-coded booleans:
         - True: `ripe`
         - False: `rotten`
     - Updated to version 1.5.5-2026.01.15.
-
+* 16:25
+    - Ensured all lines in the codebase are 80 characters and under.
 ---
 
 # TO-DO:

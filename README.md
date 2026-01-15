@@ -25,7 +25,7 @@ Spud is an experimental programming language. Currently, it is a high-level
 ## Additional Information
 See the [LICENSE](LICENSE) for licensing details.  
 Documentation is available in the [DOCUMENTATION](docs/DOCUMENTATION.md).
-Recent version update can be found in the [CHANGELOG](docs/CHANGELOG.md).
+Recent version updates can be found in the [CHANGELOG](docs/CHANGELOG.md).
 
 ## Important Notes
 This project is created by a human developer and with AI-assisted tool support.

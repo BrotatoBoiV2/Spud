@@ -64,13 +64,11 @@ class SpudInterpreter:
         self.parser = Parser()
         self.environment = Environment()
         self.file_path = file_path
-        
+
         # ~ Check if it is a valid file extension. ~ #
         if not self.file_path.endswith(".pot"):
-            err =  f"Invalid file extension: '{self.file_path}'."
-            raise ValueError(
-               err + " Expected '.pot'."
-            )
+            err = f"Invalid file extension: '{self.file_path}'."
+            raise ValueError(err + " Expected '.pot'.")
 
     def _read_file(self):
         """

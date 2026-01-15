@@ -279,18 +279,20 @@ class Parser:
 
                 # ~ Check if the block has been sprouted, ~ #
                 # ~ and has the right "tildentation" expected. ~ #
-                if self.token.type == "SPROUT" and self.token.value == self.sprouts + 1:
+                if (self.token.type == "SPROUT" and 
+                    self.token.value == self.sprouts + 1):
                     self.sprouts = self.token.value
                     code = []
 
                     while self.index < len(self.tokens):
                         self.advance()
-                        
-                        # ~ Check if the next token after the End of Line is a valid token. ~ #
+        
                         if self.token.type == "EOL":
+                            error = "Unexpected end of line in block."
                             next_token = self.peek(1)
 
-                            if next_token.type == "SPROUT" and next_token.value == self.sprouts:
+                            if (next_token.type == "SPROUT" and 
+                                next_token.value == self.sprouts):
                                 self.advance()
                                 continue
 
@@ -306,10 +308,10 @@ class Parser:
                                     pass
 
                                 else:
-                                    raise SyntaxError("Unexpected token in block.")
+                                    raise SyntaxError(error)
                             
                             else:
-                                raise SyntaxError("Unexpected token in block.")
+                                raise SyntaxError(error)
 
                         token = self.token
                         
@@ -331,7 +333,11 @@ class Parser:
                                 code = []
                                 
                                 self.advance()
-                                condition = BoolNode("ripe", self.token.line, self.token.col)
+                                condition = BoolNode(
+                                                "ripe",
+                                                self.token.line,
+                                                self.token.col
+                                            )
 
                         elif token.type == "IDENTIFIER":
                             code.append(self.parse_set_variable())

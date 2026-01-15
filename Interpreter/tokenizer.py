@@ -249,7 +249,7 @@ class Tokenizer:
                     token_type = "LOGIC"
                 else:
                     token_type = "KEYWORD" if ident in keys else "IDENTIFIER"
-                
+
                 tokens.append(Token(token_type, ident, self.row, start_col))
 
             elif char in symbols:
@@ -262,7 +262,6 @@ class Tokenizer:
                 start_col = self.col
                 self.index += 1
                 self.col += 1
-
 
                 while self.index < len(self.code) and self.peek() == "~":
                     sprouts += 1
