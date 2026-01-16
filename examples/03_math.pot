@@ -1,3 +1,4 @@
+(~ Basic mathematical operations. ~)
 x = 2
 y = 3
 xy = x + y

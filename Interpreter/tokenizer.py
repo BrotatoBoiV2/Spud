@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.5.5-2026.01.15
+                        Version: 1.6.5-2026.01.16
 
 ===============================================================================
 
@@ -235,7 +235,7 @@ class Tokenizer:
 
                 tokens.append(Token("INTEGER", num_text, self.row, start_col))
 
-            elif char.isalpha():  # maybe a `process_word()`
+            elif char.isalpha():
                 ident = ""
                 start_col = self.col
                 keys = ["say", "get", "check", "instead", "otherwise"]
@@ -258,23 +258,33 @@ class Tokenizer:
                 self.col += 1
 
             elif char == "~":
-                sprouts = 1
-                start_col = self.col
-                self.index += 1
-                self.col += 1
-
-                while self.index < len(self.code) and self.peek() == "~":
-                    sprouts += 1
+                if self.peek(1) == ".":
+                    tokens.append(Token("ROOT", "~.", self.row, self.col))
+                    self.index += 2
+                    self.col += 2
+                else:
+                    sprouts = 1
+                    start_col = self.col
                     self.index += 1
                     self.col += 1
 
-                tokens.append(Token("SPROUT", sprouts, self.row, start_col))
+                    while self.index < len(self.code) and self.peek() == "~":
+                        sprouts += 1
+                        self.index += 1
+                        self.col += 1
+
+                    tokens.append(Token("SPROUT", sprouts, self.row, start_col))
 
             elif char == ".":
-                if self.peek(1) == "." and self.peek(2) == ".":
-                    tokens.append(Token("TERMINATOR", char, self.row, self.col))
-                    self.index += 3
-                    self.col += 3
+                if self.peek(1) == ".":
+                    if self.peek(2) == ".":
+                        tokens.append(Token("TERMINATOR", char, self.row, self.col))
+                        self.index += 3
+                        self.col += 3
+                elif self.peek(1) == "~":
+                    tokens.append(Token("EYES", ".~", self.row, self.col))
+                    self.index += 2
+                    self.col += 2
                 else:
                     self.index += 1
                     self.col += 1

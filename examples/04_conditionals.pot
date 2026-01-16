@@ -1,7 +1,8 @@
-check 1 equals 0
-~say "This won't run"
+(~ Edit the values to see the conditionals in action. ~)
+check 1 equals 0 .~
+say "This won't run"
 instead 1 equals 1
-~say "This will run"
+say "This will run"
 otherwise
-~say "This will run if the above is false!"
-...
+say "This will run if the above is false!"
+~.
