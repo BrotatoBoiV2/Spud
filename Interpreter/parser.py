@@ -107,6 +107,7 @@ class Parser:
         Returns:
 			- SayNode                  : The parsed 'say' statement.
         """
+        output = []
 
         line, col = self.token.line, self.token.col
         self.advance()
@@ -153,7 +154,7 @@ class Parser:
             return IntegerNode(token.value, token.line, token.col)
 
         elif token.type == "STRING":
-            # self.advance()
+            self.advance()
             return StringNode(token.value, token.line, token.col)
 
         elif token.type == "IDENTIFIER":
@@ -212,6 +213,7 @@ class Parser:
 
         var_name = self.token.value
         line, col = self.token.line, self.token.col
+        print(self.token)
         self.advance()
 
         if self.token.type != "EQUAL":
