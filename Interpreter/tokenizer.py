@@ -270,10 +270,14 @@ class Tokenizer:
 
                 tokens.append(Token("SPROUT", sprouts, self.row, start_col))
 
-            elif char == "&":
-                tokens.append(Token("TERMINATOR", char, self.row, self.col))
-                self.index += 1
-                self.col += 1
+            elif char == ".":
+                if self.peek(1) == "." and self.peek(2) == ".":
+                    tokens.append(Token("TERMINATOR", char, self.row, self.col))
+                    self.index += 3
+                    self.col += 3
+                else:
+                    self.index += 1
+                    self.col += 1
 
             else:
                 self.index += 1

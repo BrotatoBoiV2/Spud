@@ -213,11 +213,10 @@ class Parser:
 
         var_name = self.token.value
         line, col = self.token.line, self.token.col
-        print(self.token)
+        
         self.advance()
 
         if self.token.type != "EQUAL":
-            print(self.token)
             raise SyntaxError("Expected '=' after variable name.")
 
         self.advance()
@@ -283,33 +282,27 @@ class Parser:
                     code = []
 
                     while self.index < len(self.tokens):
-                        self.advance()
+                        if self.token.type == "TERMINATOR":
+                            self.sprouts -= 1
+                            break
         
                         if self.token.type == "EOL":
+                            self.advance()
+                            
                             error = "Unexpected end of line in block."
-                            next_token = self.peek(1)
 
-                            if (next_token.type == "SPROUT" and 
-                                next_token.value == self.sprouts):
+                            if (self.token.type == "SPROUT" and 
+                                self.token.value == self.sprouts):
                                 self.advance()
+
                                 continue
 
-                            elif next_token.type in ["TERMINATOR", "EOF"]:
-                                # self.advance()
-                                self.sprouts -= 1
-                                break
-
-                            elif next_token.type == "KEYWORD":
-                                if next_token.value == "instead":
-                                    pass
-                                elif next_token.value == "otherwise":
+                            elif self.token.type == "KEYWORD":
+                                if self.token.value in ["instead", "otherwise"]:
                                     pass
 
                                 else:
                                     raise SyntaxError(error)
-                            
-                            else:
-                                raise SyntaxError(error)
 
                         token = self.token
                         
@@ -339,6 +332,8 @@ class Parser:
 
                         elif token.type == "IDENTIFIER":
                             code.append(self.parse_set_variable())
+
+                        self.advance()
 
                 else:
                     raise SyntaxError("Unexpected amount of sprouts")

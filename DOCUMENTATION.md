@@ -3,15 +3,14 @@
 ---
 
 ## Weekly Plan
-**Week Date:** *2026-01-12/2026-01-16*
+**Week Date:** *2026-01-19/2026-01-23*
 
-Essentially all I need to do is refactor the code and make sure
-the examples work as intended.
-
-Conditionals are done, but can clean the logic up a bit.
+This week I want to refactor the conditionals feature so that it is a
+ bit shorter and easier to maintain before moving on to a new feature. 
+ Afterwards, I am planning to introduce a while loop feature.
 
 **Next Plan:**
-** Loops (After Conditionals)
+** Loops (After Refactor)
 * Functions (After Loops)
 
 ---
@@ -199,10 +198,20 @@ Conditionals are done, but can clean the logic up a bit.
     - Noticed the comments are broken and need to be fixed.
 * 17:33
     - Updated some documentation and comments.
+
+*2026-01-16*
+* 17:45
+    - Fixed a string error that was caused by a debug comment.
+* 18:42
+    - Fixed the terminator not terminating the code block properly.
+* 18:47
+    - Updated the terminator character to `...` for a more simple look.
 ---
 
 # TO-DO:
+\*\*\*Terminator does absolutely nothing!\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
+\*Refactor the `check_parse()` method. \*
 \*Find out why comments break and fix it.\*
