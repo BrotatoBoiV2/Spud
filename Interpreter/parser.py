@@ -50,6 +50,7 @@ class Parser:
 		- parse                        : Parse the source code.
         - parse_condition              : Parse a condition.
 		- parse_check                  : Parse a 'check' statement.
+        - parse_branch                 : Parse a conditional statement branch.
     """
 
     def __init__(self):
@@ -252,6 +253,59 @@ class Parser:
 
         return left
 
+    def parse_branch(self, condition, code):
+        """
+        ~ Parse a conditional statement branch. ~
+
+        Arguments:
+			- condition         (Node) : The condition of the branch.
+            - code              (List) : The code of the branch.
+
+        Returns:
+			- Dict                     : The branches of the check node,
+        """
+
+        branches = {}
+
+        while self.token.type != "ROOT":
+            if self.token.type == "EOF":
+                raise SyntaxError("Potato Eyes needs to be closed with a Potato Root! '~.'")
+
+            if self.token.type == "KEYWORD":
+                if self.token.value == "say":
+                    code.append(self.parse_say())
+
+                elif self.token.value == "get":
+                    code.append(self.parse_get())
+
+                elif self.token.value == "instead":
+                    branches[condition] = code
+                    code = []
+
+                    self.advance()
+                    condition = self.parse_condition()
+
+                elif self.token.value == "otherwise":
+                    branches[condition] = code
+                    code = []
+                    
+                    self.advance()
+                    condition = BoolNode(
+                                    "ripe",
+                                    self.token.line,
+                                    self.token.col
+                                )
+
+
+            elif self.token.type == "IDENTIFIER":
+                code.append(self.parse_set_variable())
+
+            self.advance()
+
+        branches[condition] = code
+
+        return branches
+
 
     def parse_check(self):
         """
@@ -260,8 +314,6 @@ class Parser:
         Returns:
 			- CheckNode                : The parsed statement block.
         """
-
-        branches = {}
 
         while self.index < len(self.tokens):
             self.advance()
@@ -274,46 +326,9 @@ class Parser:
                 if self.token.type == "EYES":
                     self.advance()
 
-                    while self.token.type != "ROOT":
-                        if self.token.type == "EOF":
-                            raise SyntaxError("Potato Eyes needs to be closed with a Potato Root! '~.'")
-
-                        if self.token.type == "KEYWORD":
-                            if self.token.value == "say":
-                                code.append(self.parse_say())
-
-                            elif self.token.value == "get":
-                                code.append(self.parse_get())
-
-                            elif self.token.value == "instead":
-                                branches[condition] = code
-                                code = []
-
-                                self.advance()
-                                condition = self.parse_condition()
-
-                            elif self.token.value == "otherwise":
-                                branches[condition] = code
-                                code = []
-                                
-                                self.advance()
-                                condition = BoolNode(
-                                                "ripe",
-                                                self.token.line,
-                                                self.token.col
-                                            )
-
-
-                        elif self.token.type == "IDENTIFIER":
-                            code.append(self.parse_set_variable())
-
-                        self.advance()
-
-                    branches[condition] = code
+                    branches = self.parse_branch(condition, code)
 
                     return CheckNode(branches, self.token.line, self.token.col)
-
-
 
                 else:
                     raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")
