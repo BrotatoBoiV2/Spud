@@ -6,20 +6,12 @@ Spud is an experimental programming language. Currently, it is a high-level
  evolve Spud into a low-level, self-hosted systems language capable of building
  operating systems and low-level graphical software.
 
-## Current Features (v1.1)
-  * Recursive Expression Parsing: Supports complex mathematical operations
-    including addition and string concatenation.
-  * Operation Grouping: Full support for parentheses `( )` to control
-    operator precedence.
-  * Variable Scoping: Implements a Lexical Environment system via `memory.py`
-    for robust variable management.
-  * Dynamic Type Coercion: Automatically handles integer and string
-    conversions for seamless `say` output.
-  * Interactive Input: Capture user input with the `get` keyword, 
-    featuring automatic numeric detection.
-  * Informative Error Handling: Detects unterminated strings and unclosed 
-    comments (`(~` `~)`) during tokenization.
-
+## Current Version: (v1.5.5-2026.01.15)
+  * Many code refactors and cleaning have been done.
+  * Conditional Statements have been introduced.
+  * A few error handling for the new feature.
+  * Beginning the implementation of booleans: `ripe` and `rotten`.
+  
 ---
 
 ## Additional Information
