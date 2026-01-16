@@ -214,6 +214,9 @@ This week I want to refactor the conditionals feature so that it is a
       was, but I am curious if it is still there.
     - Termintor is no longer needed with the wrapped block update.
     - Officially updated to version 1.6.5-2026.01.16.
+* 21:37
+    - Cleaned the `parse_check()` method and included a `parse_branch()`
+      method to help parse the check statement.
 ---
 
 # TO-DO:
