@@ -206,12 +206,17 @@ This week I want to refactor the conditionals feature so that it is a
     - Fixed the terminator not terminating the code block properly.
 * 18:47
     - Updated the terminator character to `...` for a more simple look.
+* 20:00
+    - Code statements in `check` is now wrapped with Eyes ".~" and Roots "~."
+      to make it a bit more seamless.
+    - `check_parse()` method is shortened and refactored.
+    - Comments did not seem to break and I have no clue what the previous bug
+      was, but I am curious if it is still there.
+    - Termintor is no longer needed with the wrapped block update.
+    - Officially updated to version 1.6.5-2026.01.16.
 ---
 
 # TO-DO:
-\*\*\*Terminator does absolutely nothing!\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
-\*Refactor the `check_parse()` method. \*
-\*Find out why comments break and fix it.\*

@@ -6,7 +6,7 @@ Spud is an experimental programming language. Currently, it is a high-level
  evolve Spud into a low-level, self-hosted systems language capable of building
  operating systems and low-level graphical software.
 
-## Current Version: (v1.5.5-2026.01.15)
+## Current Version: (v1.6.5-2026.01.15)
   * Many code refactors and cleaning have been done.
   * Conditional Statements have been introduced.
   * A few error handling for the new feature.

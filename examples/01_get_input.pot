@@ -1,2 +1,3 @@
+(~ Get user input and output it back. ~)
 get input "What you type will be returned: "
 say input

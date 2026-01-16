@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.5.5-2026.01.15
+                        Version: 1.6.5-2026.01.16
 
 ===============================================================================
 
@@ -259,8 +259,6 @@ class Parser:
 
         Returns:
 			- CheckNode                : The parsed statement block.
-
-        NOTE: Need to shrink this function.
         """
 
         branches = {}
@@ -269,57 +267,32 @@ class Parser:
             self.advance()
 
             condition = self.parse_condition()
+            code = []
 
             # ~ Make sure the condition exists. ~ #
             if condition:
-                self.advance()
+                if self.token.type == "EYES":
+                    self.advance()
 
-                # ~ Check if the block has been sprouted, ~ #
-                # ~ and has the right "tildentation" expected. ~ #
-                if (self.token.type == "SPROUT" and 
-                    self.token.value == self.sprouts + 1):
-                    self.sprouts = self.token.value
-                    code = []
+                    while self.token.type != "ROOT":
+                        if self.token.type == "EOF":
+                            raise SyntaxError("Potato Eyes needs to be closed with a Potato Root! '~.'")
 
-                    while self.index < len(self.tokens):
-                        if self.token.type == "TERMINATOR":
-                            self.sprouts -= 1
-                            break
-        
-                        if self.token.type == "EOL":
-                            self.advance()
-                            
-                            error = "Unexpected end of line in block."
-
-                            if (self.token.type == "SPROUT" and 
-                                self.token.value == self.sprouts):
-                                self.advance()
-
-                                continue
-
-                            elif self.token.type == "KEYWORD":
-                                if self.token.value in ["instead", "otherwise"]:
-                                    pass
-
-                                else:
-                                    raise SyntaxError(error)
-
-                        token = self.token
-                        
-                        if token.type == "KEYWORD":
-                            if token.value == "say":
+                        if self.token.type == "KEYWORD":
+                            if self.token.value == "say":
                                 code.append(self.parse_say())
 
-                            elif token.value == "get":
+                            elif self.token.value == "get":
                                 code.append(self.parse_get())
 
-                            elif token.value == "instead":
+                            elif self.token.value == "instead":
                                 branches[condition] = code
                                 code = []
+
                                 self.advance()
                                 condition = self.parse_condition()
 
-                            elif token.value == "otherwise":
+                            elif self.token.value == "otherwise":
                                 branches[condition] = code
                                 code = []
                                 
@@ -330,19 +303,20 @@ class Parser:
                                                 self.token.col
                                             )
 
-                        elif token.type == "IDENTIFIER":
+
+                        elif self.token.type == "IDENTIFIER":
                             code.append(self.parse_set_variable())
 
                         self.advance()
 
+                    branches[condition] = code
+
+                    return CheckNode(branches, self.token.line, self.token.col)
+
+
+
                 else:
-                    raise SyntaxError("Unexpected amount of sprouts")
-
-                branches[condition] = code
-
-                return CheckNode(branches, self.token.line, self.token.col)
-
-
+                    raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")
 
     def parse(self, tokens):
         """
