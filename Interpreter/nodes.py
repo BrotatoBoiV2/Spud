@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.8.6-2026.01.19
+                        Version: 1.9.6-2026.01.19
 
 ===============================================================================
 
@@ -466,6 +466,13 @@ class CheckNode(Node):
             for node in run:
                 node.execute(memory)
 
+class CutNode(Node):
+    def __init__(self, row, column):
+        super().__init__(None, row, column)
+
+    def execute(self, memory):
+        pass
+
 class LoopNode(Node):
     """
     ~ Represents a loop node in the AST. ~
@@ -479,5 +486,16 @@ class LoopNode(Node):
         super().__init__(value, row, column)
 
     def execute(self, memory):
-        pass
+        condition = self.value[0]
+        code      = self.value[1]
+        print(code)
+
+        while condition.execute(memory):
+            for node in code:
+                if isinstance(node, CutNode):
+                    break
+
+                node.execute(memory)
+
+            break
 

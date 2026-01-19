@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 1.8.6-2026.01.19
+                        Version: 1.9.6-2026.01.19
 
 ===============================================================================
 
@@ -99,6 +99,7 @@ class SpudInterpreter:
         if nodes:
             for node in nodes:
                 if node:
+                    # print(type(node))
                     node.execute(self.env)
 
             print("")

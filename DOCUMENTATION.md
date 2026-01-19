@@ -256,6 +256,10 @@ language capable of simple scripting.
       changelog and filestamps.
     
     * Note: I need to try and only make these version updates on Friday.
+* 16:30
+    - Starting the `loop` feature, because I feel like I have finished todays planned work.
+* 18:10
+    - The loop works as intended, but nested blocks are not fully supported.
 ---
 
 # TO-DO:
@@ -263,3 +267,4 @@ language capable of simple scripting.
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
 \*Implement all Nodes to get data from `self.values` instead hard-coded.\*
+\*Fix how nested blocks are handled.*\
