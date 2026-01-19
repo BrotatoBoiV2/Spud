@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.6.5-2026.01.16
+                        Version: 1.6.6-2026.01.19
 
 ===============================================================================
 
@@ -48,10 +48,10 @@ class Token:
 
         """
 
-        self.type = token_type
+        self.type  = token_type
         self.value = token_value
-        self.line = token_line
-        self.col = token_column
+        self.line  = token_line
+        self.col   = token_column
 
     def __str__(self):
         """
@@ -87,10 +87,10 @@ class Tokenizer:
             - row                (int) : The current row in the code.
         """
 
-        self.code = None
+        self.code  = None
         self.index = 0
-        self.col = 1
-        self.row = 1
+        self.col   = 1
+        self.row   = 1
 
     def peek(self, amount=0):
         """
@@ -120,27 +120,27 @@ class Tokenizer:
         string_text = ""
         start_col = self.col
         self.index += 1
-        self.col += 1
+        self.col   += 1
 
         while self.index < len(self.code) and self.peek() != '"':
             if self.peek() == "\\" and self.peek(1) == "n":
                 string_text += "\n"
-                self.index += 2
-                self.col += 2
+                self.index  += 2
+                self.col    += 2
 
             else:
                 string_text += self.peek()
                 self.index += 1
-                self.col += 1
+                self.col   += 1
 
             if self.index >= len(self.code):
                 error_msg = "String isn't closed with a matching quotation!"
-                location = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"Line: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
         self.index += 1
-        self.col += 1
+        self.col   += 1
 
         return string_text, start_col
 
@@ -155,24 +155,24 @@ class Tokenizer:
         comment_text = ""
         start_col = self.col
         self.index += 2
-        self.col += 2
+        self.col   += 2
 
         while self.index < len(self.code):
             if self.peek() == "~" and self.peek(1) == ")":
                 break
 
             comment_text += self.peek()
-            self.index += 1
-            self.col += 1
+            self.index   += 1
+            self.col     += 1
 
             if self.index >= len(self.code):
                 error_msg = "Comment isn't closed with Right Potato Ears! '~)'"
-                location = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"Line: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
         self.index += 2
-        self.col += 2
+        self.col   += 2
 
         return comment_text, start_col
 
@@ -187,13 +187,17 @@ class Tokenizer:
             - List                     : A list of tokens.
         """
 
-        self.code = code
+        self.code  = code
         self.index = 0
-        self.col = 1
-        self.row = 1
-        tokens = []
-        symbols = {"=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM"}
-        logic = ["equals", "not"]
+        self.col   = 1
+        self.row   = 1
+        tokens     = []
+        symbols    = {
+            "=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM"
+        }
+        logic      = [
+            "equals", "not"
+        ]
 
         # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
@@ -203,7 +207,7 @@ class Tokenizer:
                 if char == "\n":
                     tokens.append(Token("EOL", "EOL", self.row, self.col))
                     self.row += 1
-                    self.col = 1
+                    self.col  = 1
 
                 else:
                     self.col += 1
@@ -212,38 +216,42 @@ class Tokenizer:
 
             elif char == '"':
                 text, col = self.process_string()
+
                 tokens.append(Token("STRING", text, self.row, col))
 
             elif char == "(" and self.peek(1) == "~":
                 text, col = self.process_comment()
+
                 tokens.append(Token("COMMENT", text, self.row, col))
 
             elif char == "~" and self.peek(1) == ")":
                 error_msg = "No Left Potato Ear '(~' found to close comment!"
-                location = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"Line: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
             elif char.isdigit():
-                num_text = ""
+                num_text  = ""
                 start_col = self.col
 
                 while self.index < len(self.code) and self.peek().isdigit():
                     num_text += self.peek()
                     self.index += 1
-                    self.col += 1
+                    self.col   += 1
 
                 tokens.append(Token("INTEGER", num_text, self.row, start_col))
 
             elif char.isalpha():
-                ident = ""
+                ident     = ""
                 start_col = self.col
-                keys = ["say", "get", "check", "instead", "otherwise"]
+                keys      = [
+                    "say", "get", "check", "instead", "otherwise"
+                ]
 
                 while self.index < len(self.code) and self.peek().isalnum():
                     ident += self.peek()
                     self.index += 1
-                    self.col += 1
+                    self.col   += 1
 
                 if ident in logic:
                     token_type = "LOGIC"
@@ -255,23 +263,24 @@ class Tokenizer:
             elif char in symbols:
                 tokens.append(Token(symbols[char], char, self.row, self.col))
                 self.index += 1
-                self.col += 1
+                self.col   += 1
 
             elif char == "~":
                 if self.peek(1) == ".":
                     tokens.append(Token("ROOT", "~.", self.row, self.col))
                     self.index += 2
-                    self.col += 2
+                    self.col   += 2
+
                 else:
                     sprouts = 1
                     start_col = self.col
                     self.index += 1
-                    self.col += 1
+                    self.col   += 1
 
                     while self.index < len(self.code) and self.peek() == "~":
-                        sprouts += 1
+                        sprouts    += 1
                         self.index += 1
-                        self.col += 1
+                        self.col   += 1
 
                     tokens.append(Token("SPROUT", sprouts, self.row, start_col))
 
@@ -280,18 +289,19 @@ class Tokenizer:
                     if self.peek(2) == ".":
                         tokens.append(Token("TERMINATOR", char, self.row, self.col))
                         self.index += 3
-                        self.col += 3
+                        self.col   += 3
+
                 elif self.peek(1) == "~":
                     tokens.append(Token("EYES", ".~", self.row, self.col))
                     self.index += 2
-                    self.col += 2
+                    self.col   += 2
                 else:
                     self.index += 1
-                    self.col += 1
+                    self.col   += 1
 
             else:
                 self.index += 1
-                self.col += 1
+                self.col   += 1
 
         tokens.append(Token("EOL", "EOL", self.row, self.col))
         tokens.append(Token("EOF", "EOF", self.row, self.col))

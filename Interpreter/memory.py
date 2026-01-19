@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: memory.py
                             Date: 2026/01/08
-                        Version: 1.6.5-2026.01.16
+                        Version: 1.6.6-2026.01.19
 
 ===============================================================================
 
@@ -50,7 +50,7 @@ class Environment:
         """
 
         self.variables = {}
-        self.parent = parent
+        self.parent    = parent
 
     def get(self, name):
         """

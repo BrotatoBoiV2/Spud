@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.6.5-2026.01.16
+                        Version: 1.6.6-2026.01.19
 
 ===============================================================================
 
@@ -67,8 +67,8 @@ class Node:
             - value           (String) : The value of the node.
         """
 
-        self.value = value
-        self.line = line
+        self.value  = value
+        self.line   = line
         self.column = column
 
     def execute(self, memory):
@@ -179,7 +179,7 @@ class BinOperNode(Node):
 
         super().__init__(value, line, column)
 
-        self.left = left
+        self.left  = left
         self.right = right
 
     def execute(self, memory):
@@ -193,7 +193,7 @@ class BinOperNode(Node):
             - Any                      : The value of the node.
         """
 
-        left = self.left.execute(memory)
+        left  = self.left.execute(memory)
         right = self.right.execute(memory)
 
         if self.value == "+":
@@ -327,7 +327,7 @@ class GetNode(Node):
 
         is_num = True
         prompt = join_parts(self.prompt, memory) if self.prompt else ""
-        value = input(prompt)
+        value  = input(prompt)
 
         if not value:
             raise ValueError("No value provided.")
@@ -366,7 +366,7 @@ class BoolNode(Node):
 
         super().__init__(value, line, column)
 
-        self.left = left
+        self.left  = left
         self.right = right
 
     def execute(self, memory):
@@ -419,6 +419,7 @@ class CheckNode(Node):
         for condition, code in self.value.items():
             if condition.execute(memory):
                 run = code
+
                 break
 
         if run:

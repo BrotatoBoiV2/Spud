@@ -238,6 +238,12 @@ language capable of simple scripting.
 * 21:37
     - Cleaned the `parse_check()` method and included a `parse_branch()`
       method to help parse the check statement.
+* 14:48
+    - Beginning to look through the documentation in the code to see if it
+      is clean and correct.
+* 15:08
+    - Made small visual changes in the code and looked over the comments and 
+      documentations.
 ---
 
 # TO-DO:

@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 1.6.5-2026.01.16
+                        Version: 1.6.6-2026.01.19
 
 ===============================================================================
 
@@ -42,7 +42,7 @@ class SpudInterpreter:
     Functions:
         - __init__                     : Initializes the interpreter.
         - display_usage                : Displays the usage of the interpreter.
-        - read_file                    : Reads the file.
+        - _read_file                   : Reads the file.
         - execute                      : Executes the file.
     """
 
@@ -61,13 +61,14 @@ class SpudInterpreter:
         """
 
         self.tokenizer = Tokenizer()
-        self.parser = Parser()
-        self.env = Environment()
+        self.parser    = Parser()
+        self.env       = Environment()
         self.file_path = file_path
 
         # ~ Check if it is a valid file extension. ~ #
         if not self.file_path.endswith(".pot"):
             err = f"Invalid file extension: '{self.file_path}'."
+
             raise ValueError(err + " Expected '.pot'.")
 
     def _read_file(self):
@@ -91,8 +92,8 @@ class SpudInterpreter:
         """
 
         source_code = self._read_file()
-        tokens = self.tokenizer.tokenize(source_code)
-        nodes = self.parser.parse(tokens)
+        tokens      = self.tokenizer.tokenize(source_code)
+        nodes       = self.parser.parse(tokens)
         
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:
@@ -113,7 +114,7 @@ def display_usage():
 
 if __name__ == "__main__":
     # ~ Seperate the filename from the flags. ~ #
-    args = sys.argv[1:]
+    args       = sys.argv[1:]
     debug_mode = "--debug" in args
 
     # ~ Isolate the filename by removing the flag. ~ #
@@ -125,7 +126,7 @@ if __name__ == "__main__":
         display_usage()
         sys.exit(1)
 
-    file_path = args[0]
+    file_path   = args[0]
     interpreter = SpudInterpreter(file_path)
 
     # ~ Execute the interpreter based on the debug setting. ~ #

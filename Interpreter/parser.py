@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.6.5-2026.01.16
+                        Version: 1.6.6-2026.01.19
 
 ===============================================================================
 
@@ -64,11 +64,11 @@ class Parser:
 			- parsed            (List) : The list of parsed nodes.
         """
 
-        self.index = 0
-        self.tokens = None
-        self.token = None
-        self.parsed = []
+        self.index   = 0
+        self.tokens  = None
+        self.token   = None
         self.sprouts = 0
+        self.parsed  = []
 
     def peek(self, amount=0):
         """
@@ -96,7 +96,7 @@ class Parser:
         """
 
         self.index += amount
-        self.token = self.peek()
+        self.token  = self.peek()
 
         if not self.token:
             self.token = Token("EOF", "EOF", None, None)
@@ -108,9 +108,9 @@ class Parser:
         Returns:
 			- SayNode                  : The parsed 'say' statement.
         """
-        output = []
-
+        output    = []
         line, col = self.token.line, self.token.col
+        
         self.advance()
 
         return SayNode(self.parse_expression(), line, col)
@@ -126,12 +126,12 @@ class Parser:
         left = self.parse_primary()
 
         while self.token.type == "OPERATOR":
-            oper = self.token.value
+            oper  = self.token.value
             self.advance()
 
             right = self.parse_primary()
-            left = BinOperNode(
-				oper,
+            left  = BinOperNode(
+                oper,
 				left,
 				right,
 				self.token.line,
@@ -177,7 +177,6 @@ class Parser:
 
         elif token.type == "LOGIC":
             self.advance()
-
             return LogicNode(token.value, token.line, token.col)
 
     def parse_get(self):
@@ -190,7 +189,7 @@ class Parser:
 
         self.advance()
         var_name = ""
-        prompt = ""
+        prompt   = ""
 
         if self.token.type == "IDENTIFIER":
             var_name = self.token.value
@@ -212,8 +211,8 @@ class Parser:
 			- VariableNode             : The parsed variable assignment.
         """
 
-        var_name = self.token.value
-        line, col = self.token.line, self.token.col
+        var_name        = self.token.value
+        line, col       = self.token.line, self.token.col
         
         self.advance()
 
@@ -243,7 +242,7 @@ class Parser:
 
             right = self.parse_expression()
 
-            left = BoolNode(
+            left  = BoolNode(
                 logic,
                 self.token.line,
                 self.token.col,
@@ -265,7 +264,7 @@ class Parser:
 			- Dict                     : The branches of the check node,
         """
 
-        branches = {}
+        branches            = {}
 
         while self.token.type != "ROOT":
             if self.token.type == "EOF":
@@ -280,21 +279,21 @@ class Parser:
 
                 elif self.token.value == "instead":
                     branches[condition] = code
-                    code = []
+                    code                = []
 
                     self.advance()
                     condition = self.parse_condition()
 
                 elif self.token.value == "otherwise":
                     branches[condition] = code
-                    code = []
+                    code                = []
                     
                     self.advance()
-                    condition = BoolNode(
-                                    "ripe",
-                                    self.token.line,
-                                    self.token.col
-                                )
+                    condition           = BoolNode(
+                                "ripe",
+                                self.token.line,
+                                self.token.col
+                    )
 
 
             elif self.token.type == "IDENTIFIER":
@@ -319,7 +318,7 @@ class Parser:
             self.advance()
 
             condition = self.parse_condition()
-            code = []
+            code      = []
 
             # ~ Make sure the condition exists. ~ #
             if condition:
@@ -345,7 +344,7 @@ class Parser:
         """
 
         self.tokens = tokens
-        self.token = self.peek() or Token("EOF", "EOF", None, None)
+        self.token  = self.peek() or Token("EOF", "EOF", None, None)
 
         while self.token.type != "EOF":
             token = self.token
