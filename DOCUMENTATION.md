@@ -5,16 +5,19 @@
 ## Weekly Plan
 **Week Date:** *2026-01-19/2026-01-23*
 
-This week will focus on some code cleaning where it is needed, followed
- by slowly introducing the new feature of a `while` loop, so that Spud
- can become a 'Turing Complete' language capable of simple scripting.
+This week will focus on some code cleaning where it is needed, some new
+ mathematical operators and conditional gates. Followed by slowly introducing
+ the new feature of a `while` loop, so that Spud can become a 'Turing Complete'
+language capable of simple scripting.
 
 *Monday:*
     - Documentation update and cleaning.
     - Plan `while` loop node.
+    - Begin adding operators and/or conditional statements.
 
 *Tuesday:*
     - Focus on programming loop.
+    - Add more operators and conditional statements.
 
 *Wednesday:*
     - Clean up what has been done.
@@ -22,6 +25,7 @@ This week will focus on some code cleaning where it is needed, followed
 
 *Thursday:*
     - Finish the `while` loop feature.
+    - Finish adding operators and conditional statements.
 
 *Friday:*
     - Clean, Refactor and do an AI sweep.
