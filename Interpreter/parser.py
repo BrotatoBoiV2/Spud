@@ -109,11 +109,11 @@ class Parser:
 			- SayNode                  : The parsed 'say' statement.
         """
         output    = []
-        line, col = self.token.line, self.token.col
+        row, col = self.token.row, self.token.col
         
         self.advance()
 
-        return SayNode(self.parse_expression(), line, col)
+        return SayNode(self.parse_expression(), row, col)
 
     def parse_expression(self):
         """
@@ -134,7 +134,7 @@ class Parser:
                 oper,
 				left,
 				right,
-				self.token.line,
+				self.token.row,
 				self.token.col
 			)
 
@@ -152,15 +152,15 @@ class Parser:
 
         if token.type == "INTEGER":
             self.advance()
-            return IntegerNode(token.value, token.line, token.col)
+            return IntegerNode(token.value, token.row, token.col)
 
         elif token.type == "STRING":
             self.advance()
-            return StringNode(token.value, token.line, token.col)
+            return StringNode(token.value, token.row, token.col)
 
         elif token.type == "IDENTIFIER":
             self.advance()
-            return VariableNode(token.value, token.line, token.col)
+            return VariableNode(token.value, token.row, token.col)
 
         elif token.type == "LPARAM":
             self.advance()
@@ -177,7 +177,7 @@ class Parser:
 
         elif token.type == "LOGIC":
             self.advance()
-            return LogicNode(token.value, token.line, token.col)
+            return LogicNode(token.value, token.row, token.col)
 
     def parse_get(self):
         """
@@ -201,7 +201,7 @@ class Parser:
         if self.token.type not in ["EOL", "EOF"]:
             prompt = self.parse_expression()
 
-        return GetNode(var_name, prompt, self.token.line, self.token.col)
+        return GetNode(var_name, prompt, self.token.row, self.token.col)
 
     def parse_set_variable(self):
         """
@@ -212,7 +212,7 @@ class Parser:
         """
 
         var_name        = self.token.value
-        line, col       = self.token.line, self.token.col
+        row, col       = self.token.row, self.token.col
         
         self.advance()
 
@@ -223,7 +223,7 @@ class Parser:
 
         expression_tree = self.parse_expression()
 
-        return VariableNode(var_name, line, col, value_parts=expression_tree)
+        return VariableNode(var_name, row, col, value_parts=expression_tree)
 
     def parse_condition(self):
         """
@@ -244,7 +244,7 @@ class Parser:
 
             left  = BoolNode(
                 logic,
-                self.token.line,
+                self.token.row,
                 self.token.col,
                 left=left,
                 right=right
@@ -291,7 +291,7 @@ class Parser:
                     self.advance()
                     condition           = BoolNode(
                                 "ripe",
-                                self.token.line,
+                                self.token.row,
                                 self.token.col
                     )
 
@@ -327,7 +327,7 @@ class Parser:
 
                     branches = self.parse_branch(condition, code)
 
-                    return CheckNode(branches, self.token.line, self.token.col)
+                    return CheckNode(branches, self.token.row, self.token.col)
 
                 else:
                     raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")

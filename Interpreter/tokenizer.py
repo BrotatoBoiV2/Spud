@@ -36,21 +36,21 @@ class Token:
         - __str__                      : Displays the Token as a string.
     """
 
-    def __init__(self, token_type, token_value, token_line, token_column):
+    def __init__(self, token_type, token_value, token_row, token_column):
         """
         ~ Initialize the Token. ~
 
         Arguments:
             - token_type         (str) : The type of the token.
             - token_value        (str) : The value of the token.
-            - token_line         (int) : The line number of the token.
+            - token_row         (int) : The row number of the token.
             - token_column       (int) : The column number of the token.
 
         """
 
         self.type  = token_type
         self.value = token_value
-        self.line  = token_line
+        self.row  = token_row
         self.col   = token_column
 
     def __str__(self):
@@ -61,7 +61,7 @@ class Token:
             - String                   : String representation of the token.
         """
 
-        return f"Token({self.type} | {self.value} | {self.line} | {self.col})"
+        return f"Token({self.type} | {self.value} | {self.row} | {self.col})"
 
 
 class Tokenizer:
@@ -135,7 +135,7 @@ class Tokenizer:
 
             if self.index >= len(self.code):
                 error_msg = "String isn't closed with a matching quotation!"
-                location  = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"row: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
@@ -167,7 +167,7 @@ class Tokenizer:
 
             if self.index >= len(self.code):
                 error_msg = "Comment isn't closed with Right Potato Ears! '~)'"
-                location  = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"row: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
@@ -228,7 +228,7 @@ class Tokenizer:
 
             elif char == "~" and self.peek(1) == ")":
                 error_msg = "No Left Potato Ear '(~' found to close comment!"
-                location  = f"Line: {self.row} ; Column:{self.col}"
+                location  = f"row: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 

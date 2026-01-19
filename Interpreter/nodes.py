@@ -54,13 +54,13 @@ class Node:
         - execute                      : Executes the node.
     """
 
-    def __init__(self, value, line, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the Node. ~
 
         Arguments:
             - value           (String) : The value of the node.
-            - line               (Int) : The line number of the node.
+            - row               (Int) : The row number of the node.
             - column             (Int) : The column number of the node
 
         Attributes:
@@ -68,7 +68,7 @@ class Node:
         """
 
         self.value  = value
-        self.line   = line
+        self.row    = row
         self.column = column
 
     def execute(self, memory):
@@ -91,17 +91,17 @@ class IntegerNode(Node):
         - execute                      : Executes the integer node.
     """
 
-    def __init__(self, value, line, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the IntegerNode. ~
 
         Arguments:
             - value           (String) : The value of the integer node.
-            - line               (Int) : The line number of the integer node.
+            - row               (Int) : The row number of the integer node.
             - column             (Int) : The column number of the integer node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         """
@@ -126,17 +126,17 @@ class StringNode(Node):
         - execute                      : Executes the string node.
     """
 
-    def __init__(self, value, line, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the StringNode. ~
 
         Arguments:
             - value           (String) : The value of the string node.
-            - line               (Int) : The line number of the string node.
+            - row                (Int) : The row number of the string node.
             - column             (Int) : The column number of the string node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         """
@@ -161,7 +161,7 @@ class BinOperNode(Node):
         - execute                      : Executes the binary operation node.
     """
 
-    def __init__(self, value, left, right, line, column):
+    def __init__(self, value, left, right, row, column):
         """
         ~ Initialize the BinOperNode. ~
 
@@ -169,7 +169,7 @@ class BinOperNode(Node):
             - value           (String) : The value of the node.
             - left              (Node) : The left child of the node.
             - right             (Node) : The right child of the node.
-            - line               (Int) : The line number of the node.
+            - row                (Int) : The row number of the node.
             - column             (Int) : The column number of the  node.
 
         Attributes:
@@ -177,7 +177,7 @@ class BinOperNode(Node):
             - right             (Node) : The right child of the node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
         self.left  = left
         self.right = right
@@ -248,13 +248,13 @@ class VariableNode(Node):
         - execute                      : Executes the variable node.
     """
 
-    def __init__(self, value, line, column, value_parts=None):
+    def __init__(self, value, row, column, value_parts=None):
         """
         ~ Initialize the VariableNode. ~
 
         Arguments:
             - value           (String) : The value of the variable node.
-            - line               (Int) : The line number of the variable node.
+            - row                (Int) : The row number of the variable node.
             - column             (Int) : The column number of the node.
             - value_parts       (Node) : The value parts of the variable node.
 
@@ -262,7 +262,7 @@ class VariableNode(Node):
             - value_parts       (Node) : The value parts of the variable node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
         self.value_parts = value_parts
 
@@ -299,17 +299,17 @@ class SayNode(Node):
         - execute                      : Executes the say node.
     """
 
-    def __init__(self, value, line, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the SayNode. ~
 
         Arguments:
             - value             (Node) : The value of the say node.
-            - line               (Int) : The line number of the say node.
+            - row                (Int) : The row number of the say node.
             - column             (Int) : The column number of the say node
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         """
@@ -333,21 +333,21 @@ class GetNode(Node):
         - execute                      : Executes the get node.
     """
 
-    def __init__(self, value, prompt, line, column):
+    def __init__(self, value, prompt, row, column):
         """
         ~ Initialize the GetNode. ~
 
         Arguments:
             - value           (String) : The value of the get node.
             - prompt            (Node) : The prompt of the get node.
-            - line               (Int) : The line number of the get node.
+            - row                (Int) : The row number of the get node.
             - column             (Int) : The column number of the get node
 
         Attributes:
             - prompt            (Node) : The prompt of the get node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
         self.prompt = prompt
 
@@ -386,7 +386,7 @@ class BoolNode(Node):
         - execute                      : Executes the boolean node.
     """
 
-    def __init__(self, value, line, column, left=None, right=None):
+    def __init__(self, value, row, column, left=None, right=None):
         """
         ~ Initialize the BoolNode. ~
 
@@ -398,7 +398,7 @@ class BoolNode(Node):
             - Boolean                  : The value of the bool node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
         self.left  = left
         self.right = right
@@ -421,7 +421,7 @@ class LogicNode(Node):
         - execute                      : Executes the logic node.
     """
 
-    def __init__(self, value, line, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the LogicNode. ~
 
@@ -429,7 +429,7 @@ class LogicNode(Node):
             - String                   : The value of the logic node.
         """
 
-        super().__init__(value, line, column)
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         return self.value
@@ -444,8 +444,8 @@ class CheckNode(Node):
         - execute                      : Executes the check node.
     """
 
-    def __init__(self, value, line, column):
-        super().__init__(value, line, column)
+    def __init__(self, value, row, column):
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         run = None
@@ -459,3 +459,19 @@ class CheckNode(Node):
         if run:
             for node in run:
                 node.execute(memory)
+
+class LoopNode(Node):
+    """
+    ~ Represents a loop node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the loop node.
+        - execute                      : Executes the loop node.
+    """
+
+    def __init__(self, value, row, column):
+        super().__init__(value, row, column)
+
+    def execute(self, memory):
+        pass
+

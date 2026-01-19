@@ -247,10 +247,11 @@ language capable of simple scripting.
 * 15:36
     - Included the rest of the mathematical operators.
        - `-`, `*`, `/`, `%`, and a special `#` "masher" which is a fancy Spud
-         themed way of saying floor division`//`
+         themed way of saying floor division`//`.
 ---
 
 # TO-DO:
 \*\*\*Add Line output to the errors.\*\*\*
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
+\*Implement all Nodes to get data from `self.values` instead hard-coded.\*
