@@ -260,6 +260,8 @@ language capable of simple scripting.
     - Starting the `loop` feature, because I feel like I have finished todays planned work.
 * 18:10
     - The loop works as intended, but nested blocks are not fully supported.
+* 21:51
+    - Nested logic is now supported and breaking out of loops is possible.
 ---
 
 # TO-DO:

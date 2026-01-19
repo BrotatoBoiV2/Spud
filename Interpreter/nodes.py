@@ -471,7 +471,7 @@ class CutNode(Node):
         super().__init__(None, row, column)
 
     def execute(self, memory):
-        pass
+        raise Exception()
 
 class LoopNode(Node):
     """
@@ -488,14 +488,17 @@ class LoopNode(Node):
     def execute(self, memory):
         condition = self.value[0]
         code      = self.value[1]
-        print(code)
+        run_code = True
 
-        while condition.execute(memory):
+        while True:
             for node in code:
-                if isinstance(node, CutNode):
+                try:
+                    node.execute(memory)
+                except Exception:
+                    run_code = False
                     break
 
-                node.execute(memory)
+            if not condition.execute(memory) or not run_code:
+                break
 
-            break
 

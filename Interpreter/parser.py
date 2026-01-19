@@ -68,7 +68,6 @@ class Parser:
         self.tokens  = None
         self.token   = None
         self.sprouts = 0
-        self.parsed  = []
 
     def peek(self, amount=0):
         """
@@ -256,7 +255,7 @@ class Parser:
 
         return left
 
-    def parse_branch(self, condition, code, nest):
+    def parse_branch(self, condition):
         """
         ~ Parse a conditional statement branch. ~
 
@@ -269,8 +268,9 @@ class Parser:
         """
 
         branches            = {}
+        code = []
 
-        while self.token.type != "ROOT" and self.sprouts == nest:
+        while self.token.type != "ROOT":
             if self.token.type == "EOF":
                 raise SyntaxError("Potato Eyes needs to be closed with a Potato Root! '~.'")
 
@@ -280,6 +280,9 @@ class Parser:
 
                 elif self.token.value == "get":
                     code.append(self.parse_get())
+
+                elif self.token.value == "check":
+                    code.append(self.parse_check())
 
                 elif self.token.value == "instead":
                     branches[condition] = code
@@ -298,6 +301,9 @@ class Parser:
                                 self.token.row,
                                 self.token.col
                     )
+
+                elif self.token.value == "cut":
+                    code.append(CutNode(self.token.row, self.token.col))
 
 
             elif self.token.type == "IDENTIFIER":
@@ -332,12 +338,14 @@ class Parser:
                     self.sprouts += 1
                     self.advance()
 
-                    branches = self.parse_branch(condition, code, nest)
+                    branches = self.parse_branch(condition)
 
                     return CheckNode(branches, self.token.row, self.token.col)
 
                 else:
                     raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")
+
+            self.advance()
 
     def parse_loop(self):
         """
@@ -382,7 +390,7 @@ class Parser:
                     code.append(self.parse_get())
 
                 elif self.token.value == "check":
-                    self.parsed.append(self.parse_check())
+                    code.append(self.parse_check())
 
                 elif self.token.value == "instead":
                     branches[condition] = code
@@ -403,7 +411,6 @@ class Parser:
                     )
 
                 elif self.token.value == "cut":
-                    print("adding cut")
                     code.append(CutNode(self.token.row, self.token.col))
 
             elif self.token.type == "IDENTIFIER":
@@ -427,6 +434,7 @@ class Parser:
 
         self.tokens = tokens
         self.token  = self.peek() or Token("EOF", "EOF", None, None)
+        parsed = []
 
         # for token in self.tokens:
         #     print(token)
@@ -436,21 +444,21 @@ class Parser:
 
             if token.type == "KEYWORD":
                 if token.value == "say":
-                    self.parsed.append(self.parse_say())
+                    parsed.append(self.parse_say())
 
                 elif token.value == "get":
-                    self.parsed.append(self.parse_get())
+                    parsed.append(self.parse_get())
 
                 elif token.value == "check":
-                    self.parsed.append(self.parse_check())
+                    parsed.append(self.parse_check())
                 
                 elif token.value == "loop":
-                    self.parsed.append(self.parse_loop())
+                    parsed.append(self.parse_loop())
 
             elif token.type == "IDENTIFIER":
-                self.parsed.append(self.parse_set_variable())
+                parsed.append(self.parse_set_variable())
 
             else:
                 self.advance()
 
-        return self.parsed
+        return parsed
