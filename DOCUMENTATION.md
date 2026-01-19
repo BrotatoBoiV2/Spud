@@ -5,12 +5,29 @@
 ## Weekly Plan
 **Week Date:** *2026-01-19/2026-01-23*
 
-This week I want to refactor the conditionals feature so that it is a
- bit shorter and easier to maintain before moving on to a new feature. 
- Afterwards, I am planning to introduce a while loop feature.
+This week will focus on some code cleaning where it is needed, followed
+ by slowly introducing the new feature of a `while` loop, so that Spud
+ can become a 'Turing Complete' language capable of simple scripting.
+
+*Monday:*
+    - Documentation update and cleaning.
+    - Plan `while` loop node.
+
+*Tuesday:*
+    - Focus on programming loop.
+
+*Wednesday:*
+    - Clean up what has been done.
+    - Mid-week break.
+
+*Thursday:*
+    - Finish the `while` loop feature.
+
+*Friday:*
+    - Clean, Refactor and do an AI sweep.
+    - Full backup. (3-2-1)
 
 **Next Plan:**
-** Loops (After Refactor)
 * Functions (After Loops)
 
 ---
