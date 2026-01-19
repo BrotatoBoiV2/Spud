@@ -244,6 +244,10 @@ language capable of simple scripting.
 * 15:08
     - Made small visual changes in the code and looked over the comments and 
       documentations.
+* 15:36
+    - Included the rest of the mathematical operators.
+       - `-`, `*`, `/`, `%`, and a special `#` "masher" which is a fancy Spud
+         themed way of saying floor division`//`
 ---
 
 # TO-DO:

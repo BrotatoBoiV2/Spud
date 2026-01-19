@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.6.6-2026.01.19
+                        Version: 1.7.6-2026.01.19
 
 ===============================================================================
 
@@ -201,6 +201,40 @@ class BinOperNode(Node):
                 return int(left) + int(right)
 
             return str(left) + str(right)
+
+        elif self.value == "-":
+            if isinstance(left, int) and isinstance(right, int):
+                return int(left) - int(right)
+
+            raise ValueError("Cannot subtract strings")
+
+        elif self.value == "*":
+            if isinstance(left, int) and isinstance(right, int):
+                return int(left) * int(right)
+
+            elif isinstance(left, str) and isinstance(right, int):
+                return str(left) * int(right)
+
+            raise ValueError("Cannot multiply strings")
+
+        elif self.value == "/":
+            if isinstance(left, int) and isinstance(right, int):
+                return int(left) / int(right)
+
+            raise ValueError("Cannot divide strings")
+            
+        elif self.value == "#":
+            if isinstance(left, int) and isinstance(right, int):
+                return int(left) // int(right)
+
+            raise ValueError("Cannot mash strings together!")
+
+        elif self.value == "%":
+            if isinstance(left, int) and isinstance(right, int):
+                return int(left) % int(right)
+
+            raise ValueError("Cannot get remainder of strings")
+            
 
         raise ValueError(f"Invalid operator: {self.value}")
 

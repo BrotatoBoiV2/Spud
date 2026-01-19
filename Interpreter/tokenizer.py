@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.6.6-2026.01.19
+                        Version: 1.7.6-2026.01.19
 
 ===============================================================================
 
@@ -193,7 +193,9 @@ class Tokenizer:
         self.row   = 1
         tokens     = []
         symbols    = {
-            "=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM"
+            "=": "EQUAL", "+": "OPERATOR", "(": "LPARAM", ")": "RPARAM", 
+            "-": "OPERATOR", "*": "OPERATOR", "/": "OPERATOR", "#": "OPERATOR",
+            "%": "OPERATOR"
         }
         logic      = [
             "equals", "not"
