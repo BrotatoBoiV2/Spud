@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.7.6-2026.01.19
+                        Version: 1.8.6-2026.01.19
 
 ===============================================================================
 
@@ -178,6 +178,10 @@ class Parser:
         elif token.type == "LOGIC":
             self.advance()
             return LogicNode(token.value, token.row, token.col)
+        
+        elif token.type == "BOOL":
+            self.advance()
+            return BoolNode(token.value, token.row, token.col)
 
     def parse_get(self):
         """
@@ -318,6 +322,7 @@ class Parser:
             self.advance()
 
             condition = self.parse_condition()
+
             code      = []
 
             # ~ Make sure the condition exists. ~ #
@@ -331,6 +336,9 @@ class Parser:
 
                 else:
                     raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")
+
+    def parse_loop(self):
+        pass
 
     def parse(self, tokens):
         """
@@ -358,6 +366,9 @@ class Parser:
 
                 elif token.value == "check":
                     self.parsed.append(self.parse_check())
+                
+                elif token.value == "loop":
+                    self.parsed.append(self.parse_loop())
 
             elif token.type == "IDENTIFIER":
                 self.parsed.append(self.parse_set_variable())

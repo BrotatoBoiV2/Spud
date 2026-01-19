@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.7.6-2026.01.19
+                        Version: 1.8.6-2026.01.19
 
 ===============================================================================
 
@@ -198,7 +198,10 @@ class Tokenizer:
             "%": "OPERATOR"
         }
         logic      = [
-            "equals", "not"
+            "equals", "not", "below", "above"
+        ]
+        bools = [
+            "ripe", "rotten", "true", "false"
         ]
 
         # ~ Iterate through each token in the source code. ~ #
@@ -257,6 +260,8 @@ class Tokenizer:
 
                 if ident in logic:
                     token_type = "LOGIC"
+                elif ident in bools:
+                    token_type = "BOOL"
                 else:
                     token_type = "KEYWORD" if ident in keys else "IDENTIFIER"
 
@@ -275,7 +280,7 @@ class Tokenizer:
 
                 else:
                     sprouts = 1
-                    start_col = self.col
+                    col = self.col
                     self.index += 1
                     self.col   += 1
 
@@ -284,14 +289,17 @@ class Tokenizer:
                         self.index += 1
                         self.col   += 1
 
-                    tokens.append(Token("SPROUT", sprouts, self.row, start_col))
+                    tokens.append(Token("SPROUT", sprouts, self.row, col))
 
             elif char == ".":
                 if self.peek(1) == ".":
                     if self.peek(2) == ".":
-                        tokens.append(Token("TERMINATOR", char, self.row, self.col))
+                        name = "TERMINATOR"
+                        tokens.append(Token(name, char, self.row, self.col))
                         self.index += 3
                         self.col   += 3
+
+                    # ~ Handle a range token. ~ #
 
                 elif self.peek(1) == "~":
                     tokens.append(Token("EYES", ".~", self.row, self.col))

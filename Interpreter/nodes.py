@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.7.6-2026.01.19
+                        Version: 1.8.6-2026.01.19
 
 ===============================================================================
 
@@ -406,9 +406,15 @@ class BoolNode(Node):
     def execute(self, memory):
         if self.value == "equals":
             return self.left.execute(memory) == self.right.execute(memory)
-        elif self.value == "ripe":
+        elif self.value == "not":
+            return not self.left.execute(memory) == self.right.execute(memory)
+        elif self.value == "below":
+            return self.left.execute(memory) < self.right.execute(memory)
+        elif self.value == "above":
+            return self.left.execute(memory) > self.right.execute(memory)
+        elif self.value == "ripe" or self.value == "true":
             return True
-        elif self.value == "rotten":
+        elif self.value == "rotten" or self.value == "false":
             return False
 
 

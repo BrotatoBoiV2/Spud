@@ -248,6 +248,14 @@ language capable of simple scripting.
     - Included the rest of the mathematical operators.
        - `-`, `*`, `/`, `%`, and a special `#` "masher" which is a fancy Spud
          themed way of saying floor division`//`.
+* 16:15
+    - The "Biological Booleans" have been introduced, as well as regular bools.
+    - Extra conditional handling has been added.
+* 16:25
+    - Updated the codebase to version 1.8.6-2026.01.19 in the
+      changelog and filestamps.
+    
+    * Note: I need to try and only make these version updates on Friday.
 ---
 
 # TO-DO:

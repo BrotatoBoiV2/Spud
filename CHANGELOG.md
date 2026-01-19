@@ -1,5 +1,14 @@
 # Current Version
 
+**V1.8.6-2026.01.19**
+
+  - Extra code refactoring and cleaning.
+  - Minor bug fix: 
+    - Erroneous debug comment.
+  - Code blocks initialized by delimiters: '.~' Eyes and `~.` Roots.
+  - Included more mathematical operators and conditional checking.
+  - Included booleans.
+
 **V1.6.5-2026-01-15**
 
   - Some code clean-up and refactoring.
