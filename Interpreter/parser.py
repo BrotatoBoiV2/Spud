@@ -30,7 +30,7 @@
 # ~ Import Local Modules. ~ #
 from nodes import (
 	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode,
-    LogicNode, BoolNode, CheckNode, LoopNode, CutNode, PotNode
+    LogicNode, BoolNode, CheckNode, LoopNode, CutNode, PotNode, BloomNode
 )
 from tokenizer import Token
 
@@ -397,6 +397,12 @@ class Parser:
                 elif token.value == "pot":
                     code.append(self.parse_pot())
 
+                elif token.value == "bloom":
+                    self.advance()
+                    code.append(BloomNode(self.parse_primary(), token.row, token.col))
+                    self.advance()
+
+
                 if is_check:
                     if token.value == "instead":
                         branches[condition] = code
@@ -417,7 +423,7 @@ class Parser:
                         )
 
             elif token.type == "IDENTIFIER":
-                if self.peek(1).type == "EQUALS":
+                if self.peek(1).type == "EQUAL":
                     code.append(self.parse_set_variable())
                     self.advance()
                 else:

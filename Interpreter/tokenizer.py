@@ -253,7 +253,7 @@ class Tokenizer:
                 start_col = self.col
                 keys      = [
                     "say", "get", "check", "instead", "otherwise", "loop",
-                    "cut", "pot"
+                    "cut", "pot", "bloom"
                 ]
                 
                 while self.index < len(self.code) and self.peek().isalnum():

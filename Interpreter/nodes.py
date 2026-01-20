@@ -309,7 +309,7 @@ class VariableNode(Node):
                 return value
 
             error = f"Variable {self.value} is not defined."
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
 
@@ -552,6 +552,38 @@ class PotNode(Node):
         env = Environment()
         env.parent = memory
 
-        for node in self.value:
-            node.execute(env)
+        try:
+            for node in self.value:
+                node.execute(env)
+        
+        except Exception as signal:
+            # print("ERR")
+            # print(signal)
+            # if isinstance(signal, str):
+            #     return StringNode(signal, self.row, self.column)
+            # elif isinstance(signal, int):
+            #     return IntegerNode(signal, self.row, self.column)
+            return signal
+
+        # return None
+
+class BloomNode(Node):
+    """
+    ~ Represents a bloom node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the bloom node.
+        - execute                      : Executes the bloom node.
+    """
+
+    def __init__(self, value, row, col):
+        super().__init__(value, row, col)
+
+    def execute(self, memory):
+        if isinstance(self.value, VariableNode):
+            result = self.value.execute(memory)
+        else:
+            result = self.value
+
+        raise Exception(result)
 

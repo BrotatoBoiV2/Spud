@@ -277,8 +277,12 @@ language capable of simple scripting.
     - Included `.spud` as a valid file extension.
 * 18:25
     - Implemented functions with the keyword `pot` to allow for modulated code.
+* 21:28
+    - Output can be returned from a `pot` with the `bloom` keyword.
+    - Next I need to include arguments for the `pot` function.
 ---
 
 # TO-DO:
+\*\*\*\*\*Allow arguments for the `pot` keyword.\*\*\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Implement all Nodes to get data from `self.values` instead of hard-coded.\*
