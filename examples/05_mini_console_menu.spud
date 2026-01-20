@@ -1,0 +1,22 @@
+say "Welcome\n\n"
+
+loop ripe .~
+
+    get userInput "\n>>> "
+
+    check userInput equals "quit" .~
+
+        say "\nShutting Down..."
+        cut
+
+    instead userInput equals "hi"
+
+        say "\nHello"
+
+    otherwise
+
+        say "\nSorry, I do not know what '" + userInput + "' means!"
+
+    ~.
+
+~.
