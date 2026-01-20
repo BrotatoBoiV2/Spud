@@ -206,7 +206,10 @@ class BinOperNode(Node):
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) - int(right)
 
-            raise ValueError("Cannot subtract strings")
+            error = "Cannot subtract strings"
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
 
         elif self.value == "*":
             if isinstance(left, int) and isinstance(right, int):
@@ -215,28 +218,43 @@ class BinOperNode(Node):
             elif isinstance(left, str) and isinstance(right, int):
                 return str(left) * int(right)
 
-            raise ValueError("Cannot multiply strings")
+            error = "Cannot multiply strings"
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
 
         elif self.value == "/":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) / int(right)
 
-            raise ValueError("Cannot divide strings")
+            error = "Cannot divide strings"
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
             
         elif self.value == "#":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) // int(right)
 
-            raise ValueError("Cannot mash strings together!")
+            error = "Cannot mash strings together!"
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
 
         elif self.value == "%":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) % int(right)
 
-            raise ValueError("Cannot get remainder of strings")
+            error = "Cannot get remainder of strings"
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
             
 
-        raise ValueError(f"Invalid operator: {self.value}")
+        error = f"Invalid operator: {self.value}"
+        location = f"row: {self.row}"
+
+        raise ValueError("Error: " + error + "\n" + location)
 
 
 class VariableNode(Node):
@@ -283,7 +301,10 @@ class VariableNode(Node):
             if value is not None:
                 return value
 
-            raise ValueError(f"Variable {self.value} is not defined.")
+            error = f"Variable {self.value} is not defined."
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
 
         else:
             value = join_parts(self.value_parts, memory)
@@ -364,7 +385,10 @@ class GetNode(Node):
         value  = input(prompt)
 
         if not value:
-            raise ValueError("No value provided.")
+            error = "No value provided."
+            location = f"row: {self.row} ; Column:{self.col}"
+
+            raise ValueError("Error: " + error + "\n" + location)
 
         for val in value:
             if not val.isdigit():

@@ -166,13 +166,19 @@ class Parser:
             node = self.parse_expression()
 
             if self.token.type != "RPARAM":
-                raise SyntaxError("Expected ')' after expression.")
+                error = "Expected ')' after expression."
+                location = f"row: {self.token.row} ; Column:{self.token.col}"
+
+                raise SyntaxError("Error: " + error + "\n" + location)
 
             self.advance()
             return node
 
         elif token.type == "RPARAM":
-            raise SyntaxError("Found a ')' that does not close an expression.")
+            error = "Found a ')' that does not close an expression."
+            location = f"row: {self.token.row} ; Column:{self.token.col}"
+
+            raise SyntaxError("Error: " + error + "\n" + location)
 
         elif token.type == "LOGIC":
             self.advance()
@@ -199,7 +205,10 @@ class Parser:
             self.advance()
 
         else:
-            raise SyntaxError("Expected identifier after 'get'.")
+            error = "Expected identifier after 'get'."
+            location = f"row: {self.token.row} ; Column:{self.token.col}"
+
+            raise SyntaxError("Error: " + error + "\n" + location)
 
         if self.token.type not in ["EOL", "EOF"]:
             prompt = self.parse_expression()
@@ -281,8 +290,9 @@ class Parser:
                     return CheckNode(branches, self.token.row, self.token.col)
 
                 else:
-                    
-                    raise SyntaxError(err)
+                    loc = f"row: {self.token.row} ; Column:{self.token.col}"
+
+                    raise SyntaxError("Error: " + err + "\n" + loc)
 
             self.advance()
 
@@ -313,7 +323,9 @@ class Parser:
                     return LoopNode(value, self.token.row, self.token.col)
 
                 else:
-                    raise SyntaxError(err)
+                    loc = f"row: {self.token.row} ; Column:{self.token.col}"
+
+                    raise SyntaxError("Error: " + err + "\n" + loc)
 
     def parse_code(self, is_check=False, condition=None):
         """

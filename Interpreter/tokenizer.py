@@ -159,6 +159,8 @@ class Tokenizer:
 
         while self.index < len(self.code):
             if self.peek() == "~" and self.peek(1) == ")":
+                self.index += 2
+                self.col   += 2
                 break
 
             comment_text += self.peek()
@@ -279,7 +281,7 @@ class Tokenizer:
                     self.index += 2
                     self.col   += 2
 
-                else:
+                else: # ~ Might be depricated. ~ #
                     sprouts = 1
                     col = self.col
                     self.index += 1

@@ -269,10 +269,12 @@ language capable of simple scripting.
     - Cleaned `parser.py` a little bit more.
 * 05:55
     - Looked over and ensured the codebase is clean.
+* 06:13
+    - Updated error output, need to add the line too.
+* 06:20
+    - Double checked how the row and column is updated.
 ---
 
 # TO-DO:
 \*\*\*Add Line output to the errors.\*\*\*
-\*Include a bit more commentation.\*
-\*Fix row/column updating.\*
-\*Implement all Nodes to get data from `self.values` instead hard-coded.\*
+\*Implement all Nodes to get data from `self.values` instead of hard-coded.\*
