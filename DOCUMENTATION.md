@@ -269,4 +269,5 @@ language capable of simple scripting.
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
 \*Implement all Nodes to get data from `self.values` instead hard-coded.\*
-\*Fix how nested blocks are handled.*\
+\*Fix how nested blocks are handled.\*
+\*Make a method for parsing a block of code.\*

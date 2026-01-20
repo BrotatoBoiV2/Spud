@@ -9,15 +9,15 @@
   - Included more mathematical operators and conditional checking.
   - Included booleans.
 
+---
+
+## Previous Versions
+
 **V1.6.5-2026-01-15**
 
   - Some code clean-up and refactoring.
   - Started the implementation of boolean keywords: `ripe` and `rotten`
   - Some extra error handling.
-
----
-
-## Previous Versions
 
 **V1.5.2-2026.01.15**
 
