@@ -262,6 +262,8 @@ language capable of simple scripting.
     - The loop works as intended, but nested blocks are not fully supported.
 * 21:51
     - Nested logic is now supported and breaking out of loops is possible.
+*2026-01-19*
+    - Refactored `parser.py` to make code a bit cleaner and modulated.
 ---
 
 # TO-DO:
@@ -269,5 +271,3 @@ language capable of simple scripting.
 \*Include a bit more commentation.\*
 \*Fix row/column updating.\*
 \*Implement all Nodes to get data from `self.values` instead hard-coded.\*
-\*Fix how nested blocks are handled.\*
-\*Make a method for parsing a block of code.\*
