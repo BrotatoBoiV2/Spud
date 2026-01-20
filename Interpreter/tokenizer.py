@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.9.7-2026.01.20
+                        Version: 2.0.7-2026.01.20
 
 ===============================================================================
 
@@ -173,8 +173,8 @@ class Tokenizer:
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
 
-        self.index += 2
-        self.col   += 2
+        # self.index += 2
+        # self.col   += 2
 
         return comment_text, start_col
 
@@ -209,7 +209,7 @@ class Tokenizer:
         # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
             char = self.peek()
-
+            
             if char.isspace():
                 if char == "\n":
                     tokens.append(Token("EOL", "EOL", self.row, self.col))
@@ -253,14 +253,15 @@ class Tokenizer:
                 start_col = self.col
                 keys      = [
                     "say", "get", "check", "instead", "otherwise", "loop",
-                    "cut"
+                    "cut", "pot"
                 ]
-
+                
                 while self.index < len(self.code) and self.peek().isalnum():
                     ident += self.peek()
+                    
                     self.index += 1
                     self.col   += 1
-
+                    
                 if ident in logic:
                     token_type = "LOGIC"
                 elif ident in bools:
@@ -272,12 +273,14 @@ class Tokenizer:
 
             elif char in symbols:
                 tokens.append(Token(symbols[char], char, self.row, self.col))
+                
                 self.index += 1
                 self.col   += 1
 
             elif char == "~":
                 if self.peek(1) == ".":
                     tokens.append(Token("ROOT", "~.", self.row, self.col))
+
                     self.index += 2
                     self.col   += 2
 
@@ -299,6 +302,7 @@ class Tokenizer:
                     if self.peek(2) == ".":
                         name = "TERMINATOR"
                         tokens.append(Token(name, char, self.row, self.col))
+
                         self.index += 3
                         self.col   += 3
 
@@ -306,6 +310,7 @@ class Tokenizer:
 
                 elif self.peek(1) == "~":
                     tokens.append(Token("EYES", ".~", self.row, self.col))
+
                     self.index += 2
                     self.col   += 2
                 else:

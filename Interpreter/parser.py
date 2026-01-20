@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.9.7-2026.01.20
+                        Version: 2.0.7-2026.01.20
 
 ===============================================================================
 
@@ -30,7 +30,7 @@
 # ~ Import Local Modules. ~ #
 from nodes import (
 	IntegerNode, StringNode, BinOperNode, VariableNode, SayNode, GetNode,
-    LogicNode, BoolNode, CheckNode, LoopNode, CutNode
+    LogicNode, BoolNode, CheckNode, LoopNode, CutNode, PotNode
 )
 from tokenizer import Token
 
@@ -228,9 +228,6 @@ class Parser:
         
         self.advance()
 
-        # if self.token.type != "EQUAL":
-        #     raise SyntaxError("Expected '=' after variable name.")
-
         self.advance()
 
         expression_tree = self.parse_expression()
@@ -272,7 +269,7 @@ class Parser:
 			- CheckNode                : The parsed statement block.
         """
         err = "A `check` block needs to be started with some Potato Eyes! '.~'"
-
+        
         while self.index < len(self.tokens):
             self.advance()
 
@@ -327,6 +324,36 @@ class Parser:
 
                     raise SyntaxError("Error: " + err + "\n" + loc)
 
+    def parse_pot(self):
+        """
+        ~ Parse a pot statement. ~
+
+        Returns:
+			- PotNode                   : The parsed pot statement.
+        """
+
+        pot_name = ""
+        code = []
+
+        self.advance()
+
+        if self.token.type == "IDENTIFIER":
+            pot_name = self.token.value
+            self.advance()
+
+            if self.token.type == "EYES":
+                code = self.parse_code()
+
+            # ~ Later update will allow for arguments. ~ #
+            
+            else:
+                err = "Unexpected token after `pot` declaration."
+                location = f"row: {self.token.row} ; Column:{self.token.col}"
+
+                raise SyntaxError("Error: " + err + "\n" + location)
+
+        return VariableNode(pot_name, self.token.row, self.token.col, value_parts=PotNode(code, self.token.row, self.token.col))
+
     def parse_code(self, is_check=False, condition=None):
         """
         ~ Parse a block of code. ~
@@ -345,6 +372,11 @@ class Parser:
 
         while self.token.type != "EOF":
             token = self.token
+            # print(token)
+            if token.type == "ROOT":
+                # print("D")
+                self.advance()
+                break
 
             if token.type == "KEYWORD":
                 if token.value == "say":
@@ -358,6 +390,13 @@ class Parser:
                 
                 elif token.value == "loop":
                     code.append(self.parse_loop())
+
+
+                elif token.value == "cut":
+                    code.append(CutNode(self.token.row, self.token.col))
+
+                elif token.value == "pot":
+                    code.append(self.parse_pot())
 
                 if is_check:
                     if token.value == "instead":
@@ -379,7 +418,15 @@ class Parser:
                         )
 
             elif token.type == "IDENTIFIER":
-                code.append(self.parse_set_variable())
+                if self.peek(1).type == "EQUALS":
+                    code.append(self.parse_set_variable())
+                    self.advance()
+                else:
+                    code.append(VariableNode(token.value, token.row, token.col))
+                    self.advance()
+                    pass
+                    # print("RUNNING")
+                    # print(self.parse_expression())
 
             else:
                 self.advance()

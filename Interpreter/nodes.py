@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.9.7-2026.01.20
+                        Version: 2.0.7-2026.01.20
 
 ===============================================================================
 
@@ -25,6 +25,9 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
+
+
+from memory import Environment
 
 
 def join_parts(parts, memory):
@@ -295,10 +298,14 @@ class VariableNode(Node):
             - Any                      : The value of the variable node.
         """
 
+        
         if not self.value_parts:
             value = memory.get(self.value)
 
             if value is not None:
+                if isinstance(value, PotNode):
+                    return value.execute(memory)
+
                 return value
 
             error = f"Variable {self.value} is not defined."
@@ -307,8 +314,11 @@ class VariableNode(Node):
             raise ValueError("Error: " + error + "\n" + location)
 
         else:
-            value = join_parts(self.value_parts, memory)
-            memory.set_var(self.value, value)
+            if isinstance(self.value_parts, PotNode):
+                memory.set_var(self.value, self.value_parts)
+            else:
+                value = join_parts(self.value_parts, memory)
+                memory.set_var(self.value, value)
 
 
 class SayNode(Node):
@@ -524,4 +534,24 @@ class LoopNode(Node):
 
             if not condition.execute(memory) or not run_code:
                 break
+
+
+class PotNode(Node):
+    """
+    ~ Represents a pot node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the pot node.
+        - execute                      : Executes the pot node.
+    """
+
+    def __init__(self, value, row, column):
+        super().__init__(value, row, column)
+
+    def execute(self, memory):
+        env = Environment()
+        env.parent = memory
+
+        for node in self.value:
+            node.execute(env)
 

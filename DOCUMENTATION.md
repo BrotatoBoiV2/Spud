@@ -273,6 +273,10 @@ language capable of simple scripting.
     - Updated error output, need to add the line too.
 * 06:20
     - Double checked how the row and column is updated.
+* 16:43
+    - Included `.spud` as a valid file extension.
+* 18:25
+    - Implemented functions with the keyword `pot` to allow for modulated code.
 ---
 
 # TO-DO:

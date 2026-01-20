@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: memory.py
                             Date: 2026/01/08
-                        Version: 1.9.7-2026.01.20
+                        Version: 2.0.7-2026.01.20
 
 ===============================================================================
 
@@ -62,6 +62,7 @@ class Environment:
         Returns:
             - Any                      : The value of the variable.
         """
+
 
         if name in self.variables:
             return self.variables[name]
