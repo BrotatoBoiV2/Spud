@@ -299,19 +299,17 @@ class VariableNode(Node):
         """
 
         
-        if not self.value_parts:
-            value = memory.get(self.value)
+        if isinstance(self.value, dict):
+            for key, value in self.value.items():
+                memory.set_var(key, value)
 
-            if value is not None:
-                if isinstance(value, PotNode):
-                    return value.execute(memory)
-
-                return value
+                return
 
             error = f"Variable {self.value} is not defined."
             location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
+
 
         else:
             if isinstance(self.value_parts, PotNode):
@@ -319,7 +317,7 @@ class VariableNode(Node):
             else:
                 value = join_parts(self.value_parts, memory)
                 memory.set_var(self.value, value)
-
+           
 
 class SayNode(Node):
     """
@@ -551,18 +549,19 @@ class PotNode(Node):
     def execute(self, memory):
         env = Environment()
         env.parent = memory
+        
+        code = self.value[0]
+        args = self.value[1]
+        
+        for arg in args:
+            env.set_var(arg, memory.get(arg))
+
 
         try:
-            for node in self.value:
+            for node in code:
                 node.execute(env)
         
         except Exception as signal:
-            # print("ERR")
-            # print(signal)
-            # if isinstance(signal, str):
-            #     return StringNode(signal, self.row, self.column)
-            # elif isinstance(signal, int):
-            #     return IntegerNode(signal, self.row, self.column)
             return signal
 
         # return None

@@ -62,7 +62,7 @@ class Environment:
         Returns:
             - Any                      : The value of the variable.
         """
-
+   
         if name in self.variables:
             return self.variables[name]
 

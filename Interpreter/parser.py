@@ -232,7 +232,9 @@ class Parser:
 
         expression_tree = self.parse_expression()
 
-        return VariableNode(var_name, row, col, value_parts=expression_tree)
+        value = {var_name: expression_tree}
+
+        return VariableNode(value, row, col)
 
     def parse_condition(self):
         """
@@ -334,25 +336,40 @@ class Parser:
 
         pot_name = ""
         code = []
+        args = []
 
         self.advance()
 
         if self.token.type == "IDENTIFIER":
             pot_name = self.token.value
+
             self.advance()
+
+            
+
+            if self.token.type == "LPARAM":
+                while True:
+                    self.advance()
+
+                    if self.token.type == "RPARAM":
+                        self.advance()
+                        break
+                    
+                    args.append(self.token.value)
 
             if self.token.type == "EYES":
                 code = self.parse_code()
 
-            # ~ Later update will allow for arguments. ~ #
-            
             else:
                 err = "Unexpected token after `pot` declaration."
                 location = f"row: {self.token.row} ; Column:{self.token.col}"
 
                 raise SyntaxError("Error: " + err + "\n" + location)
 
-        return VariableNode(pot_name, self.token.row, self.token.col, value_parts=PotNode(code, self.token.row, self.token.col))
+        pot_value = [args, code]
+        var_value = {pot_name: PotNode(pot_value, self.token.row, self.token.col)}
+
+        return VariableNode(var_value, self.token.row, self.token.col)
 
     def parse_code(self, is_check=False, condition=None):
         """
@@ -426,8 +443,22 @@ class Parser:
                 if self.peek(1).type == "EQUAL":
                     code.append(self.parse_set_variable())
                     self.advance()
-                else:
-                    code.append(VariableNode(token.value, token.row, token.col))
+                elif self.peek(1).type == "LPARAM":
+                    self.advance()
+
+                    args = []
+
+                    while True:
+                        self.advance()
+
+                        if self.token.type == "RPARAM":
+                            break
+
+                        args.append(self.token.value)
+
+                    value = {token.value: args}
+
+                    code.append(VariableNode(value, token.row, token.col))
                     self.advance()
                     pass
 
