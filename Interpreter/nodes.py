@@ -501,8 +501,8 @@ class CheckNode(Node):
                 node.execute(memory)
 
 class CutNode(Node):
-    def __init__(self, row, column):
-        super().__init__(None, row, column)
+    def __init__(self, value, row, column):
+        super().__init__(value, row, column)
 
     def execute(self, memory):
         raise Exception()

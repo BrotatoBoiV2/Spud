@@ -55,7 +55,7 @@ class Token:
 
     def __str__(self):
         """
-        ~ Print the Token in a string format for debugging. ~
+        ~ Output the Token in a string format for debugging. ~
 
         Returns:
             - String                   : String representation of the token.

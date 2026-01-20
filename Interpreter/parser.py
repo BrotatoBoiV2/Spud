@@ -372,9 +372,8 @@ class Parser:
 
         while self.token.type != "EOF":
             token = self.token
-            # print(token)
+            
             if token.type == "ROOT":
-                # print("D")
                 self.advance()
                 break
 
@@ -391,9 +390,9 @@ class Parser:
                 elif token.value == "loop":
                     code.append(self.parse_loop())
 
-
                 elif token.value == "cut":
-                    code.append(CutNode(self.token.row, self.token.col))
+                    code.append(CutNode(None, self.token.row, self.token.col))
+                    self.advance()
 
                 elif token.value == "pot":
                     code.append(self.parse_pot())
@@ -425,8 +424,6 @@ class Parser:
                     code.append(VariableNode(token.value, token.row, token.col))
                     self.advance()
                     pass
-                    # print("RUNNING")
-                    # print(self.parse_expression())
 
             else:
                 self.advance()
@@ -452,8 +449,5 @@ class Parser:
         self.tokens = tokens
         self.token  = self.peek() or Token("EOF", "EOF", None, None)
         parsed = self.parse_code()
-
-        # for token in self.tokens:
-        #     print(token)
 
         return parsed

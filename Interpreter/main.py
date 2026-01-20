@@ -95,8 +95,6 @@ class SpudInterpreter:
         tokens      = self.tokenizer.tokenize(source_code)
         nodes       = self.parser.parse(tokens)
     
-        # for node in nodes:
-        #     print(node)
 
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:
