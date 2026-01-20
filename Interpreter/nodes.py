@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 1.9.6-2026.01.19
+                        Version: 1.9.7-2026.01.20
 
 ===============================================================================
 
@@ -59,8 +59,8 @@ class Node:
         ~ Initialize the Node. ~
 
         Arguments:
-            - value           (String) : The value of the node.
-            - row               (Int) : The row number of the node.
+            - value          (Unknown) : The value of the node.
+            - row                (Int) : The row number of the node.
             - column             (Int) : The column number of the node
 
         Attributes:
@@ -97,7 +97,7 @@ class IntegerNode(Node):
 
         Arguments:
             - value           (String) : The value of the integer node.
-            - row               (Int) : The row number of the integer node.
+            - row                (Int) : The row number of the integer node.
             - column             (Int) : The column number of the integer node.
         """
 
@@ -500,5 +500,4 @@ class LoopNode(Node):
 
             if not condition.execute(memory) or not run_code:
                 break
-
 

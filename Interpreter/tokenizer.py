@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 1.9.6-2026.01.19
+                        Version: 1.9.7-2026.01.20
 
 ===============================================================================
 
@@ -43,14 +43,14 @@ class Token:
         Arguments:
             - token_type         (str) : The type of the token.
             - token_value        (str) : The value of the token.
-            - token_row         (int) : The row number of the token.
+            - token_row          (int) : The row number of the token.
             - token_column       (int) : The column number of the token.
 
         """
 
         self.type  = token_type
         self.value = token_value
-        self.row  = token_row
+        self.row   = token_row
         self.col   = token_column
 
     def __str__(self):
@@ -250,7 +250,8 @@ class Tokenizer:
                 ident     = ""
                 start_col = self.col
                 keys      = [
-                    "say", "get", "check", "instead", "otherwise", "loop", "cut"
+                    "say", "get", "check", "instead", "otherwise", "loop",
+                    "cut"
                 ]
 
                 while self.index < len(self.code) and self.peek().isalnum():

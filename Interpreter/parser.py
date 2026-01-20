@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 1.9.6-2026.01.19
+                        Version: 1.9.7-2026.01.20
 
 ===============================================================================
 
@@ -25,6 +25,7 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
+
 
 # ~ Import Local Modules. ~ #
 from nodes import (
@@ -51,7 +52,7 @@ class Parser:
         - parse_condition              : Parse a condition.
 		- parse_check                  : Parse a 'check' statement.
         - parse_loop                   : Parse a loop statement.
-        - parse_block                  : Parse a block of code.
+        - parse_code                   : Parse a block of code.
     """
 
     def __init__(self):
@@ -261,25 +262,27 @@ class Parser:
         Returns:
 			- CheckNode                : The parsed statement block.
         """
+        err = "A `check` block needs to be started with some Potato Eyes! '.~'"
 
         while self.index < len(self.tokens):
             self.advance()
 
-            condition = self.parse_condition()
+            cond = self.parse_condition()
 
             code      = []
 
             # ~ Make sure the condition exists. ~ #
-            if condition:
+            if cond:
                 if self.token.type == "EYES":
                     self.advance()
 
-                    branches = self.parse_block(is_check=True, condition=condition)
+                    branches = self.parse_code(is_check=True, condition=cond)
 
                     return CheckNode(branches, self.token.row, self.token.col)
 
                 else:
-                    raise SyntaxError("A `check` block needs to be started with some Potato Eyes! '.~'")
+                    
+                    raise SyntaxError(err)
 
             self.advance()
 
@@ -291,6 +294,8 @@ class Parser:
 			- LoopNode                 : The parsed loop statement.
         """
 
+        err = "A `loop` block needs to be started with some Potato Eyes! '.~'"
+
         while self.index < len(self.tokens):
             self.advance()
 
@@ -302,17 +307,22 @@ class Parser:
             if condition:
                 if self.token.type == "EYES":
                     self.advance()
-                    code = self.parse_block()
+                    code = self.parse_code()
                     value = [condition, code]
 
                     return LoopNode(value, self.token.row, self.token.col)
 
                 else:
-                    raise SyntaxError("A `loop` block needs to be started with some Potato Eyes! '.~'")
+                    raise SyntaxError(err)
 
-    def parse_block(self, is_check=False, condition=None):
+    def parse_code(self, is_check=False, condition=None):
         """
         ~ Parse a block of code. ~
+
+        Attributes:
+            - is_check       (Boolean) : Whether the block is a check block.
+            - condition         (Node) : The condition for the check block.
+
 
         Returns:
 			- List                     : The parsed block of code.
@@ -382,11 +392,9 @@ class Parser:
 
         self.tokens = tokens
         self.token  = self.peek() or Token("EOF", "EOF", None, None)
-        parsed = self.parse_block()
+        parsed = self.parse_code()
 
         # for token in self.tokens:
         #     print(token)
-
-        
 
         return parsed

@@ -263,7 +263,12 @@ language capable of simple scripting.
 * 21:51
     - Nested logic is now supported and breaking out of loops is possible.
 *2026-01-19*
+* 05:18
     - Refactored `parser.py` to make code a bit cleaner and modulated.
+* 05:44
+    - Cleaned `parser.py` a little bit more.
+* 05:55
+    - Looked over and ensured the codebase is clean.
 ---
 
 # TO-DO:
