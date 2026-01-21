@@ -288,7 +288,7 @@ language capable of simple scripting.
 
 * 19:00
     - Finally got arguments to work in the `pot` function.
-    - The fibbonacci example now works as intended.
+    - The factorial example now works as intended.
     - Pushing and merging to main and taking a break.
 ---
 
