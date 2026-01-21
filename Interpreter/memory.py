@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: memory.py
                             Date: 2026/01/08
-                        Version: 2.0.7-2026.01.20
+                        Version: 2.3.7-2026.01.21
 
 ===============================================================================
 
@@ -62,8 +62,9 @@ class Environment:
         Returns:
             - Any                      : The value of the variable.
         """
-
-
+        # print(self.variables)
+        # print(f"ju {name}")
+        # print(f"DEBUG: Looking for '{name}' in {id(self)}. Local keys: {list(self.variables.keys())}")
         if name in self.variables:
             return self.variables[name]
 
@@ -71,6 +72,9 @@ class Environment:
             return self.parent.get(name)
 
         raise NameError(f"Variable '{name}' not found.")
+
+        # print("SINS")
+        # print(value)
 
     def set_var(self, name, value):
         """
@@ -80,5 +84,6 @@ class Environment:
             - name            (String) : The name of the variable.
             - value              (Any) : The value of the variable.
         """
-
+        # print("SETTING")
+        # print(name, value)
         self.variables[name] = value

@@ -262,7 +262,7 @@ language capable of simple scripting.
     - The loop works as intended, but nested blocks are not fully supported.
 * 21:51
     - Nested logic is now supported and breaking out of loops is possible.
-*2026-01-19*
+*2026-01-20*
 * 05:18
     - Refactored `parser.py` to make code a bit cleaner and modulated.
 * 05:44
@@ -277,8 +277,22 @@ language capable of simple scripting.
     - Included `.spud` as a valid file extension.
 * 18:25
     - Implemented functions with the keyword `pot` to allow for modulated code.
+* 21:28
+    - Output can be returned from a `pot` with the `bloom` keyword.
+    - Next I need to include arguments for the `pot` function.
+
+*2026-01-21*
+* 02:21
+    - Implementing arguments in the `pot` functions are much harder than I 
+      thought it would be...
+
+* 19:00
+    - Finally got arguments to work in the `pot` function.
+    - The fibbonacci example now works as intended.
+    - Pushing and merging to main and taking a break.
 ---
 
 # TO-DO:
+\*\*\*\*\*Allow arguments for the `pot` keyword.\*\*\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Implement all Nodes to get data from `self.values` instead of hard-coded.\*

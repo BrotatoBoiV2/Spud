@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 2.0.7-2026.01.20
+                        Version: 2.3.7-2026.01.21
 
 ===============================================================================
 
@@ -253,7 +253,7 @@ class Tokenizer:
                 start_col = self.col
                 keys      = [
                     "say", "get", "check", "instead", "otherwise", "loop",
-                    "cut", "pot"
+                    "cut", "pot", "bloom"
                 ]
                 
                 while self.index < len(self.code) and self.peek().isalnum():

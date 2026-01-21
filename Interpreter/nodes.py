@@ -5,7 +5,7 @@
                      Description: My custom language.
                              File: nodes.py
                             Date: 2026/01/02
-                        Version: 2.0.7-2026.01.20
+                        Version: 2.3.7-2026.01.21
 
 ===============================================================================
 
@@ -196,7 +196,7 @@ class BinOperNode(Node):
             - Any                      : The value of the node.
         """
 
-        left  = self.left.execute(memory)
+        left = self.left.execute(memory)
         right = self.right.execute(memory)
 
         if self.value == "+":
@@ -206,11 +206,13 @@ class BinOperNode(Node):
             return str(left) + str(right)
 
         elif self.value == "-":
+            # print(left)
+            # print(right)
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) - int(right)
 
             error = "Cannot subtract strings"
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
 
@@ -221,8 +223,11 @@ class BinOperNode(Node):
             elif isinstance(left, str) and isinstance(right, int):
                 return str(left) * int(right)
 
+            elif isinstance(left, Node) and isinstance(right, Node):
+                return left.execute(memory) * right.execute(memory)
+
             error = "Cannot multiply strings"
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
 
@@ -231,7 +236,7 @@ class BinOperNode(Node):
                 return int(left) / int(right)
 
             error = "Cannot divide strings"
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
             
@@ -240,7 +245,7 @@ class BinOperNode(Node):
                 return int(left) // int(right)
 
             error = "Cannot mash strings together!"
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
 
@@ -249,7 +254,7 @@ class BinOperNode(Node):
                 return int(left) % int(right)
 
             error = "Cannot get remainder of strings"
-            location = f"row: {self.row} ; Column:{self.col}"
+            location = f"row: {self.row} ; Column:{self.column}"
 
             raise ValueError("Error: " + error + "\n" + location)
             
@@ -269,7 +274,7 @@ class VariableNode(Node):
         - execute                      : Executes the variable node.
     """
 
-    def __init__(self, value, row, column, value_parts=None):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the VariableNode. ~
 
@@ -285,7 +290,7 @@ class VariableNode(Node):
 
         super().__init__(value, row, column)
 
-        self.value_parts = value_parts
+        # print(self.value)
 
     def execute(self, memory):
         """
@@ -297,28 +302,53 @@ class VariableNode(Node):
         Returns:
             - Any                      : The value of the variable node.
         """
+        # print(self.value)
+        if self.value["action"] == "set":
+            name = self.value["content"]["name"]
+            raw_value = self.value["content"]["value"]
+            value = raw_value.execute(memory)
 
-        
-        if not self.value_parts:
-            value = memory.get(self.value)
+            return memory.set_var(name, value)
 
-            if value is not None:
-                if isinstance(value, PotNode):
-                    return value.execute(memory)
 
-                return value
+        elif self.value["action"] == "get":
+            name = self.value["content"]["name"]
+            value = memory.get(name)
 
-            error = f"Variable {self.value} is not defined."
-            location = f"row: {self.row} ; Column:{self.col}"
+            if value:
+                if isinstance(value, VariableNode):
+                    value = value.execute(memory)
 
-            raise ValueError("Error: " + error + "\n" + location)
+                # print(f"VALUE: {value}")
+                return memory.get(name)
 
-        else:
-            if isinstance(self.value_parts, PotNode):
-                memory.set_var(self.value, self.value_parts)
+        elif self.value["action"] == "pot":
+            name = self.value["content"]["name"] 
+            node = self.value["content"]["potNode"]
+            args = self.value["content"]["args"]
+
+            for arg in args:
+                node.mapped_args[arg] = None
+            
+            return memory.set_var(name, node)
+
+        elif self.value["action"] == "run": 
+            node = memory.get(self.value["content"]["name"])
+            args = self.value["content"]["args"]
+            evaluated_args = [args.execute(memory) for args in args]
+
+            if len(args) == len(node.args):
+                for arg, name in zip(evaluated_args, node.args):
+                    node.mapped_args[name] = arg
             else:
-                value = join_parts(self.value_parts, memory)
-                memory.set_var(self.value, value)
+                error = "Invalid number of arguments."
+                location = f"row: {self.row} ; Column:{self.column}"
+
+                raise ValueError("Error: " + error + "\n" + location)                
+
+            result = node.execute(memory, evaluated_args=evaluated_args)
+            # print(f"RESULT: {result}")
+            return result
 
 
 class SayNode(Node):
@@ -547,11 +577,55 @@ class PotNode(Node):
 
     def __init__(self, value, row, column):
         super().__init__(value, row, column)
+        
+        self.code = self.value["code"]
+        self.args = self.value["args"]
+        self.mapped_args = {}
+
+
+    def execute(self, memory, evaluated_args=None):
+        # 1. IMMEDIATE REGISTRATION:
+        # If we are being defined (not called with args), store ourselves in memory.
+        if evaluated_args is None:
+            memory.set_var(self.value["name"], self)
+            return self
+
+        # 2. EXECUTION LOGIC (This runs during a 'run' action):
+       
+        # Map the arguments into the new local environment
+        if evaluated_args:
+            env = Environment(parent=memory)
+        
+            for name, val in zip(self.args, evaluated_args):
+                env.set_var(name, val)
+
+        try:
+            for node in self.code:
+                node.execute(env)
+
+        except Exception as signal:
+            return signal.args[0] if signal.args else None
+
+        return None
+
+
+class BloomNode(Node):
+    """
+    ~ Represents a bloom node in the AST. ~
+
+    Functions:
+        - __init__                     : Initializes the bloom node.
+        - execute                      : Executes the bloom node.
+    """
+
+    def __init__(self, value, row, col):
+        super().__init__(value, row, col)
 
     def execute(self, memory):
-        env = Environment()
-        env.parent = memory
-
-        for node in self.value:
-            node.execute(env)
+        if isinstance(self.value, Node):
+            result = self.value.execute(memory)
+        else:
+            result = self.value
+            
+        raise Exception(result)
 
