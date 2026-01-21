@@ -1,0 +1,17 @@
+pot factorial(n) .~
+
+    check n equals 1 .~
+
+        bloom 1
+
+    ~.
+
+    next = n - 1
+    prev = factorial(next)
+    bloom n * prev
+
+~.
+
+result = factorial(5)
+say "The growth factor of 5 is: "
+say result

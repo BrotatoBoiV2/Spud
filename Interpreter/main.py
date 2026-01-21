@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 2.0.7-2026.01.20
+                        Version: 2.3.7-2026.01.21
 
 ===============================================================================
 
@@ -33,6 +33,7 @@ import sys
 from tokenizer import Tokenizer
 from parser import Parser
 from memory import Environment
+from nodes import StringNode
 
 
 class SpudInterpreter:
@@ -95,6 +96,15 @@ class SpudInterpreter:
         tokens      = self.tokenizer.tokenize(source_code)
         nodes       = self.parser.parse(tokens)
     
+
+        # for node in nodes:
+        #     print("NODE")
+        #     if isinstance(node.value, StringNode):
+        #         print("STIRNG")
+        #         print(node)
+        #     print(node.value)
+
+        # ~ Execute the parsed code. ~ #
 
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:

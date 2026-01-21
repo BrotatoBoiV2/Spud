@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 2.0.7-2026.01.20
+                        Version: 2.3.7-2026.01.21
 
 ===============================================================================
 
@@ -148,7 +148,7 @@ class Parser:
         """
 
         token = self.token
-
+        
         if token.type == "INTEGER":
             self.advance()
             return IntegerNode(token.value, token.row, token.col)
@@ -158,8 +158,38 @@ class Parser:
             return StringNode(token.value, token.row, token.col)
 
         elif token.type == "IDENTIFIER":
+            if self.peek(1).type == "LPARAM":
+                # print("SHatwoth")
+                args = []
+                self.advance()
+
+                while True:
+                    self.advance()
+                    arg = self.parse_expression()
+                    args.append(arg)
+
+                    if not arg or self.token.type == "RPARAM":
+                        self.advance()
+                        break                    
+
+                value = {
+                    "action": "run",
+                    "content": {
+                        "name": token.value,
+                        "args": args
+                    }
+                }
+                
+                return VariableNode(value, token.row, token.col)
+
             self.advance()
-            return VariableNode(token.value, token.row, token.col)
+            value = {
+                "action": "get",
+                "content": {
+                    "name": token.value
+                }
+            }
+            return VariableNode(value, token.row, token.col)
 
         elif token.type == "LPARAM":
             self.advance()
@@ -230,9 +260,15 @@ class Parser:
 
         self.advance()
 
-        expression_tree = self.parse_expression()
+        exp = self.parse_expression()
 
-        value = {var_name: expression_tree}
+        value = {
+            "action": "set",
+            "content": {
+                "name": var_name,
+                "value": exp
+            }
+        }
 
         return VariableNode(value, row, col)
 
@@ -345,8 +381,6 @@ class Parser:
 
             self.advance()
 
-            
-
             if self.token.type == "LPARAM":
                 while True:
                     self.advance()
@@ -366,10 +400,18 @@ class Parser:
 
                 raise SyntaxError("Error: " + err + "\n" + location)
 
-        pot_value = [args, code]
-        var_value = {pot_name: PotNode(pot_value, self.token.row, self.token.col)}
+        pot_value = {
+            "name": pot_name,
+            "args": args, 
+            "code": code,
+        }
 
-        return VariableNode(var_value, self.token.row, self.token.col)
+        pot = PotNode(pot_value, self.token.row, self.token.col)
+        pot_value["potNode"] = pot
+
+        # VariableNode(var_value, self.token.row, self.token.col).hidden()
+        return pot
+        # return VariableNode(var_value, self.token.row, self.token.col)
 
     def parse_code(self, is_check=False, condition=None):
         """
@@ -416,7 +458,8 @@ class Parser:
 
                 elif token.value == "bloom":
                     self.advance()
-                    code.append(BloomNode(self.parse_primary(), token.row, token.col))
+                    exp = self.parse_expression()
+                    code.append(BloomNode(exp, token.row, token.col))
                     self.advance()
 
 
@@ -440,6 +483,7 @@ class Parser:
                         )
 
             elif token.type == "IDENTIFIER":
+                # print(self.token)
                 if self.peek(1).type == "EQUAL":
                     code.append(self.parse_set_variable())
                     self.advance()
@@ -452,15 +496,23 @@ class Parser:
                         self.advance()
 
                         if self.token.type == "RPARAM":
+                            self.advance()
                             break
 
                         args.append(self.token.value)
 
-                    value = {token.value: args}
-
+                    value = {
+                        "action": "run",
+                        "content": {
+                            "name": token.value,
+                            "args": args
+                        }
+                    }
+                    print("GOLF")
                     code.append(VariableNode(value, token.row, token.col))
                     self.advance()
-                    pass
+                else:
+                    self.advance()
 
             else:
                 self.advance()
