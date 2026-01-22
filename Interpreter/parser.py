@@ -5,7 +5,7 @@
                      Description: My custom language.
                             File: parser.py
                             Date: 2026/01/02
-                        Version: 2.3.7-2026.01.21
+                        Version: 2.3.8-2026.01.22
 
 ===============================================================================
 
@@ -95,7 +95,8 @@ class Parser:
         """
 
         self.index += amount
-        self.token  = self.peek()
+
+        self.token = self.peek()
 
         if not self.token:
             self.token = Token("EOF", "EOF", None, None)
@@ -108,7 +109,7 @@ class Parser:
 			- SayNode                  : The parsed 'say' statement.
         """
         output    = []
-        row, col = self.token.row, self.token.col
+        row, col  = self.token.row, self.token.col
         
         self.advance()
 
@@ -149,7 +150,7 @@ class Parser:
 
         token = self.token
         
-        if token.type == "INTEGER":
+        if   token.type == "INTEGER":
             self.advance()
             return IntegerNode(token.value, token.row, token.col)
 
@@ -159,17 +160,20 @@ class Parser:
 
         elif token.type == "IDENTIFIER":
             if self.peek(1).type == "LPARAM":
-                # print("SHatwoth")
                 args = []
+
                 self.advance()
 
                 while True:
                     self.advance()
+
                     arg = self.parse_expression()
+
                     args.append(arg)
 
                     if not arg or self.token.type == "RPARAM":
                         self.advance()
+
                         break                    
 
                 value = {
@@ -183,39 +187,45 @@ class Parser:
                 return VariableNode(value, token.row, token.col)
 
             self.advance()
+
             value = {
                 "action": "get",
                 "content": {
                     "name": token.value
                 }
             }
+
             return VariableNode(value, token.row, token.col)
 
         elif token.type == "LPARAM":
             self.advance()
+
             node = self.parse_expression()
 
             if self.token.type != "RPARAM":
-                error = "Expected ')' after expression."
+                error    = "Expected ')' after expression."
                 location = f"row: {self.token.row} ; Column:{self.token.col}"
 
                 raise SyntaxError("Error: " + error + "\n" + location)
 
             self.advance()
+
             return node
 
         elif token.type == "RPARAM":
-            error = "Found a ')' that does not close an expression."
+            error    = "Found a ')' that does not close an expression."
             location = f"row: {self.token.row} ; Column:{self.token.col}"
 
             raise SyntaxError("Error: " + error + "\n" + location)
 
         elif token.type == "LOGIC":
             self.advance()
+
             return LogicNode(token.value, token.row, token.col)
         
         elif token.type == "BOOL":
             self.advance()
+
             return BoolNode(token.value, token.row, token.col)
 
     def parse_get(self):
@@ -227,15 +237,17 @@ class Parser:
         """
 
         self.advance()
+
         var_name = ""
         prompt   = ""
 
         if self.token.type == "IDENTIFIER":
             var_name = self.token.value
+
             self.advance()
 
         else:
-            error = "Expected identifier after 'get'."
+            error    = "Expected identifier after 'get'."
             location = f"row: {self.token.row} ; Column:{self.token.col}"
 
             raise SyntaxError("Error: " + error + "\n" + location)
@@ -253,16 +265,13 @@ class Parser:
 			- VariableNode             : The parsed variable assignment.
         """
 
-        var_name        = self.token.value
+        var_name       = self.token.value
         row, col       = self.token.row, self.token.col
         
-        self.advance()
+        self.advance(2)
 
-        self.advance()
-
-        exp = self.parse_expression()
-
-        value = {
+        exp            = self.parse_expression()
+        value          = {
             "action": "set",
             "content": {
                 "name": var_name,
@@ -285,10 +294,10 @@ class Parser:
 
         while self.token.type == "LOGIC":
             logic = self.token.value
+
             self.advance()
 
             right = self.parse_expression()
-
             left  = BoolNode(
                 logic,
                 self.token.row,
@@ -312,8 +321,7 @@ class Parser:
             self.advance()
 
             cond = self.parse_condition()
-
-            code      = []
+            code = []
 
             # ~ Make sure the condition exists. ~ #
             if cond:
@@ -344,16 +352,16 @@ class Parser:
         while self.index < len(self.tokens):
             self.advance()
 
-            condition = self.parse_condition()
-
-            code      = []
+            cond = self.parse_condition()
+            code = []
 
             # ~ Make sure the condition exists. ~ #
-            if condition:
+            if cond:
                 if self.token.type == "EYES":
                     self.advance()
-                    code = self.parse_code()
-                    value = [condition, code]
+
+                    code  = self.parse_code()
+                    value = [cond, code]
 
                     return LoopNode(value, self.token.row, self.token.col)
 
@@ -370,9 +378,9 @@ class Parser:
 			- PotNode                   : The parsed pot statement.
         """
 
-        pot_name = ""
-        code = []
-        args = []
+        pot_name    = ""
+        code        = []
+        args        = []
 
         self.advance()
 
@@ -387,6 +395,7 @@ class Parser:
 
                     if self.token.type == "RPARAM":
                         self.advance()
+
                         break
                     
                     args.append(self.token.value)
@@ -395,23 +404,21 @@ class Parser:
                 code = self.parse_code()
 
             else:
-                err = "Unexpected token after `pot` declaration."
+                err      = "Unexpected token after `pot` declaration."
                 location = f"row: {self.token.row} ; Column:{self.token.col}"
 
                 raise SyntaxError("Error: " + err + "\n" + location)
 
-        pot_value = {
-            "name": pot_name,
-            "args": args, 
-            "code": code,
+        val         = {
+              "name": pot_name,
+              "args": args, 
+              "code": code,
         }
 
-        pot = PotNode(pot_value, self.token.row, self.token.col)
-        pot_value["potNode"] = pot
+        pot         = PotNode(pot_value, self.token.row, self.token.col)
+        val["node"] = pot
 
-        # VariableNode(var_value, self.token.row, self.token.col).hidden()
         return pot
-        # return VariableNode(var_value, self.token.row, self.token.col)
 
     def parse_code(self, is_check=False, condition=None):
         """
@@ -426,7 +433,7 @@ class Parser:
 			- List                     : The parsed block of code.
         """
 
-        code = []
+        code     = []
         branches = {}
 
         while self.token.type != "EOF":
@@ -434,6 +441,7 @@ class Parser:
             
             if token.type == "ROOT":
                 self.advance()
+
                 break
 
             if token.type == "KEYWORD":
@@ -451,6 +459,7 @@ class Parser:
 
                 elif token.value == "cut":
                     code.append(CutNode(None, self.token.row, self.token.col))
+
                     self.advance()
 
                 elif token.value == "pot":
@@ -458,8 +467,11 @@ class Parser:
 
                 elif token.value == "bloom":
                     self.advance()
+
                     exp = self.parse_expression()
+
                     code.append(BloomNode(exp, token.row, token.col))
+
                     self.advance()
 
 
@@ -469,13 +481,15 @@ class Parser:
                         code                = []
 
                         self.advance()
-                        condition = self.parse_condition()
+
+                        condition           = self.parse_condition()
 
                     elif token.value == "otherwise":
                         branches[condition] = code
                         code                = []
 
                         self.advance()
+
                         condition           = BoolNode(
                                     "ripe",
                                     self.token.row,
@@ -483,34 +497,11 @@ class Parser:
                         )
 
             elif token.type == "IDENTIFIER":
-                # print(self.token)
-                if self.peek(1).type == "EQUAL":
+                if   self.peek(1).type == "EQUAL":
                     code.append(self.parse_set_variable())
+
                     self.advance()
-                elif self.peek(1).type == "LPARAM":
-                    self.advance()
 
-                    args = []
-
-                    while True:
-                        self.advance()
-
-                        if self.token.type == "RPARAM":
-                            self.advance()
-                            break
-
-                        args.append(self.token.value)
-
-                    value = {
-                        "action": "run",
-                        "content": {
-                            "name": token.value,
-                            "args": args
-                        }
-                    }
-                    print("GOLF")
-                    code.append(VariableNode(value, token.row, token.col))
-                    self.advance()
                 else:
                     self.advance()
 
@@ -519,6 +510,7 @@ class Parser:
 
         if is_check:
             branches[condition] = code
+
             return branches
 
         return code
@@ -537,6 +529,6 @@ class Parser:
 
         self.tokens = tokens
         self.token  = self.peek() or Token("EOF", "EOF", None, None)
-        parsed = self.parse_code()
+        parsed      = self.parse_code()
 
         return parsed

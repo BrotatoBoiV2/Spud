@@ -5,7 +5,7 @@
                      Description: My custom language.
                            File: tokenizer.py
                             Date: 2026/01/02
-                        Version: 2.3.7-2026.01.21
+                        Version: 2.3.8-2026.01.22
 
 ===============================================================================
 
@@ -118,7 +118,8 @@ class Tokenizer:
         """
 
         string_text = ""
-        start_col = self.col
+        start_col   = self.col
+
         self.index += 1
         self.col   += 1
 
@@ -130,8 +131,8 @@ class Tokenizer:
 
             else:
                 string_text += self.peek()
-                self.index += 1
-                self.col   += 1
+                self.index  += 1
+                self.col    += 1
 
             if self.index >= len(self.code):
                 error_msg = "String isn't closed with a matching quotation!"
@@ -153,7 +154,8 @@ class Tokenizer:
         """
 
         comment_text = ""
-        start_col = self.col
+        start_col    = self.col
+
         self.index += 2
         self.col   += 2
 
@@ -161,6 +163,7 @@ class Tokenizer:
             if self.peek() == "~" and self.peek(1) == ")":
                 self.index += 2
                 self.col   += 2
+
                 break
 
             comment_text += self.peek()
@@ -172,9 +175,6 @@ class Tokenizer:
                 location  = f"row: {self.row} ; Column:{self.col}"
 
                 raise SyntaxError("Error: " + error_msg + "\n" + location)
-
-        # self.index += 2
-        # self.col   += 2
 
         return comment_text, start_col
 
@@ -202,7 +202,7 @@ class Tokenizer:
         logic      = [
             "equals", "not", "below", "above"
         ]
-        bools = [
+        bools      = [
             "ripe", "rotten", "true", "false"
         ]
 
@@ -213,6 +213,7 @@ class Tokenizer:
             if char.isspace():
                 if char == "\n":
                     tokens.append(Token("EOL", "EOL", self.row, self.col))
+
                     self.row += 1
                     self.col  = 1
 
@@ -242,7 +243,7 @@ class Tokenizer:
                 start_col = self.col
 
                 while self.index < len(self.code) and self.peek().isdigit():
-                    num_text += self.peek()
+                    num_text   += self.peek()
                     self.index += 1
                     self.col   += 1
 
@@ -257,8 +258,7 @@ class Tokenizer:
                 ]
                 
                 while self.index < len(self.code) and self.peek().isalnum():
-                    ident += self.peek()
-                    
+                    ident      += self.peek()
                     self.index += 1
                     self.col   += 1
                     
@@ -286,7 +286,8 @@ class Tokenizer:
 
                 else: # ~ Might be depricated. ~ #
                     sprouts = 1
-                    col = self.col
+                    col     = self.col
+
                     self.index += 1
                     self.col   += 1
 
@@ -306,7 +307,7 @@ class Tokenizer:
                         self.index += 3
                         self.col   += 3
 
-                    # ~ Handle a range token. ~ #
+                    #else:# ~ Handle a range token. ~ #
 
                 elif self.peek(1) == "~":
                     tokens.append(Token("EYES", ".~", self.row, self.col))

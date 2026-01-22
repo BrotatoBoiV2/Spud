@@ -280,16 +280,20 @@ language capable of simple scripting.
 * 21:28
     - Output can be returned from a `pot` with the `bloom` keyword.
     - Next I need to include arguments for the `pot` function.
-
 *2026-01-21*
 * 02:21
     - Implementing arguments in the `pot` functions are much harder than I 
       thought it would be...
-
 * 19:00
     - Finally got arguments to work in the `pot` function.
     - The factorial example now works as intended.
     - Pushing and merging to main and taking a break.
+*2026-01-22*
+* 15:53
+    - Starting to clean and refactor the code.
+* 15:28
+    - The code has been cleaned and lines were ensured to be 80
+      characters and less.
 ---
 
 # TO-DO:

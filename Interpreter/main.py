@@ -5,7 +5,7 @@
                      Description: My custom language.
                               File: main.py
                             Date: 2026/01/02
-                        Version: 2.3.7-2026.01.21
+                        Version: 2.3.8-2026.01.22
 
 ===============================================================================
 
@@ -67,7 +67,12 @@ class SpudInterpreter:
         self.file_path = file_path
 
         # ~ Check if it is a valid file extension. ~ #
-        if not self.file_path.endswith(".pot") and not self.file_path.endswith(".spud"):
+        is_ext         = (
+            self.file_path.endswith(".pot") or 
+            self.file_path.endswith(".spud")
+        )
+
+        if not is_ext:
             err = f"Invalid file extension: '{self.file_path}'."
 
             raise ValueError(err + " Expected `.spud`, or `.pot`")
@@ -96,16 +101,6 @@ class SpudInterpreter:
         tokens      = self.tokenizer.tokenize(source_code)
         nodes       = self.parser.parse(tokens)
     
-
-        # for node in nodes:
-        #     print("NODE")
-        #     if isinstance(node.value, StringNode):
-        #         print("STIRNG")
-        #         print(node)
-        #     print(node.value)
-
-        # ~ Execute the parsed code. ~ #
-
         # ~ Maybe turn into `nodes.execute()`. ~ #
         if nodes:
             for node in nodes:
@@ -143,6 +138,7 @@ if __name__ == "__main__":
     # ~ Execute the interpreter based on the debug setting. ~ #
     if debug_mode:
         interpreter.execute()
+        sys.exit(0)
 
     else:
         try:                      # ~ Debug Mode: Displays Python Errors. ~ #
