@@ -77,14 +77,13 @@ class Parser:
 			- amount             (Int) : The amount to peek ahead.
 
         Returns:
-			- Token                    : The next token to process.
-            - String                   : Empty string to avoid errors.
+			- Token                    : The next token or EOF if out of range.
         """
 
         if self.tokens and self.index + amount < len(self.tokens):
             return self.tokens[self.index + amount]
 
-        return ""
+        return Token("EOF", "EOF", None, None)
 
     def advance(self, amount=1):
         """
@@ -95,11 +94,7 @@ class Parser:
         """
 
         self.index += amount
-
         self.token = self.peek()
-
-        if not self.token:
-            self.token = Token("EOF", "EOF", None, None)
 
     def parse_say(self):
         """
@@ -108,7 +103,7 @@ class Parser:
         Returns:
 			- SayNode                  : The parsed 'say' statement.
         """
-        output    = []
+
         row, col  = self.token.row, self.token.col
         
         self.advance()
@@ -127,16 +122,12 @@ class Parser:
 
         while self.token.type == "OPERATOR":
             oper  = self.token.value
+
             self.advance()
 
             right = self.parse_primary()
-            left  = BinOperNode(
-                oper,
-				left,
-				right,
-				self.token.row,
-				self.token.col
-			)
+            left  = BinOperNode(oper, left, right, self.token.row, 
+                                self.token.col)
 
         return left
 
@@ -161,19 +152,15 @@ class Parser:
         elif token.type == "IDENTIFIER":
             if self.peek(1).type == "LPARAM":
                 args = []
-
                 self.advance()
 
                 while True:
                     self.advance()
-
                     arg = self.parse_expression()
-
                     args.append(arg)
 
                     if not arg or self.token.type == "RPARAM":
                         self.advance()
-
                         break                    
 
                 value = {
@@ -183,23 +170,19 @@ class Parser:
                         "args": args
                     }
                 }
-                
                 return VariableNode(value, token.row, token.col)
 
             self.advance()
-
             value = {
                 "action": "get",
                 "content": {
                     "name": token.value
                 }
             }
-
             return VariableNode(value, token.row, token.col)
 
         elif token.type == "LPARAM":
             self.advance()
-
             node = self.parse_expression()
 
             if self.token.type != "RPARAM":
@@ -220,12 +203,10 @@ class Parser:
 
         elif token.type == "LOGIC":
             self.advance()
-
             return LogicNode(token.value, token.row, token.col)
         
         elif token.type == "BOOL":
             self.advance()
-
             return BoolNode(token.value, token.row, token.col)
 
     def parse_get(self):
@@ -243,7 +224,6 @@ class Parser:
 
         if self.token.type == "IDENTIFIER":
             var_name = self.token.value
-
             self.advance()
 
         else:
@@ -273,10 +253,7 @@ class Parser:
         exp            = self.parse_expression()
         value          = {
             "action": "set",
-            "content": {
-                "name": var_name,
-                "value": exp
-            }
+            "content": {"name": var_name, "value": exp}
         }
 
         return VariableNode(value, row, col)
@@ -298,13 +275,8 @@ class Parser:
             self.advance()
 
             right = self.parse_expression()
-            left  = BoolNode(
-                logic,
-                self.token.row,
-                self.token.col,
-                left=left,
-                right=right
-            )
+            left  = BoolNode(logic, self.token.row, self.token.col,
+                            left=left, right=right)
 
         return left
 
@@ -315,13 +287,12 @@ class Parser:
         Returns:
 			- CheckNode                : The parsed statement block.
         """
-        err = "A `check` block needs to be started with some Potato Eyes! '.~'"
+        err = "A `check` block needs to start with Potato Eyes! '.~'"
         
         while self.index < len(self.tokens):
             self.advance()
 
             cond = self.parse_condition()
-            code = []
 
             # ~ Make sure the condition exists. ~ #
             if cond:
@@ -347,13 +318,12 @@ class Parser:
 			- LoopNode                 : The parsed loop statement.
         """
 
-        err = "A `loop` block needs to be started with some Potato Eyes! '.~'"
+        err = "A `loop` block needs to start with Potato Eyes! '.~'"
 
         while self.index < len(self.tokens):
             self.advance()
 
             cond = self.parse_condition()
-            code = []
 
             # ~ Make sure the condition exists. ~ #
             if cond:
@@ -361,9 +331,8 @@ class Parser:
                     self.advance()
 
                     code  = self.parse_code()
-                    value = [cond, code]
 
-                    return LoopNode(value, self.token.row, self.token.col)
+                    return LoopNode([cond, code], self.token.row, self.token.col)
 
                 else:
                     loc = f"row: {self.token.row} ; Column:{self.token.col}"
@@ -409,13 +378,8 @@ class Parser:
 
                 raise SyntaxError("Error: " + err + "\n" + location)
 
-        val         = {
-              "name": pot_name,
-              "args": args, 
-              "code": code,
-        }
-
-        pot         = PotNode(pot_value, self.token.row, self.token.col)
+        val         = {"name": pot_name, "args": args, "code": code,}
+        pot         = PotNode(val, self.token.row, self.token.col)
         val["node"] = pot
 
         return pot
@@ -441,37 +405,26 @@ class Parser:
             
             if token.type == "ROOT":
                 self.advance()
-
                 break
 
             if token.type == "KEYWORD":
                 if token.value == "say":
                     code.append(self.parse_say())
-
                 elif token.value == "get":
                     code.append(self.parse_get())
-
                 elif token.value == "check":
                     code.append(self.parse_check())
-                
                 elif token.value == "loop":
                     code.append(self.parse_loop())
-
                 elif token.value == "cut":
                     code.append(CutNode(None, self.token.row, self.token.col))
-
                     self.advance()
-
                 elif token.value == "pot":
                     code.append(self.parse_pot())
-
                 elif token.value == "bloom":
                     self.advance()
-
                     exp = self.parse_expression()
-
                     code.append(BloomNode(exp, token.row, token.col))
-
                     self.advance()
 
 
@@ -479,27 +432,19 @@ class Parser:
                     if token.value == "instead":
                         branches[condition] = code
                         code                = []
-
                         self.advance()
-
                         condition           = self.parse_condition()
 
                     elif token.value == "otherwise":
                         branches[condition] = code
                         code                = []
-
                         self.advance()
-
-                        condition           = BoolNode(
-                                    "ripe",
-                                    self.token.row,
-                                    self.token.col
-                        )
+                        condition           = BoolNode("ripe", self.token.row,
+                                                        self.token.col)
 
             elif token.type == "IDENTIFIER":
                 if   self.peek(1).type == "EQUAL":
                     code.append(self.parse_set_variable())
-
                     self.advance()
 
                 else:
@@ -510,7 +455,6 @@ class Parser:
 
         if is_check:
             branches[condition] = code
-
             return branches
 
         return code
@@ -529,6 +473,4 @@ class Parser:
 
         self.tokens = tokens
         self.token  = self.peek() or Token("EOF", "EOF", None, None)
-        parsed      = self.parse_code()
-
-        return parsed
+        return self.parse_code()

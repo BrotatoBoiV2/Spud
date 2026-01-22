@@ -82,7 +82,7 @@ class SpudInterpreter:
         ~ Read the source code from the file. ~
 
         Returns:
-            - Stirng                   : The raw source code string.
+            - String                   : The raw source code string.
         """
 
         with open(self.file_path, "r", encoding="utf-8") as f:

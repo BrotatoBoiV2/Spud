@@ -294,6 +294,11 @@ language capable of simple scripting.
 * 15:28
     - The code has been cleaned and lines were ensured to be 80
       characters and less.
+* 15:30
+    - I am now going to to a second AI Refactor on my code.
+* 17:13
+    - I have refactored; `main.py`, `tokenizer.py` and `parser.py`.
+    - Moving onto the `nodes.py` file after a short break. 
 ---
 
 # TO-DO:

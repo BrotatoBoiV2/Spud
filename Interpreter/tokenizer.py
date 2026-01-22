@@ -71,7 +71,7 @@ class Tokenizer:
     Functions:
         - __init__                     : Initializes the tokenizer.
         - tokenize                     : Tokenizes the source code.
-        - peek                         : Peek at the curretn or next token.
+        - peek                         : Peek at the current or next token.
         - process_string               : Process a string token.
         - process_comment              : Process a comment token.
     """
@@ -114,7 +114,7 @@ class Tokenizer:
         ~ Process a string token. ~
 
         Returns:
-            - String                   : The string token.
+            - Tuple(String, Int)       : The string token.
         """
 
         string_text = ""
@@ -150,7 +150,7 @@ class Tokenizer:
         ~ Process a comment token. ~
 
         Returns:
-            - String                   : The comment token.
+            - Tuple(String, Int)       : The comment token.
         """
 
         comment_text = ""
@@ -199,12 +199,8 @@ class Tokenizer:
             "-": "OPERATOR", "*": "OPERATOR", "/": "OPERATOR", "#": "OPERATOR",
             "%": "OPERATOR"
         }
-        logic      = [
-            "equals", "not", "below", "above"
-        ]
-        bools      = [
-            "ripe", "rotten", "true", "false"
-        ]
+        logic      = ["equals", "not", "below", "above"]
+        bools      = ["ripe", "rotten", "true", "false"]
 
         # ~ Iterate through each token in the source code. ~ #
         while self.index < len(code):
