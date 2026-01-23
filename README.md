@@ -6,12 +6,12 @@ Spud is an experimental programming language. Currently, it is a high-level
  evolve Spud into a low-level, self-hosted systems language capable of building
  operating systems and low-level graphical software.
 
-## Current Version: (v1.6.5-2026.01.15)
-  * Many code refactors and cleaning have been done.
-  * Conditional Statements have been introduced.
-  * A few error handling for the new feature.
-  * Beginning the implementation of booleans: `ripe` and `rotten`.
-  
+## Current Version: (v2.3.7-2026.01.21)
+  * More code refactors and clean-up.
+  * Added `loops` so you can execute code multiple times, with
+    the `cut` keyword to end the loop.
+  * Added `pot` functions that allow for arguments an can `bloom` the output.
+  * Nested (recursive) logic is supported.
 ---
 
 ## Additional Information

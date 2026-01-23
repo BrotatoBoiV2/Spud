@@ -260,8 +260,10 @@ language capable of simple scripting.
     - Starting the `loop` feature, because I feel like I have finished todays planned work.
 * 18:10
     - The loop works as intended, but nested blocks are not fully supported.
+    - I have officailly reached the "Turing Complete" Milestone.
 * 21:51
     - Nested logic is now supported and breaking out of loops is possible.
+
 *2026-01-20*
 * 05:18
     - Refactored `parser.py` to make code a bit cleaner and modulated.
@@ -290,9 +292,12 @@ language capable of simple scripting.
     - Finally got arguments to work in the `pot` function.
     - The factorial example now works as intended.
     - Pushing and merging to main and taking a break.
+
+*2026-01-22*
+* 21:46
+    - Updated the Changelog and filestamps to V2.3.7-2026.01.21.
 ---
 
 # TO-DO:
-\*\*\*\*\*Allow arguments for the `pot` keyword.\*\*\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Implement all Nodes to get data from `self.values` instead of hard-coded.\*
