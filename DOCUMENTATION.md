@@ -299,8 +299,11 @@ language capable of simple scripting.
 * 17:13
     - I have refactored; `main.py`, `tokenizer.py` and `parser.py`.
     - Moving onto the `nodes.py` file after a short break. 
+*2026-01-23*
+* 19:09
+    - I have refactored the Node classes to get the data from the value argument instead of multiple hard-coded values.
+    - I need to move on to continuing the refactoring job from yesterday.
 ---
 
 # TO-DO:
 \*\*\*Add Line output to the errors.\*\*\*
-\*Implement all Nodes to get data from `self.values` instead of hard-coded.\*

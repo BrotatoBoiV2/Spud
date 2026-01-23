@@ -164,26 +164,26 @@ class BinOperNode(Node):
         - execute                      : Executes the binary operation node.
     """
 
-    def __init__(self, value, left, right, row, column):
+    def __init__(self, value, row, column):
         """
         ~ Initialize the BinOperNode. ~
 
         Arguments:
-            - value           (String) : The value of the node.
-            - left              (Node) : The left child of the node.
-            - right             (Node) : The right child of the node.
+            - value             (Dict) : The full value of of the node.
             - row                (Int) : The row number of the node.
             - column             (Int) : The column number of the  node.
 
         Attributes:
+            - oper            (String) : The operator of the node.
             - left              (Node) : The left child of the node.
             - right             (Node) : The right child of the node.
         """
 
         super().__init__(value, row, column)
 
-        self.left  = left
-        self.right = right
+        self.oper = value.get("oper")
+        self.left  = value.get("left")
+        self.right =value.get("right")
 
     def execute(self, memory):
         """
@@ -199,13 +199,13 @@ class BinOperNode(Node):
         left  = self.left.execute(memory)
         right = self.right.execute(memory)
 
-        if   self.value == "+":
+        if   self.oper == "+":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) + int(right)
 
             return str(left) + str(right)
 
-        elif self.value == "-":
+        elif self.oper == "-":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) - int(right)
 
@@ -214,7 +214,7 @@ class BinOperNode(Node):
 
             raise ValueError("Error: " + error + "\n" + location)
 
-        elif self.value == "*":
+        elif self.oper == "*":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) * int(right)
 
@@ -229,7 +229,7 @@ class BinOperNode(Node):
 
             raise ValueError("Error: " + error + "\n" + location)
 
-        elif self.value == "/":
+        elif self.oper == "/":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) / int(right)
 
@@ -238,7 +238,7 @@ class BinOperNode(Node):
 
             raise ValueError("Error: " + error + "\n" + location)
             
-        elif self.value == "#":
+        elif self.oper == "#":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) // int(right)
 
@@ -247,7 +247,7 @@ class BinOperNode(Node):
 
             raise ValueError("Error: " + error + "\n" + location)
 
-        elif self.value == "%":
+        elif self.oper == "%":
             if isinstance(left, int) and isinstance(right, int):
                 return int(left) % int(right)
 
@@ -405,7 +405,8 @@ class GetNode(Node):
 
         super().__init__(value, row, column)
 
-        self.prompt = prompt
+        self.val_name = value.get("name")
+        self.prompt   = value.get("prompt")
 
     def execute(self, memory):
         """
@@ -434,7 +435,7 @@ class GetNode(Node):
         if is_num:
             value = int(value)
 
-        memory.set_var(self.value, value)
+        memory.set_var(self.val_name, value)
 
 
 class BoolNode(Node):

@@ -126,8 +126,8 @@ class Parser:
             self.advance()
 
             right = self.parse_primary()
-            left  = BinOperNode(oper, left, right, self.token.row, 
-                                self.token.col)
+            value = {"oper": oper, "left": left, "right": right}
+            left  = BinOperNode(value, self.token.row, self.token.col)
 
         return left
 
@@ -207,7 +207,8 @@ class Parser:
         
         elif token.type == "BOOL":
             self.advance()
-            return BoolNode(token.value, token.row, token.col)
+            value = {"logic": token.value, "left": None, "right": None}
+            return BoolNode(value, token.row, token.col)
 
     def parse_get(self):
         """
@@ -235,7 +236,9 @@ class Parser:
         if self.token.type not in ["EOL", "EOF"]:
             prompt = self.parse_expression()
 
-        return GetNode(var_name, prompt, self.token.row, self.token.col)
+        value = {"name": var_name, "prompt": prompt}
+
+        return GetNode(value, self.token.row, self.token.col)
 
     def parse_set_variable(self):
         """
@@ -275,8 +278,8 @@ class Parser:
             self.advance()
 
             right = self.parse_expression()
-            left  = BoolNode(logic, self.token.row, self.token.col,
-                            left=left, right=right)
+            value = {"logic": logic, "left": left, "right": right}
+            left  = BoolNode(value, self.token.row, self.token.col)
 
         return left
 
@@ -439,7 +442,8 @@ class Parser:
                         branches[condition] = code
                         code                = []
                         self.advance()
-                        condition           = BoolNode("ripe", self.token.row,
+                        value = {"logic": "ripe", "left": None, "right": None}
+                        condition           = BoolNode(value, self.token.row,
                                                         self.token.col)
 
             elif token.type == "IDENTIFIER":
