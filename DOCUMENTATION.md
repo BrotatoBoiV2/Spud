@@ -302,6 +302,5 @@ language capable of simple scripting.
 ---
 
 # TO-DO:
-\*\*\*\*\*Allow arguments for the `pot` keyword.\*\*\*\*\*
 \*\*\*Add Line output to the errors.\*\*\*
 \*Implement all Nodes to get data from `self.values` instead of hard-coded.\*

@@ -323,7 +323,7 @@ class VariableNode(Node):
             args = self.value["content"]["args"]
 
             for arg in args:
-                node.mapped_args[arg] = None
+                node.map_arg[arg] = None
             
             return memory.set_var(name, node)
 
@@ -334,7 +334,7 @@ class VariableNode(Node):
 
             if len(args) == len(node.args):
                 for arg, name in zip(eval_args, node.args):
-                    node.mapped_args[name] = arg
+                    node.map_arg[name] = arg
             else:
                 error    = "Invalid number of arguments."
                 location = f"row: {self.row} ; Column:{self.column}"
@@ -585,7 +585,7 @@ class PotNode(Node):
         
         self.code    = self.value["code"]
         self.args    = self.value["args"]
-        self.arg_map = {}
+        self.map_arg = {}
 
 
     def execute(self, memory, evaluated_args=None):
