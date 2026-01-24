@@ -27,7 +27,7 @@
   - Included more mathematical operators and conditional checking.
   - Included booleans.
 
-**V1.6.5-2026-01-15**
+**V1.6.5-2026.01.15**
   Name: Watering
 
   - Some code clean-up and refactoring.
@@ -67,7 +67,7 @@
   - String/Integer Concatenation is more explicit with "+" to join the parts.
   - The Part Handler Method was updated to be a bit easier to manage.
 
-**V0.6-2026-01-05**
+**V0.6-2026.01.05**
   Name: Sprouting
   
   - User input is introduced.
